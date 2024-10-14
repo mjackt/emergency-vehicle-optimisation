@@ -2,6 +2,7 @@ import json
 import node
 import matplotlib.pyplot as plt
 import networkx as nx
+import random
 
 
 def read_data():
@@ -43,7 +44,6 @@ def read_data():
 if __name__=="__main__":
     graph = read_data()
 
-
     G = nx.DiGraph()
 
     for node in graph:
@@ -53,16 +53,21 @@ if __name__=="__main__":
 
     for node in graph:
         for edge in graph[node].outs:
-            G.add_edge(graph[node].id,edge.id)
+            G.add_edge(graph[node].id, edge[0].id, weight = edge[1])
 
-    options = {
-        'node_color': 'red',
-        'node_size' : 10,
-    }
 
     pos=nx.get_node_attributes(G,'pos')
 
-    nx.draw_networkx(G, pos)
+    start = random.choice(list(graph.keys()))
+    end = random.choice(list(graph.keys()))
+
+    path = nx.dijkstra_path(G, start, end)
+
+    path_edges = list(zip(path,path[1:]))
+    nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='r')
+    nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='r',width=1)
+
+    nx.draw_networkx(G, pos, with_labels = False, node_size = 10)
 
     plt.savefig("graph.pdf")
     plt.show()
