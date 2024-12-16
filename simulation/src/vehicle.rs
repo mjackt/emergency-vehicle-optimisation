@@ -1,8 +1,11 @@
+use std::fmt;
+
 use crate::types;
 
 pub struct Vehicle{
     location: types::Location,
-    secs_till_free: types::Time
+    secs_till_free: types::Time,
+    name: String,
 }
 
 impl Vehicle{
@@ -10,6 +13,7 @@ impl Vehicle{
         Self{
             location,
             secs_till_free: 0.0,
+            name: "Car".to_string(),
         }
     }
 
@@ -39,9 +43,16 @@ impl Vehicle{
 
     pub fn timestep(&mut self, timestep: types::Time){
         if timestep > self.secs_till_free{
-            self.secs_till_free = 0.0
+            self.secs_till_free = 0.0;
         }
+        else{
+            self.secs_till_free = self.secs_till_free - timestep;
+        }
+    }
+}
 
-        self.secs_till_free = self.secs_till_free - timestep;
+impl fmt::Display for Vehicle{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} reporting:\nLocation:{}\nTime till free:{}", self.name, self.location, self.secs_till_free)
     }
 }
