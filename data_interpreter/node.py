@@ -7,6 +7,8 @@ class Node:
         self.id: int = id
         #All nodes reachable from current node. != to all nodes that can reach this node due to one ways
         self.outs: list[(Node, float)] = []
+
+        self.ins: list[Node] = []
         #Coords of node
         self.location: tuple[float,float] = location
         #Number of incdients per year (Can be floats)
