@@ -3,17 +3,19 @@ use std::fmt;
 use crate::types;
 
 pub struct Vehicle{
+    base: types::Location,
     location: types::Location,
     secs_till_free: types::Time,
     name: String,
 }
 
 impl Vehicle{
-    pub fn new(location: types::Location) -> Self{
+    pub fn new(base: types::Location, name: String) -> Self{
         Self{
-            location,
+            base,
+            location: base,
             secs_till_free: 0.0,
-            name: "Car".to_string(),
+            name,
         }
     }
 
@@ -23,6 +25,10 @@ impl Vehicle{
 
     pub fn get_location(&self) -> types::Location{
         self.location
+    }
+
+    pub fn get_name(&self) -> String{
+        self.name.clone()
     }
 
     pub fn goto(&mut self, target: types::Location, travel_time: types::Time, incident_time: types::Time) -> Result<types::Location, &'static str> {

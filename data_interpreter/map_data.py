@@ -1,5 +1,5 @@
 import json
-import node
+import sys
 import matplotlib.pyplot as plt
 import networkx as nx
 import random
@@ -7,6 +7,9 @@ import numpy as np
 import json
 import collections
 import heapq
+
+from node import calc_distance
+from node import Node
 
 
 def read_data():
@@ -24,7 +27,7 @@ def read_data():
         if i['type'] == "node":
             rand = np.random.poisson(0.1 , 1)[0]
 
-            graph[i['id']] = node.Node(i['id'],(i['lat'],i['lon']), int(rand))
+            graph[i['id']] = Node(i['id'],(i['lat'],i['lon']), int(rand))
 
     #Handling ways
     for i in road_osm['elements']:
@@ -55,7 +58,95 @@ def read_data():
                 if i != len(nodes)-1:
                     graph[nodes[i]].add_out(graph[nodes[i+1]], speed)
                     graph[nodes[i+1]].ins.append(graph[nodes[i]])
+
+    #Creating police nodes
+    police_osm_file = open('input_data/police.json')
+
+    police_osm = json.load(police_osm_file)
+
+    police_osm_file.close()
+
+    police_ids = []
+
+    for i in police_osm['elements']:
+        #Need to get one node to represent the way
+        if i['type'] == "way":
+            if 'tags' in i:
+                node_id = i['nodes'][0]
+                
+                for element in police_osm['elements']:
+                    if element['type'] == 'node' and element['id'] == node_id:
+                        lat = element['lat']
+                        long = element['lon']
+
+                node_to_add = Node(node_id, (lat, long), 0)
+                nearest = find_nearest_node(node_to_add, graph)
+
+                node_to_add.add_out(nearest, 30)
+                node_to_add.ins.append(nearest)
+
+                nearest.add_out(node_to_add, 30)
+                nearest.ins.append(node_to_add)
+
+                graph[node_id] = node_to_add
+                police_ids.append(node_id)
+
+        elif i['type'] == "node":
+            if 'tags' in i:
+                node_to_add = Node(i['id'], (i['lat'], i['lon']), 0)
+                nearest = find_nearest_node(node_to_add, graph)
+
+                node_to_add.add_out(nearest, 30)
+                node_to_add.ins.append(nearest)
+
+                nearest.add_out(node_to_add, 30)
+                nearest.ins.append(node_to_add)
+
+                graph[i['id']] = node_to_add
+                police_ids.append(i['id'])
+
+        elif i['type'] == "relation":
+            way_id = i['members'][0]
+
+            for element in police_osm['elements']:
+                if element['type'] == 'way' and element['id'] == way_id:
+                    node_id = element['nodes'][0]
+                    break
+            
+            for element in police_osm['elements']:
+                if element['type'] == 'node' and element['id'] == node_id:
+                    lat = element['lat']
+                    long = element['lon']
+
+            node_to_add = Node(node_id, (lat, long), 0)
+            nearest = find_nearest_node(node_to_add, graph)
+
+            node_to_add.add_out(nearest, 30)
+            node_to_add.ins.append(nearest)
+
+            nearest.add_out(node_to_add, 30)
+            nearest.ins.append(node_to_add)
+
+            graph[node_id] = node_to_add
+            police_ids.append(node_id)
+            
+    with open('out/police.json', 'w') as f:
+        json.dump(police_ids, f)
+
     return graph
+
+def find_nearest_node(target, graph: dict):
+    nearest = None
+    nearest_dist = sys.maxsize
+
+    for node in graph.values():
+        dist = calc_distance(target.location[0], target.location[1], node.location[0], node.location[1])
+
+        if dist < nearest_dist:
+            nearest = node
+            nearest_dist = dist
+
+    return nearest
 
 def remove_dead_ends(graph: dict):    
     while True:
