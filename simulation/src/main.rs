@@ -9,7 +9,7 @@ use rand::Rng;
 
 fn read_probs() -> HashMap<types::Location, u32> {
     // Attempt to read the JSON file
-    let file_content = fs::read_to_string("map_data/probs.json").expect("Error loading probs.json");
+    let file_content = fs::read_to_string("exeter/map_data/probs.json").expect("Error loading probs.json");
 
     // Attempt to parse the JSON into a HashMap
     let raw_data: HashMap<String, u32> = serde_json::from_str(&file_content).expect("Error parsing probs.json");
@@ -25,7 +25,7 @@ fn read_probs() -> HashMap<types::Location, u32> {
 
 fn read_apsp() -> HashMap<types::Location, HashMap<types::Location, types::Time>> {
     // Attempt to read the JSON file
-    let file_content = fs::read_to_string("map_data/apsp.json").expect("Error loading apsp.json");
+    let file_content = fs::read_to_string("exeter/map_data/apsp.json").expect("Error loading apsp.json");
 
     // Attempt to parse the JSON into a HashMap
     let raw_data: HashMap<String, HashMap<String, types::Time>> = serde_json::from_str(&file_content).expect("Error parsing apsp.json");
@@ -49,7 +49,7 @@ fn read_apsp() -> HashMap<types::Location, HashMap<types::Location, types::Time>
 }
 
 fn read_police() -> Vec<types::Location>{
-    let file_content = fs::read_to_string("map_data/police.json").expect("Error loading police.json");
+    let file_content = fs::read_to_string("exeter/map_data/police.json").expect("Error loading police.json");
 
     let data: Vec<types::Location> = serde_json::from_str(&file_content).expect("Error parsing police.json");
 
@@ -93,6 +93,15 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
             None => (),
         }
     }
+
+    for car in vehicles{
+        if car.get_secs_till_free() == 0.0 && car.get_location() != car.get_base(){
+            let travel_time: types::Time = *apsp.get(&car.get_location()).unwrap().get(&car.get_base()).unwrap();
+
+            car.goto(car.get_base(), travel_time, 0.0);
+            println!("{}: {} returning to base. Travel time: {}\n", current_time, car.get_name(), travel_time);
+        }
+    }
 }
 
 fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64){
@@ -118,7 +127,7 @@ fn step_vehicles(vehicles: &mut Vec<vehicle::Vehicle>, timestep: types::Time){
 }
 
 fn simulation(apsp: HashMap<types::Location, HashMap<types::Location, types::Time>>, incident_probs: &HashMap<types::Location, u32>, vehicles: &mut Vec<vehicle::Vehicle>, timestep: types::Time, end_time: types::Time) -> types::Time{
-    const PROBABILTY_WEIGHTING: f64 = 2.0;
+    const PROBABILTY_WEIGHTING: f64 = 1.5;
     let mut incidents: Vec<incident::Incident> = Vec::new();
     let mut time: types::Time = 0.0;
 
@@ -155,7 +164,7 @@ fn simulation(apsp: HashMap<types::Location, HashMap<types::Location, types::Tim
 
 fn main(){
     const TIMESTEP: types::Time = 300.0;
-    const END_TIME: types::Time = 60.0 * 60.0 * 24.0;//12 hours
+    const END_TIME: types::Time = 60.0 * 60.0 * 12.0;//12 hours
 
     let incident_probs: HashMap<types::Location, u32> = read_probs();
     
@@ -164,9 +173,11 @@ fn main(){
     let mut vehicles: Vec<vehicle::Vehicle> = Vec::new();
     let base_locations: Vec<types::Location> = read_police();
 
+    println!("Initialised hashmaps");
+
     let mut solution: Vec<u8> = vec![0; base_locations.len()];
 
-    solution[0] = 2;
+    solution[0] = 1;
 
     let mut counter: u8 = 0;
     let mut i: usize = 0;

@@ -7,6 +7,7 @@ import numpy as np
 import json
 import collections
 import heapq
+import jsonlines
 
 from node import calc_distance
 from node import Node
@@ -37,7 +38,8 @@ def read_data():
             oneway=False
 
             if 'oneway' in i['tags']:
-                oneway = True
+                if i['tags']['oneway'] == 'yes':
+                    oneway = True
 
             speed: int = 30
 
@@ -118,7 +120,7 @@ def read_data():
                     lat = element['lat']
                     long = element['lon']
 
-            node_to_add = Node(node_id, (lat, long), 0)
+            node_to_add = Node(node_id, (lat, long), 0, True)
             nearest = find_nearest_node(node_to_add, graph)
 
             node_to_add.add_out(nearest, 30)
@@ -148,7 +150,7 @@ def find_nearest_node(target, graph: dict):
 
     return nearest
 
-def remove_dead_ends(graph: dict):    
+def remove_pits(graph: dict):    
     while True:
         to_remove = []
         for _, node in graph.items():
@@ -165,11 +167,12 @@ def remove_dead_ends(graph: dict):
 
 def keep_decisions(graph: dict):
     while True:
-        to_remove = []
+        to_remove_2way = []
+        to_remove_1out = []
         for _, node in graph.items():
-            if len(node.outs) != 2:
+            if len(node.outs) > 2:
                 continue
-            else:
+            elif len(node.outs) == 2:
                 out_ids = []
                 in_ids = []
 
@@ -180,18 +183,62 @@ def keep_decisions(graph: dict):
                     in_ids.append(entry.id)
 
                 if collections.Counter(in_ids) == collections.Counter(out_ids):
-                    to_remove.append(node)
+                    to_remove_2way.append(node)
+            else:#1 out
+                if node.outs[0][0] not in node.ins:#Prevent pointing to self
+                    to_remove_1out.append(node)
 
-        if len(to_remove) == 0:
+
+        if len(to_remove_2way) == 0 and len(to_remove_1out) == 0:
             break
         else:
-            for node in to_remove:
-                graph = prune_node(graph, node)
+            for node in to_remove_2way:
+                graph = prune_2way_node(graph, node)
+            
+            for node in to_remove_1out:
+                graph = prune_1out_node(graph, node)
 
     return graph
 
-def prune_node(graph: dict, node):
+def prune_1out_node(graph: dict, node):
+    #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
+    exit = node.outs[0][0]
+
+    if exit in node.ins:#Sometimes there will be one way circles i.e car parks which if unchecked results in node pointing to itself which causes issues
+        return graph
+    
+    new_ins = []
+    for into in exit.ins:
+        if into.id != node.id:
+            new_ins.append(into)
+
+    for entry in node.ins:
+        for i in range(len(entry.outs)):
+            if entry.outs[i][0].id == node.id:
+                index_of_pruned = i
+                break
+
+        dist_to_exit = node.outs[0][1]
+        
+        combined_dist = entry.outs[index_of_pruned][1] + dist_to_exit
+        new_out = (exit, combined_dist)
+
+        graph[entry.id].outs[index_of_pruned] = new_out
+
+        new_ins.append(entry)
+    
+    graph[exit.id].ins = new_ins
+    
+    graph.pop(node.id)
+
+    return graph
+
+
+def prune_2way_node(graph: dict, node):
+    #Pass on incident probabiltiy to nearest neighbour
+    node.outs[0][0].incid_in_year += node.incid_in_year
+
     for entry in node.ins:
         if node.ins.index(entry) == 0:
             other_node = node.ins[1]
@@ -224,33 +271,71 @@ def prune_node(graph: dict, node):
 
     return graph
 
-def prune_graph(graph: dict):
-    graph = remove_dead_ends(graph)
+def remove_tiny_leaves(graph: dict, agg_limit: float):
+    tiny_leaves = []
+    for node in graph.values():
+        if len(node.outs) == 1 and node.outs[0][0].id == node.ins[0].id:#Checks if node is a leaf
+            if node.outs[0][1] < agg_limit:
+                tiny_leaves.append(node)
+
+    for leaf in tiny_leaves:
+        remove_leaf(leaf, graph)
+
+    return graph
+
+def remove_leaf(node, graph: dict):
+    if node.police == False:
+        graph.pop(node.id)
+        if len(node.outs) > 0:#Disconnected sections will sometimes end up being just two points. Means when ones removed there are no outs
+            exit = node.outs[0][0]
+            for i in range(len(exit.ins)):
+                if exit.ins[i].id == node.id:
+                    index_to_remove = i
+                    break
+
+            exit.ins.pop(index_to_remove)
+
+            for i in range(len(exit.outs)):
+                if exit.outs[i][0].id == node.id:
+                    index_to_remove = i
+                    break
+
+            exit.outs.pop(index_to_remove)
+
+    return graph
+
+
+def prune_graph(graph: dict, agg_limit: float):
+    graph = remove_pits(graph)
+    print(len(graph))
     graph = keep_decisions(graph)
+    print(len(graph))
+    graph = remove_tiny_leaves(graph, agg_limit)
     return graph
 
 def remove_node(end, graph: dict):
-    graph.pop(end.id)
+    if end.police == False:
+        graph.pop(end.id)
 
-    for entry in end.ins:
-        new_outs = []
-        for out in entry.outs:
-            if out[0].id != end.id:
-                new_outs.append(out)
+        for entry in end.ins:
+            new_outs = []
+            for out in entry.outs:
+                if out[0].id != end.id:
+                    new_outs.append(out)
 
-        entry.outs = new_outs
+            entry.outs = new_outs
 
-    for out in end.outs:
-        new_ins = []
-        for entry in out[0].ins:
-            if entry.id != end.id:
-                new_ins.append(entry)
+        for out in end.outs:
+            new_ins = []
+            for entry in out[0].ins:
+                if entry.id != end.id:
+                    new_ins.append(entry)
 
-        out[0].ins = new_ins
+            out[0].ins = new_ins
 
     return graph
 
-def dijkstra(start_node):
+def dijkstra(start_node, current_apsp):
     # Dictionary to store the minimum cost to each node
     min_costs = {start_node.id: 0}
     # Dictionary to store the shortest path tree (predecessors)
@@ -266,6 +351,11 @@ def dijkstra(start_node):
         if current_cost > min_costs[current_node.id]:
             continue
 
+        #if current_node.id in apsp:
+            #We have a load of information already
+            #Add already known cost IF current_node is closer to target than start_node
+            #ONCE HERE ADD EVERY NOT YET FOUND NODE INTO MIN COSTS WITH COST TO HERE PLUS APSP VALUE AND END
+
         # Iterate through the neighboring nodes
         for neighbor, cost in current_node.outs:
             # Calculate the total cost to reach the neighbor
@@ -279,22 +369,191 @@ def dijkstra(start_node):
 
     return min_costs
 
+def first_stage(graph):
+    node_count = len(graph)
+    apsp = {}
+
+    for node in graph.keys():
+        apsp[node] = {}
+
+    explore_q = [(random.choice(list(graph.values())), 0)]
+    explored = []
+    current_node = None
+    exit = False
+    #Will break if there are unreachable sections
+    while len(explored) < node_count:
+        while current_node in explored or current_node == None:
+            try:
+                current_node = explore_q.pop(0)[0]
+            except IndexError as e:
+                print("Discovered " + str(len(explored))+ "/" + str(node_count))
+                return apsp, explored
+
+
+
+        apsp[current_node.id][current_node.id] = 0.0
+
+        ordered_outs = []
+        for out in current_node.outs:
+            apsp[current_node.id][out[0].id] = out[1]
+
+            if len(ordered_outs) == 0:
+                ordered_outs.append(out)
+
+            else:
+                added = False
+                for i in range(len(ordered_outs)):
+                    if out[1] < ordered_outs[i][1]:
+                        ordered_outs.insert(i, out)
+                        added = True
+                        break
+                    
+                if added == False:
+                    ordered_outs.append(out)
+
+        for neighbour in ordered_outs:
+            known_costs_from_neighbour = apsp[neighbour[0].id]
+
+            for x in known_costs_from_neighbour.keys():
+                est_cost = apsp[current_node.id][neighbour[0].id] + apsp[neighbour[0].id][x]
+
+                if x not in apsp[current_node.id]:
+                    apsp[current_node.id][x] = est_cost               
+                elif est_cost < apsp[current_node.id][x]:
+                    apsp[current_node.id][x] = est_cost
+
+        explored.insert(0, current_node)
+        
+        #Insertion into explore q
+        for neighbour in ordered_outs:
+            if len(explore_q) == 0:
+                explore_q.append(neighbour)
+
+            else:
+                added = False
+                for i in range(len(explore_q)):
+                    if neighbour[1] < explore_q[i][1]:
+                        explore_q.insert(i, neighbour)
+                        added = True
+                        break
+                if added == False:
+                    explore_q.append(neighbour)
+
+    return apsp, explored
+
+def trenchard(graph):
+    apsp, explored = first_stage(graph)
+
+    explored_nodes = len(explored)
+    print(explored_nodes)
+
+    print("First step complete")
+
+    #Reverse fill
+    node_count = len(graph)
+    j = 0
+
+    targets = []
+    for i in range(len(explored)+1):
+        targets.append(i)
+    while len(explored) != 0:
+        node = explored[j]
+        knowledge = apsp[node.id]
+
+
+        if len(knowledge) >= explored_nodes:
+            explored.remove(explored[j])
+            print("Filled " + str(node_count - len(explored)))
+            j = j-1
+
+        else:
+            #knowledge = {k: v for k, v in sorted(knowledge.items(), key=lambda item: item[1])}
+            neighbours = sorted(node.outs, key=lambda x: x[1])
+
+            for i in range(len(neighbours)):
+                answerer = neighbours[i][0].id
+
+                other_knowledge = apsp[answerer]
+
+                for key, value in other_knowledge.items():
+                    if key not in knowledge:
+                        apsp[node.id][key] = value + apsp[node.id][answerer]
+
+            if len(targets) > 0:
+                try:
+                    while len(apsp[node.id]) >= targets[0]:
+                        print(str(targets.pop(0))+ "/" + str(explored_nodes))
+                        print(len(targets))
+                except:
+                    print("Filled")
+
+        if j >= len(explored) - 1:
+            j = 0
+        else:
+            j += 1
+
+    return apsp
+
+
 if __name__=="__main__":
     graph: dict = read_data()
 
-    graph = prune_graph(graph)
+    AGGLOMERATE_LIMIT = 45.0
+
+    print("Data read")
+    print("Graph size: " + str(len(graph)))
+
+    graph = prune_graph(graph, AGGLOMERATE_LIMIT)
+
+    print("Graph pruned to " + str(len(graph)) + " nodes")
 
     probability_dict: dict = {}
 
-
+    counter = 0
+    d_count = 0
     apsp = {}
+    detatchment = {}
     for node in graph.values():
-        node_costs = dijkstra(node)
-        apsp[node.id] = node_costs
-    print("Generated apsp")
+        added = False
+        for out in node.outs:
+            if out[1] > AGGLOMERATE_LIMIT:#Neighbour too far away so we will do calculations
+                break#All outs are sorted so we can break knowing next ones are even further away
 
-    with open('out/apsp.json', 'w') as f:
-        json.dump(apsp, f)
+            elif out[0].id in apsp:#We already have calulated neighbours paths so we will reuse it
+                total_detatchment = out[1] + detatchment[out[0].id]
+
+                if total_detatchment > AGGLOMERATE_LIMIT:#If neighbour has recieved it's paths from another node we need to check how far that node is from current node
+                    continue
+                
+                else:
+                    added = True
+                    apsp[node.id] = apsp[out[0].id]#Reuse paths
+                    detatchment[node.id] = total_detatchment
+
+                    #Add costs to neighbours manually because we have that info and otherwise costs to stolen node will be 0.
+                    for out in node.outs:
+                        apsp[node.id][out[0].id] = out[1]
+
+                    break
+
+        if added == False:
+            node_costs = dijkstra(node, apsp)
+            apsp[node.id] = node_costs
+            detatchment[node.id] = 0.0#Original calculations so theres no detatchment
+            d_count += 1
+
+        counter += 1
+        if counter % 1000 == 0:
+            print(counter)
+
+    #apsp = trenchard(graph)
+    print("Generated apsp with only " + str(d_count) + " dijkstra calculations")
+
+    print("Writing apsp.....")
+    with jsonlines.open('out/apsp.json', 'w') as f:
+        for key, value in apsp.items():
+            f.write({key:value})
+    print("Completed")
 
     for id, obj in graph.items():
         probability_dict[id] = obj.incid_in_year

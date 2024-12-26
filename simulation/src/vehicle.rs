@@ -27,6 +27,10 @@ impl Vehicle{
         self.location
     }
 
+    pub fn get_base(&self) -> types::Location{
+        self.base
+    }
+
     pub fn get_name(&self) -> String{
         self.name.clone()
     }

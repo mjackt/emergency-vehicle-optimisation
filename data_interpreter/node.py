@@ -2,7 +2,7 @@ import math
 
 class Node:
 #List of out nodes
-    def __init__(self, id, location, incid_in_year):
+    def __init__(self, id, location, incid_in_year, police = False):
         #id provided by OSM
         self.id: int = id
         #All nodes reachable from current node. != to all nodes that can reach this node due to one ways
@@ -14,13 +14,19 @@ class Node:
         #Number of incdients per year (Can be floats)
         self.incid_in_year: float = incid_in_year
 
+        self.police: bool = police
+
     def __str__(self):
-        return f"{self.id}\n{self.location}\n{self.outs}\n"
+        out_list = []
+        for node in self.outs:
+            out_list.append(node[0].id)
+
+        return f"\n {self.id}\n{self.location}\n{out_list}\n\n"
     
     def __repr__(self):
         out_list = []
         for node in self.outs:
-            out_list.append((node[0].id, node[1]))
+            out_list.append(node[0].id)
 
         return f"\n {self.id}\n{self.location}\n{out_list}\n\n"
 
@@ -32,7 +38,16 @@ class Node:
         #Time in secs to go from current node to out node
         cost = distance / speed
 
-        self.outs.append((node_to_add, cost))
+        added = False
+
+        for i in range(len(self.outs)):
+            if cost < self.outs[i][1]:
+                self.outs.insert(i,(node_to_add, cost))
+                added = True
+                break
+            
+        if added == False:
+            self.outs.append((node_to_add, cost))
 
 
 
