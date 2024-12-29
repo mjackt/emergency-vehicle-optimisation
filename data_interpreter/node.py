@@ -1,4 +1,6 @@
 import math
+import json
+import json_fix
 
 class Node:
 #List of out nodes
@@ -48,6 +50,12 @@ class Node:
             
         if added == False:
             self.outs.append((node_to_add, cost))
+
+    def to_dict(self):
+        # Create a dictionary representation of the Node, including only the relevant data
+        return {
+            "outs": [{"id": out_node[0].id, "cost": out_node[1]} for out_node in self.outs]
+        }      
 
 
 

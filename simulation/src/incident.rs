@@ -5,6 +5,7 @@ pub struct Incident{
     service_time: types::Time,
     resolved_time: Option<types::Time>,
     creation_time: types::Time,
+    valid : bool,
 }
 
 impl Incident{
@@ -14,6 +15,7 @@ impl Incident{
             service_time,
             resolved_time : None,
             creation_time,
+            valid: true,
         }
     }
 
@@ -33,14 +35,27 @@ impl Incident{
         self.creation_time
     }
 
+    pub fn unreachable(&mut self){
+        self.valid = false;
+    }
+
     pub fn solved(&mut self, time: types::Time){
         self.resolved_time = Some(time);
     }
 
     pub fn is_solved(&self) -> bool{
-        match self.resolved_time{
-            Some(_) => true,
-            None => false,
+        if self.valid{
+            match self.resolved_time{
+                Some(_) => true,
+                None => false,
+            }
         }
+        else{
+            true
+        }
+    }
+
+    pub fn is_valid(&self) -> bool{
+        self.valid
     }
 }

@@ -14,7 +14,7 @@ from node import Node
 
 
 def read_data():
-    road_osm_file = open('input_data/roadOSM.json')
+    road_osm_file = open('input_data/osm.json')
 
     road_osm = json.load(road_osm_file)
 
@@ -81,7 +81,7 @@ def read_data():
                         lat = element['lat']
                         long = element['lon']
 
-                node_to_add = Node(node_id, (lat, long), 0)
+                node_to_add = Node(node_id, (lat, long), 0, True)
                 nearest = find_nearest_node(node_to_add, graph)
 
                 node_to_add.add_out(nearest, 30)
@@ -95,7 +95,7 @@ def read_data():
 
         elif i['type'] == "node":
             if 'tags' in i:
-                node_to_add = Node(i['id'], (i['lat'], i['lon']), 0)
+                node_to_add = Node(i['id'], (i['lat'], i['lon']), 0, True)
                 nearest = find_nearest_node(node_to_add, graph)
 
                 node_to_add.add_out(nearest, 30)
@@ -170,7 +170,7 @@ def keep_decisions(graph: dict):
         to_remove_2way = []
         to_remove_1out = []
         for _, node in graph.items():
-            if len(node.outs) > 2:
+            if len(node.outs) > 2 or node.police:
                 continue
             elif len(node.outs) == 2:
                 out_ids = []
@@ -274,7 +274,7 @@ def prune_2way_node(graph: dict, node):
 def remove_tiny_leaves(graph: dict, agg_limit: float):
     tiny_leaves = []
     for node in graph.values():
-        if len(node.outs) == 1 and node.outs[0][0].id == node.ins[0].id:#Checks if node is a leaf
+        if node.police == False and len(node.outs) == 1 and node.outs[0][0].id == node.ins[0].id and len(node.ins) == 1:#Checks if node is a leaf
             if node.outs[0][1] < agg_limit:
                 tiny_leaves.append(node)
 
@@ -307,9 +307,7 @@ def remove_leaf(node, graph: dict):
 
 def prune_graph(graph: dict, agg_limit: float):
     graph = remove_pits(graph)
-    print(len(graph))
     graph = keep_decisions(graph)
-    print(len(graph))
     graph = remove_tiny_leaves(graph, agg_limit)
     return graph
 
@@ -494,6 +492,11 @@ def trenchard(graph):
 
     return apsp
 
+def verify_graph(graph: dict):
+    for node in graph.values():
+        for out in node.outs:
+            if out[0].id not in graph:
+                print("Missing " + str(out[0].id))
 
 if __name__=="__main__":
     graph: dict = read_data()
@@ -507,53 +510,61 @@ if __name__=="__main__":
 
     print("Graph pruned to " + str(len(graph)) + " nodes")
 
+    verify_graph(graph)
+
     probability_dict: dict = {}
 
-    counter = 0
-    d_count = 0
-    apsp = {}
-    detatchment = {}
-    for node in graph.values():
-        added = False
-        for out in node.outs:
-            if out[1] > AGGLOMERATE_LIMIT:#Neighbour too far away so we will do calculations
-                break#All outs are sorted so we can break knowing next ones are even further away
+    #counter = 0
+    #d_count = 0
+    #apsp = {}
+    #detatchment = {}
+    #for node in graph.values():
+        #added = False
+        #for out in node.outs:
+            #if out[1] > AGGLOMERATE_LIMIT:#Neighbour too far away so we will do calculations
+                #break#All outs are sorted so we can break knowing next ones are even further away
 
-            elif out[0].id in apsp:#We already have calulated neighbours paths so we will reuse it
-                total_detatchment = out[1] + detatchment[out[0].id]
+            #elif out[0].id in apsp:#We already have calulated neighbours paths so we will reuse it
+                #total_detatchment = out[1] + detatchment[out[0].id]
 
-                if total_detatchment > AGGLOMERATE_LIMIT:#If neighbour has recieved it's paths from another node we need to check how far that node is from current node
-                    continue
+                #if total_detatchment > AGGLOMERATE_LIMIT:#If neighbour has recieved it's paths from another node we need to check how far that node is from current node
+                    #continue
                 
-                else:
-                    added = True
-                    apsp[node.id] = apsp[out[0].id]#Reuse paths
-                    detatchment[node.id] = total_detatchment
+                #else:
+                    #added = True
+                    #apsp[node.id] = apsp[out[0].id]#Reuse paths
+                    #detatchment[node.id] = total_detatchment
 
                     #Add costs to neighbours manually because we have that info and otherwise costs to stolen node will be 0.
-                    for out in node.outs:
-                        apsp[node.id][out[0].id] = out[1]
+                    #for out in node.outs:
+                    #    apsp[node.id][out[0].id] = out[1]
 
-                    break
+                    #break
 
-        if added == False:
-            node_costs = dijkstra(node, apsp)
-            apsp[node.id] = node_costs
-            detatchment[node.id] = 0.0#Original calculations so theres no detatchment
-            d_count += 1
+        #if added == False:
+         #   node_costs = dijkstra(node, apsp)
+          #  apsp[node.id] = node_costs
+           # detatchment[node.id] = 0.0#Original calculations so theres no detatchment
+            #d_count += 1
 
-        counter += 1
-        if counter % 1000 == 0:
-            print(counter)
+        #counter += 1
+        #if counter % 1000 == 0:
+         #   print(counter)
 
     #apsp = trenchard(graph)
-    print("Generated apsp with only " + str(d_count) + " dijkstra calculations")
+    #print("Generated apsp with only " + str(d_count) + " dijkstra calculations")
 
-    print("Writing apsp.....")
-    with jsonlines.open('out/apsp.json', 'w') as f:
-        for key, value in apsp.items():
-            f.write({key:value})
-    print("Completed")
+    #print("Writing apsp.....")
+    #with jsonlines.open('out/apsp.json', 'w') as f:
+    #    for key, value in apsp.items():
+    #        f.write({key:value})
+    #print("Completed")
+
+    # Convert each Node object to a dictionary and save it in a list
+    nodes_data = {node_id: node.to_dict() for node_id, node in graph.items()}
+    
+    with open('out/graph.json', 'w') as json_file:
+        json.dump(nodes_data, json_file, indent=4)
 
     for id, obj in graph.items():
         probability_dict[id] = obj.incid_in_year
