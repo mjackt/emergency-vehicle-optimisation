@@ -1,4 +1,6 @@
+import csv
 import json
+import os
 import sys
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -8,13 +10,14 @@ import json
 import collections
 import heapq
 import jsonlines
+import pandas as pd
 
 from node import calc_distance
 from node import Node
 
 
 def read_data():
-    road_osm_file = open('input_data/osm.json')
+    road_osm_file = open('input_data/plymouth/osm.json')
 
     road_osm = json.load(road_osm_file)
 
@@ -23,12 +26,16 @@ def read_data():
     #dictionary of Nodes
     graph = {}
 
+    data_months = len(next(os.walk('input_data/call_data'))[1])
+
     #Init all nodes. Could be done in loop with checking ways but this solves finding node locations to init them
     for i in road_osm['elements']:
         if i['type'] == "node":
-            rand = np.random.poisson(0.1 , 1)[0]
+            inc = 0
+            if data_months == 0:#If theres no data then generate it randomly
+                inc = np.random.poisson(0.1 , 1)[0]
 
-            graph[i['id']] = Node(i['id'],(i['lat'],i['lon']), int(rand))
+            graph[i['id']] = Node(i['id'],(i['lat'],i['lon']), int(inc))
 
     #Handling ways
     for i in road_osm['elements']:
@@ -55,14 +62,14 @@ def read_data():
 
                 if i != 0 and oneway == False:
                     graph[nodes[i]].add_out(graph[nodes[i-1]], speed)
-                    graph[nodes[i-1]].ins.append(graph[nodes[i]])
+                    graph[nodes[i-1]].add_in(graph[nodes[i]])
 
                 if i != len(nodes)-1:
                     graph[nodes[i]].add_out(graph[nodes[i+1]], speed)
-                    graph[nodes[i+1]].ins.append(graph[nodes[i]])
+                    graph[nodes[i+1]].add_in(graph[nodes[i]])
 
     #Creating police nodes
-    police_osm_file = open('input_data/police.json')
+    police_osm_file = open('input_data/plymouth/police.json')
 
     police_osm = json.load(police_osm_file)
 
@@ -71,6 +78,7 @@ def read_data():
     police_ids = []
 
     for i in police_osm['elements']:
+        
         #Need to get one node to represent the way
         if i['type'] == "way":
             if 'tags' in i:
@@ -85,10 +93,12 @@ def read_data():
                 nearest = find_nearest_node(node_to_add, graph)
 
                 node_to_add.add_out(nearest, 30)
-                node_to_add.ins.append(nearest)
+                node_to_add.add_in(nearest)
 
                 nearest.add_out(node_to_add, 30)
-                nearest.ins.append(node_to_add)
+                nearest.add_in(node_to_add)
+
+                
 
                 graph[node_id] = node_to_add
                 police_ids.append(node_id)
@@ -99,16 +109,16 @@ def read_data():
                 nearest = find_nearest_node(node_to_add, graph)
 
                 node_to_add.add_out(nearest, 30)
-                node_to_add.ins.append(nearest)
+                node_to_add.add_in(nearest)
 
                 nearest.add_out(node_to_add, 30)
-                nearest.ins.append(node_to_add)
-
+                nearest.add_in(node_to_add)
+                
                 graph[i['id']] = node_to_add
                 police_ids.append(i['id'])
 
         elif i['type'] == "relation":
-            way_id = i['members'][0]
+            way_id = i['members'][0]['ref']
 
             for element in police_osm['elements']:
                 if element['type'] == 'way' and element['id'] == way_id:
@@ -124,10 +134,12 @@ def read_data():
             nearest = find_nearest_node(node_to_add, graph)
 
             node_to_add.add_out(nearest, 30)
-            node_to_add.ins.append(nearest)
+            node_to_add.add_in(nearest)
 
             nearest.add_out(node_to_add, 30)
-            nearest.ins.append(node_to_add)
+            nearest.add_in(node_to_add)
+
+            
 
             graph[node_id] = node_to_add
             police_ids.append(node_id)
@@ -169,8 +181,11 @@ def keep_decisions(graph: dict):
     while True:
         to_remove_2way = []
         to_remove_1out = []
+        delete_list = []
         for _, node in graph.items():
-            if len(node.outs) > 2 or node.police:
+            if len(node.outs) == 0:#Disconnected sections will reduce to one node
+                delete_list.append(node)
+            elif len(node.outs) > 2 or node.police:
                 continue
             elif len(node.outs) == 2:
                 out_ids = []
@@ -182,16 +197,19 @@ def keep_decisions(graph: dict):
                 for entry in node.ins:
                     in_ids.append(entry.id)
 
-                if collections.Counter(in_ids) == collections.Counter(out_ids):
+                if collections.Counter(in_ids) == collections.Counter(out_ids) and node.outs[0][0] != node.outs[1][0]:
                     to_remove_2way.append(node)
             else:#1 out
                 if node.outs[0][0] not in node.ins:#Prevent pointing to self
                     to_remove_1out.append(node)
 
 
-        if len(to_remove_2way) == 0 and len(to_remove_1out) == 0:
+        if len(delete_list) == 0 and len(to_remove_2way) == 0 and len(to_remove_1out) == 0:
             break
         else:
+            for node in delete_list:
+                del graph[node.id]
+                
             for node in to_remove_2way:
                 graph = prune_2way_node(graph, node)
             
@@ -203,41 +221,63 @@ def keep_decisions(graph: dict):
 def prune_1out_node(graph: dict, node):
     #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
-    exit = node.outs[0][0]
+    exit = node.outs[0][0]#
+
+    if exit.id == 11658309312:
+        print(node)
 
     if exit in node.ins:#Sometimes there will be one way circles i.e car parks which if unchecked results in node pointing to itself which causes issues
         return graph
-    
+
     new_ins = []
+    #Keep existing in list minus node being pruned
     for into in exit.ins:
         if into.id != node.id:
             new_ins.append(into)
 
+    #Now we need to point all nodes going into prunee towards the only out of prunee
     for entry in node.ins:
         for i in range(len(entry.outs)):
             if entry.outs[i][0].id == node.id:
                 index_of_pruned = i
                 break
+        if entry in exit.ins:#Stops 2 edges going in same direction between nodes existing
+            graph[entry.id].outs.pop(index_of_pruned)
+            continue
 
         dist_to_exit = node.outs[0][1]
         
         combined_dist = entry.outs[index_of_pruned][1] + dist_to_exit
         new_out = (exit, combined_dist)
-
+        
         graph[entry.id].outs[index_of_pruned] = new_out
 
         new_ins.append(entry)
     
-    graph[exit.id].ins = new_ins
+    #Theres a specific spot in Plymouth with a one way loop with entry but no exit. Obviosuly this breaks the logic of the 1 way pruning
+    try:
+        graph[exit.id].ins = new_ins
+    except:
+        print("Issue with: " + str(exit.id))
+        graph = recursive_destruction(graph, node)
     
     graph.pop(node.id)
 
     return graph
 
+def recursive_destruction(graph: dict, node: Node):
+    return graph
+
 
 def prune_2way_node(graph: dict, node):
+    if len(node.outs) != 2 or len(node.ins) != 2:#Pruning may have circled back round turning a 2 way node into a leaf. So this just makes that not an issue and it will prob be removed by leaf pruning
+        return graph
     #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
+
+    prevent_double_point = False
+    if node.ins[0] in node.ins[1].ins:
+        prevent_double_point = True
 
     for entry in node.ins:
         if node.ins.index(entry) == 0:
@@ -245,10 +285,17 @@ def prune_2way_node(graph: dict, node):
         else:
             other_node = node.ins[0]
 
+        #Figuring out which out needs to be redirected
         for i in range(len(entry.outs)):
             if entry.outs[i][0].id == node.id:
                 index_of_pruned = i
                 break
+        
+
+        if prevent_double_point:#If other 2 nodes are already connected then we can just delete the prunee
+            graph[entry.id].outs.pop(index_of_pruned)
+            graph[entry.id].ins.remove(node)
+            continue
 
         for out in node.outs:
             if out[0].id == other_node.id:
@@ -307,8 +354,14 @@ def remove_leaf(node, graph: dict):
 
 def prune_graph(graph: dict, agg_limit: float):
     graph = remove_pits(graph)
-    graph = keep_decisions(graph)
-    graph = remove_tiny_leaves(graph, agg_limit)
+    changes = True
+    while changes == True:
+        start_len = len(graph)
+        graph = keep_decisions(graph)
+        graph = remove_tiny_leaves(graph, agg_limit)
+        if start_len == len(graph):
+            changes = False
+
     return graph
 
 def remove_node(end, graph: dict):
@@ -501,14 +554,42 @@ def verify_graph(graph: dict):
 if __name__=="__main__":
     graph: dict = read_data()
 
-    AGGLOMERATE_LIMIT = 45.0
+    AGGLOMERATE_LIMIT = 30.0
 
     print("Data read")
     print("Graph size: " + str(len(graph)))
 
+    print(graph[11658309312])
+
     graph = prune_graph(graph, AGGLOMERATE_LIMIT)
 
     print("Graph pruned to " + str(len(graph)) + " nodes")
+
+    data_months = len(next(os.walk('input_data/call_data'))[1])
+    
+    #for root,_,files in os.walk("input_data/call_data"):
+    #    counter = 0
+    #    for file in files:
+    #        print(str(counter) + "/" + str(data_months))
+    #        counter += 1
+    #        if file.endswith(".csv"):
+    #            with open(str(root) + "/" + str(file), 'r') as file:
+    #                reader = csv.DictReader(file)
+    #                i=0
+    #                for row in reader:
+    #                    i += 1
+    #                    if row['Latitude'] == '':
+    #                        continue
+    #                    nearest = None
+    #                    nearest_dist = sys.maxsize
+    #                    for node in graph.values():
+    #                        dist = calc_distance(float(row['Latitude']), float(row['Longitude']), node.location[0], node.location[1])
+    #
+    #                        if dist < nearest_dist:
+    #                            nearest = node
+    #                            nearest_dist = dist
+
+                        #Add inc if still close enough
 
     verify_graph(graph)
 
@@ -572,30 +653,23 @@ if __name__=="__main__":
     with open('out/probs.json', 'w') as f:
         json.dump(probability_dict, f)
 
-
     G = nx.DiGraph()
 
     for node in graph:
-        pos=graph[node].location[1], graph[node].location[0]
-        G.add_node(node, pos=pos)
+        pos = graph[node].location[1], graph[node].location[0]
+        color = 'r' if graph[node].police else 'b'  # Red for police, blue otherwise
+        G.add_node(node, pos=pos, color=color)
 
     for node in graph:
         for edge in graph[node].outs:
-            G.add_edge(graph[node].id, edge[0].id, weight = edge[1])
+            G.add_edge(graph[node].id, edge[0].id, weight=edge[1])
 
-    pos=nx.get_node_attributes(G,'pos')
+    # Get positions and colors
+    pos = nx.get_node_attributes(G, 'pos')
+    colors = [G.nodes[node]['color'] for node in G.nodes()]
 
-
-    start = random.choice(list(graph.keys()))
-    end = random.choice(list(graph.keys()))
-
-    path = nx.dijkstra_path(G, start, end)
-
-    path_edges = list(zip(path,path[1:]))
-    nx.draw_networkx_nodes(G,pos,nodelist=path,node_color='r')
-    nx.draw_networkx_edges(G,pos,edgelist=path_edges,edge_color='r',width=1)
-
-    nx.draw_networkx(G, pos, with_labels = False, node_size = 10)
+    # Draw nodes with specified colors
+    nx.draw_networkx(G, pos, with_labels = False, node_size = 10, node_color = colors)
 
     plt.savefig("out/graph.pdf")
     plt.show()

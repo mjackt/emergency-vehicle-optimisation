@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs};
 use crate::types;
 use crate::node::Node;
 
-const PLACE: &str = "exeter";
+const PLACE: &str = "plymouth";
 
 pub fn probs() -> HashMap<types::Location, u32> {
     // Attempt to read the JSON file
@@ -15,6 +15,9 @@ pub fn probs() -> HashMap<types::Location, u32> {
 
     let mut data: HashMap<types::Location, u32> = HashMap::new();
     for (key, value) in raw_data {
+        if value == 0{
+            continue
+        }
         let key_as_u64 = key.parse::<u64>().expect("Invalid type in probs.json");
         data.insert(key_as_u64, value);
     }

@@ -1,6 +1,7 @@
 import math
 import json
 import json_fix
+import numpy as np
 
 class Node:
 #List of out nodes
@@ -20,17 +21,25 @@ class Node:
 
     def __str__(self):
         out_list = []
+        in_list = []
         for node in self.outs:
             out_list.append(node[0].id)
 
-        return f"\n {self.id}\n{self.location}\n{out_list}\n\n"
+        for node in self.ins:
+            in_list.append(node.id)
+
+        return f"\n {self.id}\n{self.location}\nOuts: {out_list}\nIns: {in_list}\n\n"
     
     def __repr__(self):
         out_list = []
+        in_list = []
         for node in self.outs:
             out_list.append(node[0].id)
 
-        return f"\n {self.id}\n{self.location}\n{out_list}\n\n"
+        for node in self.ins:
+            in_list.append(node.id)
+
+        return f"\n {self.id}\n{self.location}\nOuts: {out_list}\nIns: {in_list}\n\n"
 
     def add_out(self, node_to_add, speed):
         #Speed in m/s 
@@ -51,24 +60,28 @@ class Node:
         if added == False:
             self.outs.append((node_to_add, cost))
 
+    def add_in(self, node_to_add):
+        if node_to_add not in self.ins:
+            self.ins.append(node_to_add)
+
     def to_dict(self):
         # Create a dictionary representation of the Node, including only the relevant data
         return {
             "outs": [{"id": out_node[0].id, "cost": out_node[1]} for out_node in self.outs]
-        }      
+        }   
+
+    def add_incident(self, incid):
+        self.incid_in_year += incid   
 
 
-
+DEG_TO_RAD = np.pi / 180
 def calc_distance(lat1, lon1, lat2, lon2):
     R = 6378.137 #Earth radius in km
 
-    dLat = lat2 * math.pi / 180 - lat1 * math.pi / 180
-    dLon = lon2 * math.pi / 180 - lon1 * math.pi / 180
+    dLat = (lat2 - lat1) * DEG_TO_RAD
+    dLon = (lon2 - lon1) * DEG_TO_RAD
 
-    a = math.sin(dLat/2) * math.sin(dLat/2) + \
-    math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) * \
-    math.sin(dLon/2) * math.sin(dLon/2)
+    a = np.sin(dLat / 2) ** 2 + np.cos(lat1 * DEG_TO_RAD) * np.cos(lat2 * DEG_TO_RAD) * np.sin(dLon / 2) ** 2
 
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = R * c
-    return d * 1000 #metres
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+    return R * c * 1000  # metres

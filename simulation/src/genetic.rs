@@ -4,14 +4,13 @@ use rand::{distributions::{Uniform, Distribution}, rngs::ThreadRng, Rng, seq::Sl
 
 use crate::{types, simulation::evaluate, node::Node};
 
-pub fn generate_solution(base_number: u8, max_cars: u8) -> Vec<u8>{
+pub fn generate_solution(base_number: u8, max_cars: u8, rng: &mut ThreadRng) -> Vec<u8>{
     let mut solution: Vec<u8> = vec![0; base_number as usize];
 
-    let mut rng: ThreadRng = rand::thread_rng();
     let selection: Uniform<u8> = Uniform::from(0..base_number);
 
     for i in 0..max_cars{
-        let choice: u8 = selection.sample(&mut rng);
+        let choice: u8 = selection.sample(rng);
         solution[choice as usize] += 1;
     }
 
@@ -25,20 +24,20 @@ pub fn tournament_selection(solutions: &Vec<Vec<u8>>, num_to_select: u8, tournam
                             base_locations: &Vec<types::Location>,
                             route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
                             timestep: types::Time,
-                            end_time: types::Time
+                            end_time: types::Time,
+                            rng: &mut ThreadRng,
                             ) -> Vec<usize>{//Vec of indexes to be selected
 
     let mut selected: Vec<usize> = Vec::new();
     let mut selected_fitness: Vec<types::Time> = Vec::new();
 
-    let mut rng: ThreadRng = rand::thread_rng();
     let uniform_rng: Uniform<usize> = Uniform::from(0..solutions.len());
 
     for j in 0..tournament_size{
-        let mut choice: usize = uniform_rng.sample(&mut rng);
+        let mut choice: usize = uniform_rng.sample(rng);
 
         while selected.contains(&choice){
-            choice = uniform_rng.sample(&mut rng);
+            choice = uniform_rng.sample(rng);
         }
 
         let tournament_entry: &Vec<u8> = &solutions[choice];
@@ -70,22 +69,20 @@ pub fn tournament_selection(solutions: &Vec<Vec<u8>>, num_to_select: u8, tournam
     selected
 }
 
-fn mutate(solution: &mut Vec<u8>, num_of_mutations: u8){
-    let mut rng: ThreadRng = rand::thread_rng();
+fn mutate(solution: &mut Vec<u8>, num_of_mutations: u8, rng: &mut ThreadRng){
     let uniform_rng: Uniform<usize> = Uniform::from(0..solution.len());
     for _ in 0..num_of_mutations{
-        let mut index = uniform_rng.sample(&mut rng);
+        let mut index = uniform_rng.sample(rng);
         if solution[index] > 0 {
             solution[index] -= 1;
-            index = uniform_rng.sample(&mut rng);
+            index = uniform_rng.sample(rng);
             solution[index] += 1;
         }
     }
 }
 
 //uniform crossover with random repair
-pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u8){
-    let mut rng: ThreadRng = rand::thread_rng();
+pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u8, rng: &mut ThreadRng){
     for i in 0..a.len(){
         let random_bool = rng.gen::<bool>();
         if random_bool == true{
@@ -96,11 +93,11 @@ pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u8){
         }
     }
 
-    repair(a, max_cars);
-    repair(b, max_cars);
+    repair(a, max_cars, rng);
+    repair(b, max_cars, rng);
 }
 
-fn repair(solution: &mut Vec<u8>, max_cars: u8){
+fn repair(solution: &mut Vec<u8>, max_cars: u8, rng: &mut ThreadRng){
     let mut total_sum: i8 = 0;
     for i in 0..solution.len(){
         total_sum += solution[i] as i8;
@@ -117,11 +114,10 @@ fn repair(solution: &mut Vec<u8>, max_cars: u8){
     else{
         change = 1;
     }
-    let mut rng: ThreadRng = rand::thread_rng();
     let uniform_rng: Uniform<usize> = Uniform::from(0..solution.len());
 
     while total_sum != max_cars as i8{
-        let index = uniform_rng.sample(&mut rng);
+        let index = uniform_rng.sample(rng);
         if solution[index] > 0{
             let temp: i8 = solution[index].clone() as i8 + change;
             solution[index] = temp as u8;
@@ -140,9 +136,10 @@ pub fn evolve_pop(solutions: &mut Vec<Vec<u8>>,
                     timestep: types::Time,
                     end_time: types::Time,
                     max_cars: u8,
-                    num_of_mutations: u8){
+                    num_of_mutations: u8,
+                    rng: &mut ThreadRng){
 
-    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time);
+    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time, rng);
     selected_indexes.shuffle(&mut thread_rng());
 
     let mut new_solutions: Vec<Vec<u8>> = Vec::new();
@@ -156,9 +153,9 @@ pub fn evolve_pop(solutions: &mut Vec<Vec<u8>>,
             let mut a = solutions[selected_index].clone();
             let mut b = solutions[next_selected_index].clone();
 
-            crossover(&mut a, &mut b, max_cars);
-            mutate(&mut a, num_of_mutations);
-            mutate(&mut b, num_of_mutations);
+            crossover(&mut a, &mut b, max_cars, rng);
+            mutate(&mut a, num_of_mutations, rng);
+            mutate(&mut b, num_of_mutations, rng);
 
             new_solutions.push(a);
             new_solutions.push(b);

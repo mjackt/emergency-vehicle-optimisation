@@ -7,6 +7,7 @@ pub struct Vehicle{
     location: types::Location,
     secs_till_free: types::Time,
     name: String,
+    last_travel: types::Time,
 }
 
 impl Vehicle{
@@ -16,6 +17,7 @@ impl Vehicle{
             location: base,
             secs_till_free: 0.0,
             name,
+            last_travel: 0.0,
         }
     }
 
@@ -47,6 +49,7 @@ impl Vehicle{
         // Update state
         self.location = target;
         self.secs_till_free = travel_time + incident_time;
+        self.last_travel = travel_time;
 
         Ok(target)
     }
@@ -58,6 +61,11 @@ impl Vehicle{
         else{
             self.secs_till_free = self.secs_till_free - timestep;
         }
+    }
+
+    pub fn reset(&mut self){
+        self.location = self.base;
+        self.secs_till_free = self.last_travel;
     }
 }
 

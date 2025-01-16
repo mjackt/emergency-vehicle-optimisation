@@ -6,6 +6,7 @@ use crate::incident;
 
 use std::collections::HashMap;
 use std::collections::BinaryHeap;
+use rand::rngs::ThreadRng;
 use rand::Rng;
 
 fn update_route_cache(route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, new_knowledge: &HashMap<types::Location, types::Time>, source: types::Location){
@@ -58,13 +59,19 @@ fn dijkstra(graph: &HashMap<types::Location, Node>, route_cache: &mut HashMap<(t
             }
         }
     }
+    local_discovery.insert(target, f32::MAX);//Marks as unreachable
     update_route_cache(route_cache, &local_discovery, source);
     None
 }
 
 fn calc_travel_time(source: types::Location, target: types::Location, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, graph: &HashMap<types::Location, Node>) -> Option<types::Time>{
     match route_cache.get(&(source, target)){
-        Some(time) => return Some(time.clone()),
+        Some(time) => {
+            if *time == f32::MAX{//Already known to be unreachable
+                return None
+            }
+            return Some(*time)
+        }
         None => {
             return dijkstra(graph, route_cache, source, target);
         }
@@ -98,7 +105,7 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                         }
                     }
                     None => {//Graph must be disconnected
-                        println!("Unreachable {}", event.get_location());
+                        println!("Unreachable {} -------> {}", current_loc, target);
                         event.unreachable();
                         continue;
                     }
@@ -119,16 +126,23 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
 
     for car in vehicles{
         if car.get_secs_till_free() == 0.0 && car.get_location() != car.get_base(){
-            let travel_time: types::Time = calc_travel_time(car.get_location(), car.get_base(), route_cache, graph).unwrap();
+            match calc_travel_time(car.get_location(), car.get_base(), route_cache, graph){
+                Some(travel_time) => {
+                    car.goto(car.get_base(), travel_time, 0.0);
+                }
+                None => {
+                    //Should never really occur but beause osm boundaries are weird sometimes there may be large unescapable areas
+                    //Just resets car with previous travel cost
+                    car.reset();
+                }
+            }
 
-            car.goto(car.get_base(), travel_time, 0.0);
             //println!("{}: {} returning to base. Travel time: {}\n", current_time, car.get_name(), travel_time);
         }
     }
 }
 
-fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64){
-    let mut rng = rand::thread_rng();
+fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
     for (location, num_per_year) in incident_probs{
         //Could save some maths here
         let prob: f64 = *num_per_year as f64 / 365.0 / 24.0 / 60.0 / 60.0 * timestep as f64 * probability_weighting;//Converting num per year into probabilty per timestep
@@ -153,13 +167,12 @@ fn run(graph: &HashMap<types::Location, Node>, incident_probs: &HashMap<types::L
     const PROBABILTY_WEIGHTING: f64 = 1.5;
     let mut incidents: Vec<incident::Incident> = Vec::new();
     let mut time: types::Time = 0.0;
+    let mut rng = rand::thread_rng();
 
     while time < end_time{
-        generate_incidents(&mut incidents, &incident_probs, timestep, time, PROBABILTY_WEIGHTING);
+        generate_incidents(&mut incidents, &incident_probs, timestep, time, PROBABILTY_WEIGHTING, &mut rng);
         dispatching(vehicles, &mut incidents, graph, route_cache, time);
-        
         step_vehicles(vehicles, timestep);
-
         time = time + timestep;
     }
 
