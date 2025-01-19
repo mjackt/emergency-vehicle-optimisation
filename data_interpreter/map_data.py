@@ -17,7 +17,9 @@ from node import Node
 
 
 def read_data():
-    road_osm_file = open('input_data/plymouth/osm.json')
+    BROKEN_IDS = [182576008, 1254204193, 1254204194, 785806394, 1018262965, 1254200712, 1254200713, 1254203133, 1254203134, 1254203136, 1254203137]#List of known issues in OSM data that my program will ignore.
+
+    road_osm_file = open('input_data/keynsham/osm.json')
 
     road_osm = json.load(road_osm_file)
 
@@ -40,12 +42,15 @@ def read_data():
     #Handling ways
     for i in road_osm['elements']:
         if i['type'] == "way":
+            if i['id'] in BROKEN_IDS:
+                continue
+
             nodes = i['nodes']
 
             oneway=False
 
             if 'oneway' in i['tags']:
-                if i['tags']['oneway'] == 'yes':
+                if i['tags']['oneway'] == 'yes' or i['tags']['oneway'] == "-1":
                     oneway = True
 
             speed: int = 30
@@ -69,7 +74,7 @@ def read_data():
                     graph[nodes[i+1]].add_in(graph[nodes[i]])
 
     #Creating police nodes
-    police_osm_file = open('input_data/plymouth/police.json')
+    police_osm_file = open('input_data/keynsham/police.json')
 
     police_osm = json.load(police_osm_file)
 
@@ -208,6 +213,14 @@ def keep_decisions(graph: dict):
             break
         else:
             for node in delete_list:
+                for entry in node.ins:
+                    index_to_go = None
+                    for i in range(len(entry.outs)):
+                        if entry.outs[i][0].id == node.id:
+                            index_to_go = i
+                            break
+                    entry.outs.pop(index_to_go)
+
                 del graph[node.id]
                 
             for node in to_remove_2way:
@@ -221,10 +234,7 @@ def keep_decisions(graph: dict):
 def prune_1out_node(graph: dict, node):
     #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
-    exit = node.outs[0][0]#
-
-    if exit.id == 11658309312:
-        print(node)
+    exit = node.outs[0][0]
 
     if exit in node.ins:#Sometimes there will be one way circles i.e car parks which if unchecked results in node pointing to itself which causes issues
         return graph
@@ -253,21 +263,12 @@ def prune_1out_node(graph: dict, node):
         graph[entry.id].outs[index_of_pruned] = new_out
 
         new_ins.append(entry)
-    
-    #Theres a specific spot in Plymouth with a one way loop with entry but no exit. Obviosuly this breaks the logic of the 1 way pruning
-    try:
-        graph[exit.id].ins = new_ins
-    except:
-        print("Issue with: " + str(exit.id))
-        graph = recursive_destruction(graph, node)
+
+    graph[exit.id].ins = new_ins
     
     graph.pop(node.id)
 
     return graph
-
-def recursive_destruction(graph: dict, node: Node):
-    return graph
-
 
 def prune_2way_node(graph: dict, node):
     if len(node.outs) != 2 or len(node.ins) != 2:#Pruning may have circled back round turning a 2 way node into a leaf. So this just makes that not an issue and it will prob be removed by leaf pruning
@@ -549,7 +550,7 @@ def verify_graph(graph: dict):
     for node in graph.values():
         for out in node.outs:
             if out[0].id not in graph:
-                print("Missing " + str(out[0].id))
+                print(str(node.id) + " has non existent out: " + str(out[0].id))
 
 if __name__=="__main__":
     graph: dict = read_data()
@@ -558,8 +559,6 @@ if __name__=="__main__":
 
     print("Data read")
     print("Graph size: " + str(len(graph)))
-
-    print(graph[11658309312])
 
     graph = prune_graph(graph, AGGLOMERATE_LIMIT)
 
