@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs};
 use crate::types;
 use crate::node::Node;
 
-const PLACE: &str = "plymouth";
+const PLACE: &str = "devon";
 
 pub fn probs() -> HashMap<types::Location, u32> {
     // Attempt to read the JSON file

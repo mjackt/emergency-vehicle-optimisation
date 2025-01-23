@@ -19,7 +19,7 @@ from node import Node
 def read_data():
     BROKEN_IDS = [182576008, 1254204193, 1254204194, 785806394, 1018262965, 1254200712, 1254200713, 1254203133, 1254203134, 1254203136, 1254203137]#List of known issues in OSM data that my program will ignore.
 
-    road_osm_file = open('input_data/keynsham/osm.json')
+    road_osm_file = open('input_data/devon/osm.json')
 
     road_osm = json.load(road_osm_file)
 
@@ -28,14 +28,17 @@ def read_data():
     #dictionary of Nodes
     graph = {}
 
-    data_months = len(next(os.walk('input_data/call_data'))[1])
+    try:
+        data_months = len(next(os.walk('input_data/call_data'))[1])
+    except:
+        data_months = 0
 
     #Init all nodes. Could be done in loop with checking ways but this solves finding node locations to init them
     for i in road_osm['elements']:
         if i['type'] == "node":
             inc = 0
-            if data_months == 0:#If theres no data then generate it randomly
-                inc = np.random.poisson(0.1 , 1)[0]
+            if data_months == 0:#If theres no data
+                inc = 1
 
             graph[i['id']] = Node(i['id'],(i['lat'],i['lon']), int(inc))
 
@@ -74,7 +77,7 @@ def read_data():
                     graph[nodes[i+1]].add_in(graph[nodes[i]])
 
     #Creating police nodes
-    police_osm_file = open('input_data/keynsham/police.json')
+    police_osm_file = open('input_data/devon/police.json')
 
     police_osm = json.load(police_osm_file)
 
@@ -352,6 +355,10 @@ def remove_leaf(node, graph: dict):
 
     return graph
 
+def remove_isoltaed(graph: dict):
+    for node in graph:
+        if len(node.outs) == 1:
+            print()
 
 def prune_graph(graph: dict, agg_limit: float):
     graph = remove_pits(graph)
@@ -363,6 +370,7 @@ def prune_graph(graph: dict, agg_limit: float):
         if start_len == len(graph):
             changes = False
 
+    #graph = remove_isolated(graph)
     return graph
 
 def remove_node(end, graph: dict):
@@ -564,8 +572,7 @@ if __name__=="__main__":
 
     print("Graph pruned to " + str(len(graph)) + " nodes")
 
-    data_months = len(next(os.walk('input_data/call_data'))[1])
-    
+    #data_months = len(next(os.walk('input_data/call_data'))[1])  
     #for root,_,files in os.walk("input_data/call_data"):
     #    counter = 0
     #    for file in files:
@@ -670,5 +677,5 @@ if __name__=="__main__":
     # Draw nodes with specified colors
     nx.draw_networkx(G, pos, with_labels = False, node_size = 10, node_color = colors)
 
-    plt.savefig("out/graph.pdf")
+    #plt.savefig("out/graph.pdf")
     plt.show()

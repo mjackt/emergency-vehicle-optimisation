@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use rand::{distributions::{Uniform, Distribution}, rngs::ThreadRng, Rng, seq::SliceRandom, thread_rng};
 
-use crate::{types, simulation::evaluate, node::Node};
+use crate::{incident, node::Node, simulation::evaluate, types};
 
-pub fn generate_solution(base_number: u8, max_cars: u8, rng: &mut ThreadRng) -> Vec<u8>{
+pub fn generate_solution(base_number: u8, max_cars: u16, rng: &mut ThreadRng) -> Vec<u8>{
     let mut solution: Vec<u8> = vec![0; base_number as usize];
 
     let selection: Uniform<u8> = Uniform::from(0..base_number);
@@ -17,9 +17,9 @@ pub fn generate_solution(base_number: u8, max_cars: u8, rng: &mut ThreadRng) -> 
     return solution
 }
 
-pub fn tournament_selection(solutions: &Vec<Vec<u8>>, num_to_select: u8, tournament_size: u8,
+pub fn tournament_selection(solutions: &Vec<Vec<u8>>, num_to_select: u16, tournament_size: u16,
                             eval_iterations: u8,
-                            incident_probs: &HashMap<types::Location, u32>,
+                            spawn_stack: &Vec<Vec<incident::Incident>>,
                             graph: &HashMap<types::Location, Node>,
                             base_locations: &Vec<types::Location>,
                             route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
@@ -41,7 +41,7 @@ pub fn tournament_selection(solutions: &Vec<Vec<u8>>, num_to_select: u8, tournam
         }
 
         let tournament_entry: &Vec<u8> = &solutions[choice];
-        let solution_fitness = evaluate(tournament_entry, eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time);
+        let solution_fitness = evaluate(tournament_entry, eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time);
 
         for i in 0..num_to_select as usize{
             match selected_fitness.get(i){
@@ -82,7 +82,7 @@ fn mutate(solution: &mut Vec<u8>, num_of_mutations: u8, rng: &mut ThreadRng){
 }
 
 //uniform crossover with random repair
-pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u8, rng: &mut ThreadRng){
+pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u16, rng: &mut ThreadRng){
     for i in 0..a.len(){
         let random_bool = rng.gen::<bool>();
         if random_bool == true{
@@ -97,7 +97,7 @@ pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u8, rng: &mut Threa
     repair(b, max_cars, rng);
 }
 
-fn repair(solution: &mut Vec<u8>, max_cars: u8, rng: &mut ThreadRng){
+fn repair(solution: &mut Vec<u8>, max_cars: u16, rng: &mut ThreadRng){
     let mut total_sum: i8 = 0;
     for i in 0..solution.len(){
         total_sum += solution[i] as i8;
@@ -127,19 +127,19 @@ fn repair(solution: &mut Vec<u8>, max_cars: u8, rng: &mut ThreadRng){
 }
 
 pub fn evolve_pop(solutions: &mut Vec<Vec<u8>>,
-                    num_to_select: u8,
-                    tournament_size: u8,
+                    num_to_select: u16,
+                    tournament_size: u16,
                     eval_iterations: u8,
-                    incident_probs: &HashMap<types::Location, u32>,
+                    spawn_stack: &Vec<Vec<incident::Incident>>,
                     graph: &HashMap<types::Location, Node>, base_locations: &Vec<types::Location>,
                     route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
                     timestep: types::Time,
                     end_time: types::Time,
-                    max_cars: u8,
+                    max_cars: u16,
                     num_of_mutations: u8,
-                    rng: &mut ThreadRng){
+                    rng: &mut ThreadRng,){
 
-    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time, rng);
+    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time, rng);
     selected_indexes.shuffle(&mut thread_rng());
 
     let mut new_solutions: Vec<Vec<u8>> = Vec::new();
@@ -165,15 +165,15 @@ pub fn evolve_pop(solutions: &mut Vec<Vec<u8>>,
     *solutions = new_solutions;
 }
 
-pub fn avg_and_best_fitness(solutions: &Vec<Vec<u8>>, eval_iterations: u8, incident_probs: &HashMap<types::Location, u32>, graph: &HashMap<types::Location, Node>, base_locations: &Vec<types::Location>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time){
+pub fn avg_and_best_fitness(solutions: &Vec<Vec<u8>>, eval_iterations: u8, spawn_stack: &Vec<Vec<incident::Incident>>, graph: &HashMap<types::Location, Node>, base_locations: &Vec<types::Location>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time){
     let mut best_soltuion = &solutions[0];
-    let mut best_fitness = evaluate(&solutions[0], eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time);
+    let mut best_fitness = evaluate(&solutions[0], eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time);
 
     let mut total_fitness: types::Time = 0.0;
 
 
     for i in 1..solutions.len(){
-        let fit = evaluate(&solutions[i], eval_iterations, incident_probs, graph, base_locations, route_cache, timestep, end_time);
+        let fit = evaluate(&solutions[i], eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time);
         total_fitness += fit;
         if fit < best_fitness{
             best_fitness = fit;

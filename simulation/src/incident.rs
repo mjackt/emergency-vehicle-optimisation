@@ -1,5 +1,6 @@
 use crate::types;
 
+#[derive(Clone)]
 pub struct Incident{
     location: types::Location,
     service_time: types::Time,

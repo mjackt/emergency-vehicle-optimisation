@@ -126,6 +126,10 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
 
     for car in vehicles{
         if car.get_secs_till_free() == 0.0 && car.get_location() != car.get_base(){
+            if car.last_move_from_base() == true{//If it just came from base and now needs to return to base. We can just reuse calculated travel time for the reverse journey
+                car.goto(car.get_base(), car.get_last_travel(), 0.0);
+                continue
+            }
             match calc_travel_time(car.get_location(), car.get_base(), route_cache, graph){
                 Some(travel_time) => {
                     car.goto(car.get_base(), travel_time, 0.0);
@@ -142,7 +146,7 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
     }
 }
 
-fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
+pub fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
     for (location, num_per_year) in incident_probs{
         //Could save some maths here
         let prob: f64 = *num_per_year as f64 / 365.0 / 24.0 / 60.0 / 60.0 * timestep as f64 * probability_weighting;//Converting num per year into probabilty per timestep
@@ -157,20 +161,23 @@ fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &
     }
 }
 
+fn spawn_incidents(spawn_stack: &Vec<Vec<incident::Incident>>, incidents: &mut Vec<incident::Incident>, index: usize){
+    let mut this_step_incidents: Vec<incident::Incident> = spawn_stack[index].clone();
+    incidents.append(&mut this_step_incidents);
+}
+
 fn step_vehicles(vehicles: &mut Vec<vehicle::Vehicle>, timestep: types::Time){
     for vehicle in vehicles{
         vehicle.timestep(timestep);
     }
 }
 
-fn run(graph: &HashMap<types::Location, Node>, incident_probs: &HashMap<types::Location, u32>, vehicles: &mut Vec<vehicle::Vehicle>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time) -> types::Time{
-    const PROBABILTY_WEIGHTING: f64 = 1.5;
+fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<incident::Incident>>, vehicles: &mut Vec<vehicle::Vehicle>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time) -> types::Time{
     let mut incidents: Vec<incident::Incident> = Vec::new();
     let mut time: types::Time = 0.0;
-    let mut rng = rand::thread_rng();
 
     while time < end_time{
-        generate_incidents(&mut incidents, &incident_probs, timestep, time, PROBABILTY_WEIGHTING, &mut rng);
+        spawn_incidents(spawn_stack, &mut incidents, (time/timestep) as usize);
         dispatching(vehicles, &mut incidents, graph, route_cache, time);
         step_vehicles(vehicles, timestep);
         time = time + timestep;
@@ -196,18 +203,19 @@ fn run(graph: &HashMap<types::Location, Node>, incident_probs: &HashMap<types::L
     }
 
     let avg_response_time: types::Time = sum_response_times / inc_count as f32;
-
+    //println!("Responded to {} incidents", inc_count);
     return avg_response_time
 }
 
 pub fn evaluate(solution: &Vec<u8>,
             iterations: u8,
-            incident_probs: &HashMap<types::Location, u32>,
+            spawn_stack: &Vec<Vec<incident::Incident>>,
             graph: &HashMap<types::Location, Node>,
             base_locations: &Vec<types::Location>,
             route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
             timestep: types::Time,
-            end_time: types::Time) -> types::Time{
+            end_time: types::Time,
+            ) -> types::Time{
     let mut sum_avg_response_times: types::Time = 0.0;
 
     for _ in 0..iterations{
@@ -225,7 +233,7 @@ pub fn evaluate(solution: &Vec<u8>,
             i += 1;
         }
 
-        let avg_response_time: types::Time = run(graph, incident_probs, &mut vehicles, route_cache, timestep, end_time);
+        let avg_response_time: types::Time = run(graph, spawn_stack, &mut vehicles, route_cache, timestep, end_time,);
 
         sum_avg_response_times += avg_response_time;
     }
