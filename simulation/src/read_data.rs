@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs};
 use crate::types;
 use crate::node::Node;
 
-const PLACE: &str = "devon";
+const PLACE: &str = "dnc";
 
 pub fn probs() -> HashMap<types::Location, u32> {
     // Attempt to read the JSON file
@@ -82,10 +82,18 @@ pub fn graph() -> HashMap<types::Location, Node>{
 }
 
 pub fn police() -> Vec<types::Location>{
-    let path = format!("map_data/{}/police.json", PLACE);
-    let file_content = fs::read_to_string(path).expect("Error loading police.json");
+    let path = format!("map_data/{}/police_ids.json", PLACE);
+    let file_content = fs::read_to_string(path).expect("Error loading police_ids.json");
 
-    let data: Vec<types::Location> = serde_json::from_str(&file_content).expect("Error parsing police.json");
+    let data: Vec<types::Location> = serde_json::from_str(&file_content).expect("Error parsing police_ids.json");
 
+    data
+}
+
+pub fn police_names() -> Vec<String>{
+    let path = format!("map_data/{}/police_names.json", PLACE);
+    let file_content = fs::read_to_string(path).expect("Error loading police_names.json");
+
+    let data: Vec<String> = serde_json::from_str(&file_content).expect("Error parsing police_names.json");
     data
 }

@@ -85,7 +85,7 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                 current_time: types::Time){
             
     for event in incidents{
-        if event.is_solved(){
+        if event.is_solved() || !event.is_valid(){
             continue;
         }
 
@@ -105,9 +105,9 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                         }
                     }
                     None => {//Graph must be disconnected
-                        println!("Unreachable {} -------> {}", current_loc, target);
                         event.unreachable();
-                        continue;
+                        println!("Incident at {} is unreachable", event.get_location());
+                        break;
                     }
                 }
             }

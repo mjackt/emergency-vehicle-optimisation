@@ -6,8 +6,10 @@ mod dijkstra_node;
 mod read_data;
 mod simulation;
 mod genetic;
+mod data;
 
 use std::collections::HashMap;
+use data::Data;
 use incident::Incident;
 use node::Node;
 use rand::thread_rng;
@@ -33,7 +35,7 @@ fn main(){
 
     //TUNABLES
     //Sim stuff
-    const MAX_CARS: u16 = 60;
+    const MAX_CARS: u16 = 120;
     const TIMESTEP: types::Time = 300.0;
     const END_TIME: types::Time = 60.0 * 60.0 * 12.0;//Secs. Not inclusive i.e when time hits end time its over
     const PROBABILITY_WEIGHTING: f64 = 0.4;
@@ -59,11 +61,21 @@ fn main(){
     }
     println!("Solutions generated");
 
-    avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME);
+    let start: Data = avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME);
 
     for i in 0..TIMEOUT{
         println!("{}/{}", i, TIMEOUT);
         evolve_pop(&mut solutions, SOL_NUM/2, SOL_NUM*3/4, EVAL_ITER, &spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME, MAX_CARS, 1, &mut rng);
     }
-    avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME);
+    let end: Data = avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME);
+
+    println!("*************\nStarting solutions:\n{}", start);
+
+    println!("\n\nFinal solutions:\n{}\n", end);
+
+    let names: Vec<String> = read_data::police_names();
+    let solution: &Vec<u8> = end.get_best_solution();
+    for i in 0..solution.len(){
+        println!("{}: {}", names[i], solution[i]);
+    }
 }

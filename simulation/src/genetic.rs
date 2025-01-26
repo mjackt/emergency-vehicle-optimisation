@@ -1,8 +1,8 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::atomic::AtomicI16};
 
 use rand::{distributions::{Uniform, Distribution}, rngs::ThreadRng, Rng, seq::SliceRandom, thread_rng};
 
-use crate::{incident, node::Node, simulation::evaluate, types};
+use crate::{incident, node::Node, simulation::evaluate, types, data::Data};
 
 pub fn generate_solution(base_number: u8, max_cars: u16, rng: &mut ThreadRng) -> Vec<u8>{
     let mut solution: Vec<u8> = vec![0; base_number as usize];
@@ -98,17 +98,17 @@ pub fn crossover(a: &mut Vec<u8>, b: &mut Vec<u8>, max_cars: u16, rng: &mut Thre
 }
 
 fn repair(solution: &mut Vec<u8>, max_cars: u16, rng: &mut ThreadRng){
-    let mut total_sum: i8 = 0;
+    let mut total_sum: i16 = 0;
     for i in 0..solution.len(){
-        total_sum += solution[i] as i8;
+        total_sum += solution[i] as i16;
     }
 
     let mut change: i8 = 1;
 
-    if total_sum == max_cars as i8{
+    if total_sum == max_cars as i16{
         return
     }
-    else if total_sum > max_cars as i8{
+    else if total_sum > max_cars as i16{
         change = -1;
     }
     else{
@@ -116,12 +116,12 @@ fn repair(solution: &mut Vec<u8>, max_cars: u16, rng: &mut ThreadRng){
     }
     let uniform_rng: Uniform<usize> = Uniform::from(0..solution.len());
 
-    while total_sum != max_cars as i8{
+    while total_sum != max_cars as i16{
         let index = uniform_rng.sample(rng);
         if solution[index] > 0{
             let temp: i8 = solution[index].clone() as i8 + change;
             solution[index] = temp as u8;
-            total_sum += change;
+            total_sum += change as i16;
         }
     }
 }
@@ -165,8 +165,8 @@ pub fn evolve_pop(solutions: &mut Vec<Vec<u8>>,
     *solutions = new_solutions;
 }
 
-pub fn avg_and_best_fitness(solutions: &Vec<Vec<u8>>, eval_iterations: u8, spawn_stack: &Vec<Vec<incident::Incident>>, graph: &HashMap<types::Location, Node>, base_locations: &Vec<types::Location>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time){
-    let mut best_soltuion = &solutions[0];
+pub fn avg_and_best_fitness(solutions: &Vec<Vec<u8>>, eval_iterations: u8, spawn_stack: &Vec<Vec<incident::Incident>>, graph: &HashMap<types::Location, Node>, base_locations: &Vec<types::Location>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time) -> Data{
+    let mut best_solution = &solutions[0];
     let mut best_fitness = evaluate(&solutions[0], eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time);
 
     let mut total_fitness: types::Time = 0.0;
@@ -177,10 +177,9 @@ pub fn avg_and_best_fitness(solutions: &Vec<Vec<u8>>, eval_iterations: u8, spawn
         total_fitness += fit;
         if fit < best_fitness{
             best_fitness = fit;
-            best_soltuion = &solutions[i];
+            best_solution = &solutions[i];
         }
     }
 
-    println!("Best fitness: {}, from: {:?}", best_fitness, best_soltuion);
-    println!("Avg fitness: {}", total_fitness/solutions.len() as f32);
+    Data::new(best_solution.clone(), best_fitness, total_fitness/solutions.len() as f32)
 }

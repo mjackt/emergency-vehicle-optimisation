@@ -11,63 +11,70 @@ import collections
 import heapq
 import jsonlines
 import pandas as pd
+import typing
 
 from node import calc_distance
 from node import Node
 
 
-def read_data():
-    BROKEN_IDS = [182576008, 1254204193, 1254204194, 785806394, 1018262965, 1254200712, 1254200713, 1254203133, 1254203134, 1254203136, 1254203137]#List of known issues in OSM data that my program will ignore.
+def read_data(place: str):
+    """
+    Reads required raw osm data (osm.json and police.json) from /input_data/*place*/
 
-    road_osm_file = open('input_data/devon/osm.json')
+    Args:
+        place (str): The name of the sub-folder in the input_data folder. Generally the name of the area covered by the osm data.
 
+    Returns:
+        dict{int: Node}: A graph representaion of the osm data (Unpruned).
+    """
+    #182576008...1254203137 - Plymouth broken one way trap
+    #547154223...341619748 - Fowey Broken 1 ways. (Wrong order of nodes)
+    #30620881 - Not broken themselves but reliant on Fowey broken bit so need removing
+    BROKEN_IDS = [182576008, 1254204193, 1254204194, 785806394, 1018262965, 1254200712, 1254200713, 1254203133, 1254203134, 1254203136, 1254203137, 547154223, 29285959, 1061735928, 58947176, 167067602, 58947175, 164364892, 58947189, 341619748, 30620881]#List of known issues in OSM data that my program will ignore.
+
+    road_osm_file = open('input_data/'+ place +'/osm.json')
     road_osm = json.load(road_osm_file)
-
     road_osm_file.close()
 
-    #dictionary of Nodes
-    graph = {}
+    graph: typing.Dict[int, Node] = {}
 
     try:
-        data_months = len(next(os.walk('input_data/call_data'))[1])
+        data_months: int = len(next(os.walk('input_data/call_data'))[1])
     except:
-        data_months = 0
+        data_months: int = 0
 
-    #Init all nodes. Could be done in loop with checking ways but this solves finding node locations to init them
+    #Init all nodes. Could be done in loop with checking ways, but this solves finding node locations to init them
     for i in road_osm['elements']:
         if i['type'] == "node":
-            inc = 0
+            inc: int = 0
             if data_months == 0:#If theres no data
                 inc = 1
 
             graph[i['id']] = Node(i['id'],(i['lat'],i['lon']), int(inc))
 
-    #Handling ways
+    #OSM ways represnt stretches of roads. By going through them we can build edges into the inited nodes
     for i in road_osm['elements']:
         if i['type'] == "way":
             if i['id'] in BROKEN_IDS:
                 continue
 
-            nodes = i['nodes']
+            nodes: list[int] = i['nodes']
 
-            oneway=False
+            oneway: bool = False
 
             if 'oneway' in i['tags']:
                 if i['tags']['oneway'] == 'yes' or i['tags']['oneway'] == "-1":
                     oneway = True
 
-            speed: int = 30
-
+            speed: float = 30.0#Default speed of 30mph seems reasonable
             if 'maxspeed' in i['tags']:
-                speed = int(i['tags']['maxspeed'][0:2])
+                speed = int(i['tags']['maxspeed'][0:2])#Use real speed if data available. Most of the time it is available
 
-            speed = speed / 2.237  #mph to m/s
-
+            speed: float = speed / 2.237  #mph to m/s
 
             #Looping all nodes in a given way
             for i in range(len(nodes)):
                 #Adding nodes either side in way list to node's out list
-
                 if i != 0 and oneway == False:
                     graph[nodes[i]].add_out(graph[nodes[i-1]], speed)
                     graph[nodes[i-1]].add_in(graph[nodes[i]])
@@ -77,92 +84,109 @@ def read_data():
                     graph[nodes[i+1]].add_in(graph[nodes[i]])
 
     #Creating police nodes
-    police_osm_file = open('input_data/devon/police.json')
+    police_osm_file: typing.File = open('input_data/'+ place +'/police.json')
 
-    police_osm = json.load(police_osm_file)
+    police_osm: dict = json.load(police_osm_file)
 
     police_osm_file.close()
 
-    police_ids = []
+    police_ids: list[int] = []#Stores node id representing each police station
+    police_names: list[str] = []#Stores names of each police station. index 0 is the name of index 0 in police_ids. Used for displaying results of GA
 
     for i in police_osm['elements']:
-        
-        #Need to get one node to represent the way
+        #Some stations are represented by a way. We can just select any node in that way to represnt it.
         if i['type'] == "way":
             if 'tags' in i:
-                node_id = i['nodes'][0]
+                police_names.append(i['tags']['name'])
+                node_id: int = i['nodes'][0]#Selecting first node as representative
                 
                 for element in police_osm['elements']:
+                    #Find representative's coords
                     if element['type'] == 'node' and element['id'] == node_id:
-                        lat = element['lat']
-                        long = element['lon']
+                        lat: float = element['lat']
+                        long: float = element['lon']
 
-                node_to_add = Node(node_id, (lat, long), 0, True)
-                nearest = find_nearest_node(node_to_add, graph)
+                #Create new node obj for police station
+                node_to_add: Node = Node(node_id, (lat, long), 0, True)
+                #Find it's nearest road node
+                nearest: Node = find_nearest_node(node_to_add, graph)
 
+                #Add connections between the two nodes
                 node_to_add.add_out(nearest, 30)
                 node_to_add.add_in(nearest)
-
                 nearest.add_out(node_to_add, 30)
                 nearest.add_in(node_to_add)
-
-                
 
                 graph[node_id] = node_to_add
                 police_ids.append(node_id)
 
         elif i['type'] == "node":
             if 'tags' in i:
-                node_to_add = Node(i['id'], (i['lat'], i['lon']), 0, True)
-                nearest = find_nearest_node(node_to_add, graph)
+                police_names.append(i['tags']['name'])
+                #Create new node obj for police station
+                node_to_add: Node = Node(i['id'], (i['lat'], i['lon']), 0, True)
+                #Find it's nearest road node
+                nearest: Node = find_nearest_node(node_to_add, graph)
 
+                #Add connections between the two nodes
                 node_to_add.add_out(nearest, 30)
                 node_to_add.add_in(nearest)
-
                 nearest.add_out(node_to_add, 30)
                 nearest.add_in(node_to_add)
                 
                 graph[i['id']] = node_to_add
                 police_ids.append(i['id'])
 
+        #Finally some stations are represented by relations which are collections of ways. We can select first node from first way , similar to how ways are handled
         elif i['type'] == "relation":
-            way_id = i['members'][0]['ref']
+            police_names.append(i['tags']['name'])
+            way_id: int = i['members'][0]['ref']
 
             for element in police_osm['elements']:
                 if element['type'] == 'way' and element['id'] == way_id:
-                    node_id = element['nodes'][0]
+                    node_id: int = element['nodes'][0]
                     break
             
             for element in police_osm['elements']:
                 if element['type'] == 'node' and element['id'] == node_id:
-                    lat = element['lat']
-                    long = element['lon']
+                    lat: float = element['lat']
+                    long: float = element['lon']
+            #Find it's nearest road node
+            node_to_add: Node = Node(node_id, (lat, long), 0, True)
+            nearest: Node = find_nearest_node(node_to_add, graph)
 
-            node_to_add = Node(node_id, (lat, long), 0, True)
-            nearest = find_nearest_node(node_to_add, graph)
-
+            #Add connections between the two nodes
             node_to_add.add_out(nearest, 30)
             node_to_add.add_in(nearest)
-
             nearest.add_out(node_to_add, 30)
             nearest.add_in(node_to_add)
-
-            
 
             graph[node_id] = node_to_add
             police_ids.append(node_id)
             
-    with open('out/police.json', 'w') as f:
+    with open('out/police_ids.json', 'w') as f:
         json.dump(police_ids, f)
+
+    with open('out/police_names.json', 'w') as f:
+        json.dump(police_names, f)
 
     return graph
 
 def find_nearest_node(target, graph: dict):
-    nearest = None
-    nearest_dist = sys.maxsize
+    """
+    Takes a node and returns the nearest other node to it
+
+    Args:
+        target (Node): The node to find nearest to
+
+    Returns:
+        Node: The nearest node to target.
+    """
+    nearest: Node = None
+    nearest_dist: float = sys.maxsize
 
     for node in graph.values():
-        dist = calc_distance(target.location[0], target.location[1], node.location[0], node.location[1])
+        dist: float = calc_distance(target.location[0], target.location[1], node.location[0], node.location[1])
 
         if dist < nearest_dist:
             nearest = node
@@ -171,8 +195,17 @@ def find_nearest_node(target, graph: dict):
     return nearest
 
 def remove_pits(graph: dict):    
+    """
+    Removes nodes in the graph that have 0 ins or 0 outs
+
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     while True:
-        to_remove = []
+        to_remove: list[Node] = []
         for _, node in graph.items():
             if len(node.outs) == 0 or len(node.ins) == 0:
                 to_remove.append(node)
@@ -186,18 +219,27 @@ def remove_pits(graph: dict):
     return graph
 
 def keep_decisions(graph: dict):
+    """
+    Removes nodes that only have one available out (without backtracking).
+
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     while True:
-        to_remove_2way = []
-        to_remove_1out = []
-        delete_list = []
+        to_remove_2way: list[Node] = []
+        to_remove_1out: list[Node] = []
+        delete_list: list[Node] = []
         for _, node in graph.items():
             if len(node.outs) == 0:#Disconnected sections will reduce to one node
                 delete_list.append(node)
-            elif len(node.outs) > 2 or node.police:
+            elif len(node.outs) > 2 or node.police:#Keep the nodes fulfilling this
                 continue
-            elif len(node.outs) == 2:
-                out_ids = []
-                in_ids = []
+            elif len(node.outs) == 2:#Just having two outs doesnt immediatley qualify for removal. We need to check its part of a 2 way road with 2 ins matching it's 2 outs
+                out_ids: list[int] = []
+                in_ids: list[int] = []
 
                 for out in node.outs:
                     out_ids.append(out[0].id)
@@ -205,9 +247,10 @@ def keep_decisions(graph: dict):
                 for entry in node.ins:
                     in_ids.append(entry.id)
 
+                #See if in ins and outs match (i.e normal 2 way road with no intersection)
                 if collections.Counter(in_ids) == collections.Counter(out_ids) and node.outs[0][0] != node.outs[1][0]:
                     to_remove_2way.append(node)
-            else:#1 out
+            else:#1 out. No checks needed. Just foward all ins to it's one out
                 if node.outs[0][0] not in node.ins:#Prevent pointing to self
                     to_remove_1out.append(node)
 
@@ -217,7 +260,7 @@ def keep_decisions(graph: dict):
         else:
             for node in delete_list:
                 for entry in node.ins:
-                    index_to_go = None
+                    index_to_go: int = None
                     for i in range(len(entry.outs)):
                         if entry.outs[i][0].id == node.id:
                             index_to_go = i
@@ -235,59 +278,79 @@ def keep_decisions(graph: dict):
     return graph
 
 def prune_1out_node(graph: dict, node):
+    """
+    Removes a non-decision node with a single out
+
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        node (Node): The node to remove
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
-    exit = node.outs[0][0]
+    exit: Node = node.outs[0][0]
 
-    if exit in node.ins:#Sometimes there will be one way circles i.e car parks which if unchecked results in node pointing to itself which causes issues
+    if exit in node.ins:#Checking if this exit immediatley returns to the node to remove.#
+                        #Sometimes there will be one way circles i.e car parks which if unchecked results in node pointing to itself which causes issues
         return graph
 
-    new_ins = []
-    #Keep existing in list minus node being pruned
+    new_ins: list[Node] = []
+    #New in list for the exit node, excluding the node being removed
     for into in exit.ins:
         if into.id != node.id:
             new_ins.append(into)
 
     #Now we need to point all nodes going into prunee towards the only out of prunee
-    for entry in node.ins:
+    for entry in node.ins:#Iterate over everying coming into prunee
+        #Go over the entry's outs and find the index of the prunee
         for i in range(len(entry.outs)):
             if entry.outs[i][0].id == node.id:
-                index_of_pruned = i
+                index_of_pruned: int = i
                 break
-        if entry in exit.ins:#Stops 2 edges going in same direction between nodes existing
+        if entry in exit.ins:#Check if the entry already points to prunee's exit
             graph[entry.id].outs.pop(index_of_pruned)
             continue
-
-        dist_to_exit = node.outs[0][1]
         
-        combined_dist = entry.outs[index_of_pruned][1] + dist_to_exit
-        new_out = (exit, combined_dist)
+        #Current distance from prunee -> exit
+        dist_to_exit: float = node.outs[0][1]
         
-        graph[entry.id].outs[index_of_pruned] = new_out
+        combined_dist: float = entry.outs[index_of_pruned][1] + dist_to_exit#Add on dist from entry to prunee
+        new_out: tuple[Node, float] = (exit, combined_dist)#Create new out tuple representing entry -> exit (bypassing prunee) with the calculated combined cost
+        
+        graph[entry.id].outs[index_of_pruned] = new_out#Replace the out previously pointing to prunee with newly created one
 
-        new_ins.append(entry)
+        new_ins.append(entry)#Add entry as a new in for exit node
 
-    graph[exit.id].ins = new_ins
-    
-    graph.pop(node.id)
-
+    graph[exit.id].ins = new_ins#Provide exit with it's update ins list
+    graph.pop(node.id)#Finally remove prunee from graph
     return graph
 
 def prune_2way_node(graph: dict, node):
+    """
+    Removes a non-decision node that must be part of a 2 way road             
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        node (Node): The node to remove
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     if len(node.outs) != 2 or len(node.ins) != 2:#Pruning may have circled back round turning a 2 way node into a leaf. So this just makes that not an issue and it will prob be removed by leaf pruning
         return graph
     #Pass on incident probabiltiy to nearest neighbour
     node.outs[0][0].incid_in_year += node.incid_in_year
 
-    prevent_double_point = False
+    prevent_double_point: bool = False
     if node.ins[0] in node.ins[1].ins:
         prevent_double_point = True
 
-    for entry in node.ins:
+    for entry in node.ins:#We need to iterate over both entries into the prunee and point each one to the other entry (the only possible exit).
         if node.ins.index(entry) == 0:
-            other_node = node.ins[1]
+            other_node: Node = node.ins[1]
         else:
-            other_node = node.ins[0]
+            other_node: Node = node.ins[0]
 
         #Figuring out which out needs to be redirected
         for i in range(len(entry.outs)):
@@ -296,29 +359,30 @@ def prune_2way_node(graph: dict, node):
                 break
         
 
-        if prevent_double_point:#If other 2 nodes are already connected then we can just delete the prunee
+        if prevent_double_point:#If the other 2 nodes are already connected then we can just delete the prunee
             graph[entry.id].outs.pop(index_of_pruned)
             graph[entry.id].ins.remove(node)
             continue
 
         for out in node.outs:
             if out[0].id == other_node.id:
-                dist_to_other_node = out[1]
+                dist_to_other_node: float = out[1]#Distance from prunee -> to the exit whic is not the current entry
         
-        combined_dist = entry.outs[index_of_pruned][1] + dist_to_other_node
-        new_out = (other_node, combined_dist)
+        combined_dist: float = entry.outs[index_of_pruned][1] + dist_to_other_node#Add distance from entry -> prunee
+        new_out = (other_node, combined_dist)#Create new tuple to represent out going from entry -> other_node
 
-        graph[entry.id].outs[index_of_pruned] = new_out
+        graph[entry.id].outs[index_of_pruned] = new_out#Update out previously pointing to prunee to now point to other_node
 
-        new_ins = []
+        #Create new list of ins for the other_node by excluding prunee
+        new_ins: list[Node] = []
         for into in other_node.ins:
             if into.id != node.id:
                 new_ins.append(into)
-
+        #Add the entry to other_node's new list of ins
         new_ins.append(entry)
-        graph[other_node.id].ins = new_ins
+        graph[other_node.id].ins = new_ins#Update in graph
     
-    graph.pop(node.id)
+    graph.pop(node.id)#Finally remove prunee from graph
 
     return graph
 
@@ -355,11 +419,6 @@ def remove_leaf(node, graph: dict):
 
     return graph
 
-def remove_isoltaed(graph: dict):
-    for node in graph:
-        if len(node.outs) == 1:
-            print()
-
 def prune_graph(graph: dict, agg_limit: float):
     graph = remove_pits(graph)
     changes = True
@@ -370,7 +429,6 @@ def prune_graph(graph: dict, agg_limit: float):
         if start_len == len(graph):
             changes = False
 
-    #graph = remove_isolated(graph)
     return graph
 
 def remove_node(end, graph: dict):
@@ -561,7 +619,7 @@ def verify_graph(graph: dict):
                 print(str(node.id) + " has non existent out: " + str(out[0].id))
 
 if __name__=="__main__":
-    graph: dict = read_data()
+    graph: dict = read_data('dnc')
 
     AGGLOMERATE_LIMIT = 30.0
 
