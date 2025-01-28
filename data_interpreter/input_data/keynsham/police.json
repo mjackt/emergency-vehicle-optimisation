@@ -1,0 +1,110 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2025-01-15T14:44:20Z",
+    "timestamp_areas_base": "2025-01-15T12:33:30Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 747151197,
+  "nodes": [
+    6991110819,
+    6991110820,
+    6991110823,
+    6991110822,
+    6991110821,
+    6991110814,
+    6991110813,
+    6991110812,
+    6991110818,
+    6991110817,
+    6991110816,
+    6991110815,
+    6991110819
+  ],
+  "tags": {
+    "amenity": "police",
+    "building": "yes",
+    "name": "Keynsham Police Centre",
+    "website": "https://www.avonandsomerset.police.uk/contact-us/police-stations/keynsham-police-centre/"
+  }
+},
+{
+  "type": "node",
+  "id": 6991110812,
+  "lat": 51.4125456,
+  "lon": -2.4792947
+},
+{
+  "type": "node",
+  "id": 6991110813,
+  "lat": 51.4124209,
+  "lon": -2.4791079
+},
+{
+  "type": "node",
+  "id": 6991110814,
+  "lat": 51.4125754,
+  "lon": -2.4788428
+},
+{
+  "type": "node",
+  "id": 6991110815,
+  "lat": 51.4127641,
+  "lon": -2.4796219
+},
+{
+  "type": "node",
+  "id": 6991110816,
+  "lat": 51.4126401,
+  "lon": -2.4794362
+},
+{
+  "type": "node",
+  "id": 6991110817,
+  "lat": 51.4125692,
+  "lon": -2.4795579
+},
+{
+  "type": "node",
+  "id": 6991110818,
+  "lat": 51.4124747,
+  "lon": -2.4794164
+},
+{
+  "type": "node",
+  "id": 6991110819,
+  "lat": 51.4129186,
+  "lon": -2.4793568
+},
+{
+  "type": "node",
+  "id": 6991110820,
+  "lat": 51.4129256,
+  "lon": -2.4793673
+},
+{
+  "type": "node",
+  "id": 6991110821,
+  "lat": 51.4125472,
+  "lon": -2.4788005
+},
+{
+  "type": "node",
+  "id": 6991110822,
+  "lat": 51.4127092,
+  "lon": -2.4785224
+},
+{
+  "type": "node",
+  "id": 6991110823,
+  "lat": 51.4130876,
+  "lon": -2.4790892
+}
+
+  ]
+}

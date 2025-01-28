@@ -1,21 +1,31 @@
+//! Module contains methods focused on reading the input files required to run the simulation and GA.
+//! 
+//! This includes:
+//! - probs.json
+//! - police_ids.json
+//! - police_names.json
+//! - graph.json
 use std::{collections::HashMap, fs};
 
 use crate::types;
 use crate::node::Node;
 
-const PLACE: &str = "dnc";
+const PLACE: &str = "dnc_12months_50agg";
 
-pub fn probs() -> HashMap<types::Location, u32> {
+/// Returns a HashMap of locations and incident probabilites using the *probs.json* file.
+/// ### Returns
+/// `HashMap<types::Location, f32>` - A HashMap keyed by location ID which an associated value which represents how many incidents will occur at that location over a year.
+pub fn probs() -> HashMap<types::Location, f32> {
     // Attempt to read the JSON file
     let path = format!("map_data/{}/probs.json", PLACE);
     let file_content = fs::read_to_string(path).expect("Error loading probs.json");
 
     // Attempt to parse the JSON into a HashMap
-    let raw_data: HashMap<String, u32> = serde_json::from_str(&file_content).expect("Error parsing probs.json");
+    let raw_data: HashMap<String, f32> = serde_json::from_str(&file_content).expect("Error parsing probs.json");
 
-    let mut data: HashMap<types::Location, u32> = HashMap::new();
+    let mut data: HashMap<types::Location, f32> = HashMap::new();
     for (key, value) in raw_data {
-        if value == 0{
+        if value == 0.0{
             continue
         }
         let key_as_u64 = key.parse::<u64>().expect("Invalid type in probs.json");
@@ -25,6 +35,7 @@ pub fn probs() -> HashMap<types::Location, u32> {
     data
 }
 
+///OBSOLETE
 fn apsp() -> HashMap<types::Location, HashMap<types::Location, types::Time>> {
     // Attempt to read the JSON file
     let path = format!("map_data/{}/apsp.json", PLACE);
@@ -51,6 +62,9 @@ fn apsp() -> HashMap<types::Location, HashMap<types::Location, types::Time>> {
     data
 }
 
+/// Returns a HashMap of location IDs and Node objects using the *graph.json* file.
+/// ### Returns
+/// `HashMap<types::Location, Node>` - A HashMap keyed by location ID with the values as [Node] objects.
 pub fn graph() -> HashMap<types::Location, Node>{
     let path = format!("map_data/{}/graph.json", PLACE);
     let file_content = fs::read_to_string(path).expect("Error loading graph.json");
@@ -81,6 +95,9 @@ pub fn graph() -> HashMap<types::Location, Node>{
     graph
 }
 
+/// Returns a list of all node IDs that are a police base. Uses police_ids.json.
+/// ### Returns
+/// `Vec<types::Location>` - A list of all node IDs that are a police base.
 pub fn police() -> Vec<types::Location>{
     let path = format!("map_data/{}/police_ids.json", PLACE);
     let file_content = fs::read_to_string(path).expect("Error loading police_ids.json");
@@ -90,6 +107,9 @@ pub fn police() -> Vec<types::Location>{
     data
 }
 
+/// Returns a list of the names of every police base. Uses police_names.json.
+/// ### Returns
+/// `Vec<String>` - A list of all police base names.
 pub fn police_names() -> Vec<String>{
     let path = format!("map_data/{}/police_names.json", PLACE);
     let file_content = fs::read_to_string(path).expect("Error loading police_names.json");

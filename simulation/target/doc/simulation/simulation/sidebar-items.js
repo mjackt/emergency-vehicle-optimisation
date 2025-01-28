@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["calc_travel_time","dijkstra","dispatching","evaluate","generate_incidents","run","spawn_incidents","step_vehicles","update_route_cache"]};

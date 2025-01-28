@@ -1,1 +1,3 @@
-*.json
+simulation/target/debug/*
+simulation/target/release/*
+osm.json

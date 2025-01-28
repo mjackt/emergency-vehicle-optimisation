@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["data","dijkstra_node","genetic","incident","node","read_data","simulation","types","vehicle"]};

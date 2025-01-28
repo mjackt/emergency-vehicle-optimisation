@@ -214,7 +214,7 @@ def remove_pits(graph: dict):
             break
         else:
             for node in to_remove:
-                graph = remove_node(node, graph)
+                graph = remove_pit(node, graph)
 
     return graph
 
@@ -369,7 +369,7 @@ def prune_2way_node(graph: dict, node):
                 dist_to_other_node: float = out[1]#Distance from prunee -> to the exit whic is not the current entry
         
         combined_dist: float = entry.outs[index_of_pruned][1] + dist_to_other_node#Add distance from entry -> prunee
-        new_out = (other_node, combined_dist)#Create new tuple to represent out going from entry -> other_node
+        new_out: tuple[Node, float] = (other_node, combined_dist)#Create new tuple to represent out going from entry -> other_node
 
         graph[entry.id].outs[index_of_pruned] = new_out#Update out previously pointing to prunee to now point to other_node
 
@@ -387,7 +387,16 @@ def prune_2way_node(graph: dict, node):
     return graph
 
 def remove_tiny_leaves(graph: dict, agg_limit: float):
-    tiny_leaves = []
+    """
+    Checks graph for leafs under the agglomerate limit and removes them            
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        agg_limit (float): Agglomerate limit. Leafs under this distance from their nearest node will be deleted
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
+    tiny_leaves: list[Node] = []
     for node in graph.values():
         if node.police == False and len(node.outs) == 1 and node.outs[0][0].id == node.ins[0].id and len(node.ins) == 1:#Checks if node is a leaf
             if node.outs[0][1] < agg_limit:
@@ -399,20 +408,29 @@ def remove_tiny_leaves(graph: dict, agg_limit: float):
     return graph
 
 def remove_leaf(node, graph: dict):
+    """
+    Remove a leaf from the graph          
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        node (Node): The node to be deleted
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     if node.police == False:
         graph.pop(node.id)
         if len(node.outs) > 0:#Disconnected sections will sometimes end up being just two points. Means when ones removed there are no outs
-            exit = node.outs[0][0]
+            exit: Node = node.outs[0][0]
             for i in range(len(exit.ins)):
                 if exit.ins[i].id == node.id:
-                    index_to_remove = i
+                    index_to_remove: int = i
                     break
 
             exit.ins.pop(index_to_remove)
 
             for i in range(len(exit.outs)):
                 if exit.outs[i][0].id == node.id:
-                    index_to_remove = i
+                    index_to_remove: int = i
                     break
 
             exit.outs.pop(index_to_remove)
@@ -420,23 +438,41 @@ def remove_leaf(node, graph: dict):
     return graph
 
 def prune_graph(graph: dict, agg_limit: float):
-    graph = remove_pits(graph)
-    changes = True
-    while changes == True:
-        start_len = len(graph)
-        graph = keep_decisions(graph)
-        graph = remove_tiny_leaves(graph, agg_limit)
-        if start_len == len(graph):
-            changes = False
+    """
+    Prunes the graph.
+    Removes pits, non-decisions and small leafs       
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        agg_limit (float): Agglomerate limit. Leafs under this distance from their nearest node will be deleted
 
+    Returns:
+        dict{int: Node}: Updated graph
+    """
+    graph: dict = remove_pits(graph)
+    changes: bool = True
+    while changes == True:
+        start_len: int = len(graph)
+        graph: dict = keep_decisions(graph)
+        graph: dict = remove_tiny_leaves(graph, agg_limit)
+        if start_len == len(graph):
+            changes: bool = False
     return graph
 
-def remove_node(end, graph: dict):
+def remove_pit(end, graph: dict):
+    """
+    Removes a node that is a pit        
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+        end (Node): Node to be removed
+
+    Returns:
+        dict{int: Node}: Updated graph
+    """
     if end.police == False:
         graph.pop(end.id)
 
         for entry in end.ins:
-            new_outs = []
+            new_outs: tuple[Node, float] = []
             for out in entry.outs:
                 if out[0].id != end.id:
                     new_outs.append(out)
@@ -444,7 +480,7 @@ def remove_node(end, graph: dict):
             entry.outs = new_outs
 
         for out in end.outs:
-            new_ins = []
+            new_ins: list[Node] = []
             for entry in out[0].ins:
                 if entry.id != end.id:
                     new_ins.append(entry)
@@ -454,6 +490,9 @@ def remove_node(end, graph: dict):
     return graph
 
 def dijkstra(start_node, current_apsp):
+    """
+    REDUNDANT
+    """
     # Dictionary to store the minimum cost to each node
     min_costs = {start_node.id: 0}
     # Dictionary to store the shortest path tree (predecessors)
@@ -488,6 +527,9 @@ def dijkstra(start_node, current_apsp):
     return min_costs
 
 def first_stage(graph):
+    """
+    REDUNDANT
+    """
     node_count = len(graph)
     apsp = {}
 
@@ -560,6 +602,9 @@ def first_stage(graph):
     return apsp, explored
 
 def trenchard(graph):
+    """
+    REDUNDANT
+    """
     apsp, explored = first_stage(graph)
 
     explored_nodes = len(explored)
@@ -613,15 +658,37 @@ def trenchard(graph):
     return apsp
 
 def verify_graph(graph: dict):
+    """
+    Checks that every node's outs actually exist      
+    Args:
+        graph (dict{int: Node}): The original graph of nodes
+    """
     for node in graph.values():
         for out in node.outs:
             if out[0].id not in graph:
                 print(str(node.id) + " has non existent out: " + str(out[0].id))
 
+def truncate(f, n):
+    """
+    Truncates/pads a float f to n decimal places without rounding
+
+    Args:
+        f (float): Float to truncate
+        n (int): Number of decimal places to truncate to
+
+    Returns:
+        float: The truncated float
+    """
+    s = '{}'.format(f)
+    if 'e' in s or 'E' in s:
+        return '{0:.{1}f}'.format(f, n)
+    i, p, d = s.partition('.')
+    return '.'.join([i, (d+'0'*n)[:n]])
+
 if __name__=="__main__":
     graph: dict = read_data('dnc')
 
-    AGGLOMERATE_LIMIT = 30.0
+    AGGLOMERATE_LIMIT = 50.0
 
     print("Data read")
     print("Graph size: " + str(len(graph)))
@@ -630,30 +697,47 @@ if __name__=="__main__":
 
     print("Graph pruned to " + str(len(graph)) + " nodes")
 
-    #data_months = len(next(os.walk('input_data/call_data'))[1])  
-    #for root,_,files in os.walk("input_data/call_data"):
-    #    counter = 0
-    #    for file in files:
-    #        print(str(counter) + "/" + str(data_months))
-    #        counter += 1
-    #        if file.endswith(".csv"):
-    #            with open(str(root) + "/" + str(file), 'r') as file:
-    #                reader = csv.DictReader(file)
-    #                i=0
-    #                for row in reader:
-    #                    i += 1
-    #                    if row['Latitude'] == '':
-    #                        continue
-    #                    nearest = None
-    #                    nearest_dist = sys.maxsize
-    #                    for node in graph.values():
-    #                        dist = calc_distance(float(row['Latitude']), float(row['Longitude']), node.location[0], node.location[1])
-    #
-    #                        if dist < nearest_dist:
-    #                            nearest = node
-    #                            nearest_dist = dist
+    data_months = len(next(os.walk('input_data/call_data'))[1])  
+    counter = 0
+    for root,_,files in os.walk("input_data/call_data"):
+        distance_map: dict = {}#Gotta refresh every new file otherwise it gets to big and crashes
+        for file in files:
+            print(str(counter) + "/" + str(data_months))
+            counter += 1
+            if file.endswith(".csv"):
+                with open(str(root) + "/" + str(file), 'r') as file:
+                    reader = csv.DictReader(file)
+                    i=0
+                    for row in reader:
+                        if i == 6000:
+                            distance_map = {}#Prevent memory crash
 
-                        #Add inc if still close enough
+                        print(str(counter) + "." + str(i))
+                        i += 1
+                        if row['Latitude'] == '':
+                            continue
+                        nearest = None
+                        nearest_dist = sys.maxsize
+                        for node in graph.values():
+                            inc_lat_3dp = row['Latitude'][:6]
+                            inc_lon_3dp = row['Longitude'][:6]
+                            node_lat_3dp = truncate(node.location[0], 3)
+                            node_lon_3dp = truncate(node.location[1], 3)
+                            if (node_lat_3dp, node_lon_3dp, inc_lat_3dp, inc_lon_3dp) not in distance_map:                                
+                                dist = calc_distance(float(row['Latitude']), float(row['Longitude']), node.location[0], node.location[1])
+                                distance_map[(node_lat_3dp, node_lon_3dp, inc_lat_3dp, inc_lon_3dp)] = dist
+                            else:
+                                dist = distance_map[(node_lat_3dp, node_lon_3dp, inc_lat_3dp, inc_lon_3dp)]
+
+                            if dist < 350:#If the distance is less than 300 metres then just stop the search cause this is good enough
+                                nearest = node
+                                nearest_dist = dist
+                                break
+                            elif dist < nearest_dist:
+                                nearest = node
+                                nearest_dist = dist
+
+                        nearest.incid_in_year += (1/data_months*12)#Converting to a per year value
 
     verify_graph(graph)
 
@@ -736,4 +820,4 @@ if __name__=="__main__":
     nx.draw_networkx(G, pos, with_labels = False, node_size = 10, node_color = colors)
 
     #plt.savefig("out/graph.pdf")
-    plt.show()
+    #plt.show()

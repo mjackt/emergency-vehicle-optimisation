@@ -1,11 +1,35 @@
+//! Module containing all methods related to the police response simulation.
+//! 
+//! The simulation can be explained as such:
+//! 1. Spawn new incidents using the `spawn_stack` incident schedule
+//! 2. Dispatch vehicles to incidents as efficiently as possible
+//! 3. Step the simulation and vehciles using the desired timstep
+//! 4. If the time < end_time:
+//!     Go back to the start
+//!    Else:
+//!     Sum and return performance metrics
+//! 
+//! The simulation has been designed to run as efficiently as possible by using serveral concepts:
+//! ##### Hash Maps
+//! Due to the large amount of items and info being stored, hash maps are used pretty much everywhere to achieve O(1) accessing.
+//! ##### Route Caching
+//! Route calculations are done using Dijkstra and all knowledge gained from a Dijkstra run is cached in a HashMap.
+//! Before performing any calculations, this cache is checked to see if the calculation has been performed before and therefore doesn't need to be done again.
+//! ##### Incident Plan
+//! Predetermining the incident plan provides a fair test for all solutions. However it also has a couple performance boosts:
+//! - Makes route caching insanely powerful. If the incidents are always in the same place then journeys will be similar accross all solutions. Therefore caching is utilised to the maximum.
+//! - Removes need to randomly generate new incidents for every simulation.
+//! ##### Travel simplification
+//! A vehicle will always store the cost of it's latest journey. Then if a vehcile has just left base and now wants to return to base, it will just use this last travel cost value for the reverse journey rather than recalculating the new cost.
+use crate::incident::Incident;
 use crate::types;
 use crate::dijkstra_node::DijkstraNode;
 use crate::node::Node;
 use crate::vehicle;
-use crate::incident;
 
 use std::collections::HashMap;
 use std::collections::BinaryHeap;
+use std::collections::HashSet;
 use rand::rngs::ThreadRng;
 use rand::Rng;
 
@@ -79,7 +103,7 @@ fn calc_travel_time(source: types::Location, target: types::Location, route_cach
 }
 
 fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
-                incidents: &mut Vec<incident::Incident>,
+                incidents: &mut Vec<Incident>,
                 graph: &HashMap<types::Location, Node>,
                 route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
                 current_time: types::Time){
@@ -106,7 +130,6 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                     }
                     None => {//Graph must be disconnected
                         event.unreachable();
-                        println!("Incident at {} is unreachable", event.get_location());
                         break;
                     }
                 }
@@ -146,7 +169,7 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
     }
 }
 
-pub fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_probs: &HashMap<types::Location, u32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
+pub fn generate_incidents(incidents: &mut Vec<Incident>, incident_probs: &HashMap<types::Location, f32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
     for (location, num_per_year) in incident_probs{
         //Could save some maths here
         let prob: f64 = *num_per_year as f64 / 365.0 / 24.0 / 60.0 / 60.0 * timestep as f64 * probability_weighting;//Converting num per year into probabilty per timestep
@@ -155,14 +178,14 @@ pub fn generate_incidents(incidents: &mut Vec<incident::Incident>, incident_prob
         if ran_float < prob{
             let service_time: types::Time = rand::thread_rng().gen_range(600..2400) as f32;
 
-            let new_incident: incident::Incident = incident::Incident::new(*location, service_time, current_time);
+            let new_incident: Incident = Incident::new(*location, service_time, current_time);
             incidents.push(new_incident);
         }
     }
 }
 
-fn spawn_incidents(spawn_stack: &Vec<Vec<incident::Incident>>, incidents: &mut Vec<incident::Incident>, index: usize){
-    let mut this_step_incidents: Vec<incident::Incident> = spawn_stack[index].clone();
+fn spawn_incidents(spawn_stack: &Vec<Vec<Incident>>, incidents: &mut Vec<Incident>, index: usize){
+    let mut this_step_incidents: Vec<Incident> = spawn_stack[index].clone();
     incidents.append(&mut this_step_incidents);
 }
 
@@ -172,8 +195,8 @@ fn step_vehicles(vehicles: &mut Vec<vehicle::Vehicle>, timestep: types::Time){
     }
 }
 
-fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<incident::Incident>>, vehicles: &mut Vec<vehicle::Vehicle>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time) -> types::Time{
-    let mut incidents: Vec<incident::Incident> = Vec::new();
+fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<Incident>>, vehicles: &mut Vec<vehicle::Vehicle>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time, unreachable_set: &mut HashSet<types::Location>) -> types::Time{
+    let mut incidents: Vec<Incident> = Vec::new();
     let mut time: types::Time = 0.0;
 
     while time < end_time{
@@ -200,6 +223,9 @@ fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<incident::I
                 }
             }
         }
+        else{
+            unreachable_set.insert(event.get_location());
+        }
     }
 
     let avg_response_time: types::Time = sum_response_times / inc_count as f32;
@@ -209,12 +235,13 @@ fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<incident::I
 
 pub fn evaluate(solution: &Vec<u8>,
             iterations: u8,
-            spawn_stack: &Vec<Vec<incident::Incident>>,
+            spawn_stack: &Vec<Vec<Incident>>,
             graph: &HashMap<types::Location, Node>,
             base_locations: &Vec<types::Location>,
             route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
             timestep: types::Time,
             end_time: types::Time,
+            unreachable_set: &mut HashSet<types::Location>,
             ) -> types::Time{
     let mut sum_avg_response_times: types::Time = 0.0;
 
@@ -233,7 +260,7 @@ pub fn evaluate(solution: &Vec<u8>,
             i += 1;
         }
 
-        let avg_response_time: types::Time = run(graph, spawn_stack, &mut vehicles, route_cache, timestep, end_time,);
+        let avg_response_time: types::Time = run(graph, spawn_stack, &mut vehicles, route_cache, timestep, end_time, unreachable_set);
 
         sum_avg_response_times += avg_response_time;
     }

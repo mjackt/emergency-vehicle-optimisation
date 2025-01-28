@@ -1,9 +1,13 @@
+//! Module containing the DijkstraNode struct and it's implementations to provide comparisons.
 use crate::types;
 use std::cmp::Ordering;
 
+///A struct to store Dijkstra calculations for a Node.
 #[derive(Debug, PartialEq)]
 pub struct DijkstraNode {
+    ///The cost to reach the node.
     pub cost: types::Time,
+    ///The location of the node. Corresponds to OSM id.
     pub location: types::Location,
 }
 
