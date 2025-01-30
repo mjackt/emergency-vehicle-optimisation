@@ -30,8 +30,11 @@ use crate::vehicle;
 use std::collections::HashMap;
 use std::collections::BinaryHeap;
 use std::collections::HashSet;
+use rand::rng;
 use rand::rngs::ThreadRng;
 use rand::Rng;
+use rand_distr::Normal;
+use rand_distr::StandardNormal;
 
 fn update_route_cache(route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, new_knowledge: &HashMap<types::Location, types::Time>, source: types::Location){
     for (key, value) in new_knowledge{
@@ -169,14 +172,17 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
     }
 }
 
-pub fn generate_incidents(incidents: &mut Vec<Incident>, incident_probs: &HashMap<types::Location, f32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: &mut ThreadRng){
+pub fn generate_incidents(incidents: &mut Vec<Incident>, incident_probs: &HashMap<types::Location, f32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rngthread: &mut ThreadRng){
     for (location, num_per_year) in incident_probs{
         //Could save some maths here
         let prob: f64 = *num_per_year as f64 / 365.0 / 24.0 / 60.0 / 60.0 * timestep as f64 * probability_weighting;//Converting num per year into probabilty per timestep
 
-        let ran_float: f64 = rng.gen();
+        let ran_float: f64 = rngthread.random();
         if ran_float < prob{
-            let service_time: types::Time = rand::thread_rng().gen_range(600..2400) as f32;
+            let service_time: types::Time = rng().sample::<f32,_>(Normal::new(35.0, 9.0).unwrap());
+            if service_time < 0.0{
+                panic!("Negative service time");//Obvs don't have to panic here. Could just set it to 0. Feels like it would be good to be aware tho.
+            }
 
             let new_incident: Incident = Incident::new(*location, service_time, current_time);
             incidents.push(new_incident);

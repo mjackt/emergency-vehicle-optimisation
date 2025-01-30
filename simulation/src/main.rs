@@ -38,7 +38,7 @@ use data::Data;
 use incident::Incident;
 use node::Node;
 use rand::rngs::ThreadRng;
-use rand::thread_rng;
+use rand::rng;
 use types::Solution;
 
 use crate::genetic::{evolve_pop, avg_and_best_fitness};
@@ -61,7 +61,7 @@ fn main(){
 
     let mut solutions : Vec<Solution> = Vec::new();
 
-    let mut rng: ThreadRng = thread_rng();
+    let mut rngthread: ThreadRng = rng();
 
     //TUNABLES
     //Sim stuff
@@ -84,7 +84,7 @@ fn main(){
     let mut incident_sum: usize = 0;
     for _ in 0..total_steps as usize{
         let mut step_incidents: Vec<Incident> = Vec::new();
-        generate_incidents(&mut step_incidents, &incident_probs, TIMESTEP, spawn_time, PROBABILITY_WEIGHTING, &mut rng);
+        generate_incidents(&mut step_incidents, &incident_probs, TIMESTEP, spawn_time, PROBABILITY_WEIGHTING, &mut rngthread);
         incident_sum += step_incidents.len();
         spawn_stack.push(step_incidents);
         spawn_time += TIMESTEP;
@@ -92,7 +92,7 @@ fn main(){
     println!("Incident plan generated containing {} incidents", incident_sum);
 
     for _ in 0..SOL_NUM{
-        solutions.push(genetic::generate_solution(base_locations.len() as u8, MAX_CARS, &mut rng));
+        solutions.push(genetic::generate_solution(base_locations.len() as u8, MAX_CARS, &mut rngthread));
     }
     println!("Solutions generated");
 
@@ -103,7 +103,7 @@ fn main(){
     println!("First evaluations in {} seconds", start_time.elapsed().as_secs_f32());
 
     for i in 0..TIMEOUT{
-        evolve_pop(&mut solutions, SOL_NUM/2, SOL_NUM*3/4, EVAL_ITER, &spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME, MAX_CARS, MUTATION_NUM, &mut rng, &mut unreachable_set);
+        evolve_pop(&mut solutions, SOL_NUM/2, SOL_NUM*3/4, EVAL_ITER, &spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME, MAX_CARS, MUTATION_NUM, &mut rngthread, &mut unreachable_set);
         println!("{}/{}", i + 1, TIMEOUT);
     }
     let end: Data = avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, &mut route_cache, TIMESTEP, END_TIME, &mut unreachable_set);
@@ -117,8 +117,15 @@ fn main(){
 
     let names: Vec<String> = read_data::police_names();
     let solution: &Solution = end.get_best_solution();
+    let mut outcomes: Vec<(String, u8)> = Vec::new();
     for i in 0..solution.len(){
-        println!("{}: {}", names[i], solution[i]);
+        outcomes.push((names[i].clone(), solution[i]));
+    }
+
+    outcomes.sort_by(|a, b| a.0.cmp(&b.0));
+
+    for element in outcomes{
+        println!("{}: {}", element.0, element.1);
     }
 
     println!("*************\nUnreachables: {:?}", unreachable_set);

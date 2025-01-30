@@ -1,23 +1,22 @@
 //! Module containing all the functions related to the genetic algorithm operation.
 use std::collections::{HashMap, HashSet};
-use rand::{distributions::{Uniform, Distribution}, rngs::ThreadRng, Rng, seq::SliceRandom, thread_rng};
-
+use rand::{distr::{Distribution, Uniform}, rng, rngs::ThreadRng, seq::SliceRandom, Rng};
 use crate::{data::Data, incident, node::Node, simulation::evaluate, types::{self, Solution}};
 
 /// Returns a solution by randomly assigning a number of cars to a number of police bases.
 /// ### Parameters
 /// * `base_number` - Number of police stations or bases in use.
 /// * `max_cars` - Maximum cars available i.e number of cars to be assigned to bases.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
 /// ### Returns
 /// A `Vec<u8>` of length *n* whose values will sum to *x*, where *n* is `base_number` and *x* is `max_cars`.
-pub fn generate_solution(base_number: u8, max_cars: u16, rng: &mut ThreadRng) -> Solution{
+pub fn generate_solution(base_number: u8, max_cars: u16, rngthread: &mut ThreadRng) -> Solution{
     let mut solution: Solution = vec![0; base_number as usize];
 
-    let selection: Uniform<u8> = Uniform::from(0..base_number);
+    let selection: Uniform<u8> = Uniform::try_from(0..base_number).unwrap();
 
     for _ in 0..max_cars{
-        let choice: u8 = selection.sample(rng);
+        let choice: u8 = selection.sample(rngthread);
         solution[choice as usize] += 1;
     }
 
@@ -36,7 +35,7 @@ pub fn generate_solution(base_number: u8, max_cars: u16, rng: &mut ThreadRng) ->
 /// * `route_cache` - The cache of route calculations.
 /// * `timestep` - Timestep to run the simulation with.
 /// * `end_time` - Time to end simulation at.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
 /// * `unreachable_set` - HashSet containg ids of every node that is unreachable.
 /// ### Returns
 /// A list of indexes of the solutions to be selected. Corresponds to the `solutions` parameter.
@@ -50,20 +49,20 @@ pub fn tournament_selection(solutions: &Vec<Solution>,
                             route_cache: &mut HashMap<(types::Location, types::Location), types::Time>,
                             timestep: types::Time,
                             end_time: types::Time,
-                            rng: &mut ThreadRng,
+                            rngthread: &mut ThreadRng,
                             unreachable_set: &mut HashSet<types::Location>,
                             ) -> Vec<usize>{
 
     let mut selected: Vec<usize> = Vec::new();
     let mut selected_fitness: Vec<types::Time> = Vec::new();
 
-    let uniform_rng: Uniform<usize> = Uniform::from(0..solutions.len());
+    let uniform_rng: Uniform<usize> = Uniform::try_from(0..solutions.len()).unwrap();
 
     for _ in 0..tournament_size{
-        let mut choice: usize = uniform_rng.sample(rng);
+        let mut choice: usize = uniform_rng.sample(rngthread);
 
         while selected.contains(&choice){
-            choice = uniform_rng.sample(rng);
+            choice = uniform_rng.sample(rngthread);
         }
 
         let tournament_entry: &Solution = &solutions[choice];
@@ -98,14 +97,14 @@ pub fn tournament_selection(solutions: &Vec<Solution>,
 /// ### Parameters
 /// * `solution` - Solution to be mutated.
 /// * `num_of_mutations` - The number of indexes to be mutated.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
-fn mutate(solution: &mut Solution, num_of_mutations: u8, rng: &mut ThreadRng){
-    let uniform_rng: Uniform<usize> = Uniform::from(0..solution.len());
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
+fn mutate(solution: &mut Solution, num_of_mutations: u8, rngthread: &mut ThreadRng){
+    let uniform_rng: Uniform<usize> = Uniform::try_from(0..solution.len()).unwrap();
     for _ in 0..num_of_mutations{
-        let mut index = uniform_rng.sample(rng);
+        let mut index = uniform_rng.sample(rngthread);
         if solution[index] > 0 {
             solution[index] -= 1;
-            index = uniform_rng.sample(rng);
+            index = uniform_rng.sample(rngthread);
             solution[index] += 1;
         }
     }
@@ -115,10 +114,10 @@ fn mutate(solution: &mut Solution, num_of_mutations: u8, rng: &mut ThreadRng){
 /// * `a` - A solution to be crossed.
 /// * `b` - The other solution to be crossed.
 /// * `max_cars` - Maximum cars available.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
-pub fn crossover(a: &mut Solution, b: &mut Solution, max_cars: u16, rng: &mut ThreadRng){
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
+pub fn crossover(a: &mut Solution, b: &mut Solution, max_cars: u16, rngthread: &mut ThreadRng){
     for i in 0..a.len(){
-        let random_bool: bool = rng.gen::<bool>();
+        let random_bool: bool = rngthread.random::<bool>();
         if random_bool == true{
             let a_value: u8 = a[i];
 
@@ -127,15 +126,15 @@ pub fn crossover(a: &mut Solution, b: &mut Solution, max_cars: u16, rng: &mut Th
         }
     }
 
-    repair(a, max_cars, rng);
-    repair(b, max_cars, rng);
+    repair(a, max_cars, rngthread);
+    repair(b, max_cars, rngthread);
 }
 
 /// Randomly repairs a solution (if required), to ensure adherence with `max_cars` constraint
 /// * `solution` - Solution to be repaired.
 /// * `max_cars` - Maximum cars available.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
-fn repair(solution: &mut Solution, max_cars: u16, rng: &mut ThreadRng){
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
+fn repair(solution: &mut Solution, max_cars: u16, rngthread: &mut ThreadRng){
     let mut total_sum: i16 = 0;
     for i in 0..solution.len(){
         total_sum += solution[i] as i16;
@@ -152,10 +151,10 @@ fn repair(solution: &mut Solution, max_cars: u16, rng: &mut ThreadRng){
     else{
         change = 1;
     }
-    let uniform_rng: Uniform<usize> = Uniform::from(0..solution.len());
+    let uniform_rng: Uniform<usize> = Uniform::try_from(0..solution.len()).unwrap();
 
     while total_sum != max_cars as i16{
-        let index = uniform_rng.sample(rng);
+        let index = uniform_rng.sample(rngthread);
         if solution[index] > 0{
             let temp: i8 = solution[index].clone() as i8 + change;
             solution[index] = temp as u8;
@@ -181,7 +180,7 @@ fn repair(solution: &mut Solution, max_cars: u16, rng: &mut ThreadRng){
 /// * `end_time` - Time to end simulation at.
 /// * `max_cars` - Maximum cars available.
 /// * `num_of_mutations` - The number of indexes to be mutated.
-/// * `rng` - A ThreadRng object to avoid constant reseeding.
+/// * `rngthread` - A ThreadRng object to avoid constant reseeding.
 /// * `unreachable_set` - HashSet containg ids of every node that is unreachable.
 pub fn evolve_pop(solutions: &mut Vec<Solution>,
                     num_to_select: u16,
@@ -195,12 +194,12 @@ pub fn evolve_pop(solutions: &mut Vec<Solution>,
                     end_time: types::Time,
                     max_cars: u16,
                     num_of_mutations: u8,
-                    rng: &mut ThreadRng,
+                    rngthread: &mut ThreadRng,
                     unreachable_set: &mut HashSet<types::Location>,
                 ){
 
-    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time, rng, unreachable_set);
-    selected_indexes.shuffle(&mut thread_rng());
+    let mut selected_indexes: Vec<usize> = tournament_selection(solutions, num_to_select, tournament_size, eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time, rngthread, unreachable_set);
+    selected_indexes.shuffle(&mut rng());
 
     let mut new_solutions: Vec<Solution> = Vec::new();
 
@@ -213,9 +212,9 @@ pub fn evolve_pop(solutions: &mut Vec<Solution>,
             let mut a = solutions[selected_index].clone();
             let mut b = solutions[next_selected_index].clone();
 
-            crossover(&mut a, &mut b, max_cars, rng);
-            mutate(&mut a, num_of_mutations, rng);
-            mutate(&mut b, num_of_mutations, rng);
+            crossover(&mut a, &mut b, max_cars, rngthread);
+            mutate(&mut a, num_of_mutations, rngthread);
+            mutate(&mut b, num_of_mutations, rngthread);
 
             new_solutions.push(a);
             new_solutions.push(b);
