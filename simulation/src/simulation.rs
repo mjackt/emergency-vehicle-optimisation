@@ -30,18 +30,29 @@ use crate::vehicle;
 use std::collections::HashMap;
 use std::collections::BinaryHeap;
 use std::collections::HashSet;
-use rand::rng;
 use rand::rngs::ThreadRng;
 use rand::Rng;
-use rand_distr::Normal;
-use rand_distr::StandardNormal;
+use weighted_rand::table::WalkerTable;
 
+/// Adds new calculation knowledge into the route cache
+/// ### Parameters
+/// * `route_cache` - The current hash map of knowledge.
+/// * `new_knowledge` - A hashmap of time calculations.
+/// * `source` - The source node where all calculations begin.
 fn update_route_cache(route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, new_knowledge: &HashMap<types::Location, types::Time>, source: types::Location){
     for (key, value) in new_knowledge{
         route_cache.insert((source, *key), *value);
     }
 }
 
+/// Performs a dijkstra algorithm. Terminates after target is located.
+/// ### Parameters
+/// * `graph` - The road network graph as a HashMap.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `source` - The starting node for the Dijkstra search.
+/// * `target` - The target node for the Dijkstra path.
+/// ### Returns
+/// * `Option<types::Time>` - An option either containing the time from source to target or None if there is no path.
 fn dijkstra(graph: &HashMap<types::Location, Node>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, source: types::Location, target: types::Location) -> Option<types::Time>{
     let mut heap = BinaryHeap::new();
     let mut local_discovery: HashMap<types::Location, types::Time>= HashMap::new();
@@ -91,6 +102,14 @@ fn dijkstra(graph: &HashMap<types::Location, Node>, route_cache: &mut HashMap<(t
     None
 }
 
+/// Calculates travel time from source to target or uses cache.
+/// ### Parameters
+/// * `source` - The starting node for the Dijkstra search.
+/// * `target` - The target node for the Dijkstra path.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `graph` - The road network graph as a HashMap.
+/// ### Returns
+/// * `Option<types::Time>` - An option either containing the time from source to target or None if there is no path.
 fn calc_travel_time(source: types::Location, target: types::Location, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, graph: &HashMap<types::Location, Node>) -> Option<types::Time>{
     match route_cache.get(&(source, target)){
         Some(time) => {
@@ -105,6 +124,13 @@ fn calc_travel_time(source: types::Location, target: types::Location, route_cach
     }
 }
 
+/// Dispatches vehicles to active incidents.
+/// ### Parameters
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `incidents` - The Vec of current incidents.
+/// * `graph` - The road network graph as a HashMap.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `current_time` - The current time of the simulation
 fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                 incidents: &mut Vec<Incident>,
                 graph: &HashMap<types::Location, Node>,
@@ -115,10 +141,9 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
         if event.is_solved() || !event.is_valid(){
             continue;
         }
-
-        let mut closest_time: types::Time = std::f32::MAX; 
-        let mut closest_car: Option<&mut vehicle::Vehicle> = None;
-
+        let vehicles_required: usize = event.get_vehicles_required();
+        let mut closest_times: Vec<types::Time> = vec![std::f32::MAX; vehicles_required]; 
+        let mut closest_cars: Vec<&mut vehicle::Vehicle> = Vec::new();
         let target: types::Location = event.get_location();
 
         for car in &mut *vehicles{
@@ -126,9 +151,19 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                 let current_loc: types::Location = car.get_location();
                 match calc_travel_time(current_loc, target, route_cache, graph){
                     Some(travel_time) => {
-                        if travel_time < closest_time{
-                            closest_time = travel_time;
-                            closest_car = Some(car);
+                        for i in 0..closest_times.len(){
+                            if travel_time < closest_times[i]{
+                                closest_times.insert(i, travel_time);
+                                closest_cars.insert(i, car);
+                                break
+                            }
+                        }
+                        //Restore to correct lengths
+                        while closest_times.len() > vehicles_required{
+                            closest_times.pop();
+                        }
+                        while closest_cars.len() > vehicles_required{
+                            closest_cars.pop();
                         }
                     }
                     None => {//Graph must be disconnected
@@ -138,16 +173,13 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
                 }
             }
         }
-        match closest_car{
-            Some(closest_car) => {
-                let incident_time: types::Time = event.get_service_time();
 
-                closest_car.goto(target, closest_time, incident_time);
-                event.solved(current_time + closest_time);
-                //println!("{}: {} responding to incident at {}. Response time: {}\n", current_time, closest_car.get_name(), target, closest_time);
-            },
-            None => (),
+        let incident_time: types::Time = event.get_service_time();
+        for i in 0..closest_cars.len(){
+            closest_cars[i].goto(target,closest_times[i], incident_time);
         }
+        event.solved(current_time + closest_times[vehicles_required - 1]);//Event is solved after last car arrives
+        //println!("{}: {} responding to incident at {}. Response time: {}\n", current_time, closest_car.get_name(), target, closest_time);
     }
 
     for car in vehicles{
@@ -172,35 +204,69 @@ fn dispatching(vehicles: &mut Vec<vehicle::Vehicle>,
     }
 }
 
-pub fn generate_incidents(incidents: &mut Vec<Incident>, incident_probs: &HashMap<types::Location, f32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rngthread: &mut ThreadRng){
+/// Generates incidents based on probabilistic occurrence rates.
+/// ### Parameters
+/// * `incidents` - A mutable reference to a `Vec<Incident>`.
+/// * `incident_probs` - A `HashMap` mapping locations to probabilities representing the chance of an incident occurring at that location per timestep.
+/// * `timestep` - The simulation timestep.
+/// * `current_time` - The current simulation time.
+/// * `probability_weighting` - A weight applied to incident probability.
+/// * `rngthread` - A mutable reference to a random number generator.
+/// * `wa_table` - A reference to a `WalkerTable`, which is used to determine vehicle allocation.
+/// * `vehicle_count` - A mutable reference to an array of vehicle counts, tracking the number of incdients with each number of vehciles.
+/// * `service_time_mean` - The mean service time for an incident.
+/// * `_service_time_std` - The standard deviation of the service time (currently unused).
+pub fn generate_incidents(incidents: &mut Vec<Incident>, incident_probs: &HashMap<types::Location, f32>, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rngthread: &mut ThreadRng, wa_table: &WalkerTable, vehicle_count: &mut [u32; 5], service_time_mean: f32, _service_time_std: f32){
     for (location, num_per_year) in incident_probs{
         //Could save some maths here
         let prob: f64 = *num_per_year as f64 / 365.0 / 24.0 / 60.0 / 60.0 * timestep as f64 * probability_weighting;//Converting num per year into probabilty per timestep
-
         let ran_float: f64 = rngthread.random();
         if ran_float < prob{
-            let service_time: types::Time = rng().sample::<f32,_>(Normal::new(35.0, 9.0).unwrap());
+            let vehicle_num = wa_table.next() + 1;
+            vehicle_count[vehicle_num-1] += 1;
+            let service_time: types::Time = service_time_mean;
+            /*let service_time: types::Time = rng().sample::<f32,_>(Normal::new(service_time_mean, service_time_std).unwrap());
             if service_time < 0.0{
                 panic!("Negative service time");//Obvs don't have to panic here. Could just set it to 0. Feels like it would be good to be aware tho.
-            }
+            }*/
 
-            let new_incident: Incident = Incident::new(*location, service_time, current_time);
+            let new_incident: Incident = Incident::new(*location, service_time, current_time, vehicle_num);
             incidents.push(new_incident);
         }
     }
 }
 
+/// Adds incidents to the list of active ones. They are spawned from the spawn stack.
+/// ### Parameters
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `incidents` - A mutable reference to a `Vec<Incident>`.
+/// * `index` - The index of spawn stack to use.
 fn spawn_incidents(spawn_stack: &Vec<Vec<Incident>>, incidents: &mut Vec<Incident>, index: usize){
     let mut this_step_incidents: Vec<Incident> = spawn_stack[index].clone();
     incidents.append(&mut this_step_incidents);
 }
 
+/// Completes a timestep on each vehicle
+/// ### Parameters
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `timestep` - The simulation timestep.
 fn step_vehicles(vehicles: &mut Vec<vehicle::Vehicle>, timestep: types::Time){
     for vehicle in vehicles{
         vehicle.timestep(timestep);
     }
 }
 
+/// Runs the simulation once.
+/// ### Parameters
+/// * `graph` - The road network graph as a HashMap.
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `timestep` - The simulation timestep.
+/// * `end_time` - The time to end simulation at.
+/// * `unreachable_set` - A HashSet of locations known to be unreachable that will be updated throughout the simulation.
+/// ### Returns
+/// * `types::Time` - The average response time.
 fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<Incident>>, vehicles: &mut Vec<vehicle::Vehicle>, route_cache: &mut HashMap<(types::Location, types::Location), types::Time>, timestep: types::Time, end_time: types::Time, unreachable_set: &mut HashSet<types::Location>) -> types::Time{
     let mut incidents: Vec<Incident> = Vec::new();
     let mut time: types::Time = 0.0;
@@ -239,6 +305,19 @@ fn run(graph: &HashMap<types::Location, Node>, spawn_stack: &Vec<Vec<Incident>>,
     return avg_response_time
 }
 
+/// Evaluates a solution.
+/// ### Parameters
+/// * `solution` - The solution to be evaluated.
+/// * `iterations` - The number of iterations for the solution to be evaluated. Redundant should always be one currently.
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `graph` - The road network graph as a HashMap.
+/// * `base_locations` - A Vec of locations in which police vehicles can be based at.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `timestep` - The simulation timestep.
+/// * `end_time` - The time to end simulation at.
+/// * `unreachable_set` - A HashSet of locations known to be unreachable that will be updated throughout the simulation.
+/// ### Returns
+/// * `types::Time` - The average average response time.
 pub fn evaluate(solution: &Vec<u8>,
             iterations: u8,
             spawn_stack: &Vec<Vec<Incident>>,

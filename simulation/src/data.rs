@@ -1,7 +1,7 @@
 //! Module containg the [Data] struct and it's associated methods.
 use std::fmt;
 
-use crate::types::{Solution, Time};
+use crate::types::{self, Solution, Time};
 
 ///Used to store the results from an evaluation of a collection of solutions.
 pub struct Data{
@@ -26,6 +26,10 @@ impl Data{
     ///Returns a reference to the best solution
     pub fn get_best_solution(&self) -> &Solution{
         &self.best_solution
+    }
+
+    pub fn get_best_fitness(&self) -> types::Time{
+        self.best_fitness
     }
 }
 

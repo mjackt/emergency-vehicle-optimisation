@@ -9,6 +9,8 @@ pub struct Incident{
     location: types::Location,
     ///How long will the police need to attend the incident for until it's resolved.
     service_time: types::Time,
+    ///The number of police vehicles required to resolve the incident.
+    vehicles_required: usize,
     ///The time between the incident's creation time and the police's arrival. Will be `None` when not resolved and `Some<Time>` after police attendance.
     resolved_time: Option<types::Time>,
     ///The time the incident was created.
@@ -19,13 +21,14 @@ pub struct Incident{
 
 impl Incident{
     ///Returns an Incident object.
-    pub fn new(location: types::Location, service_time: types::Time, creation_time: types::Time) -> Self{
+    pub fn new(location: types::Location, service_time: types::Time, creation_time: types::Time, vehicles_required: usize) -> Self{
         Self{
             location,
             service_time,
             resolved_time : None,
             creation_time,
             valid: true,
+            vehicles_required,
         }
     }
 
@@ -37,6 +40,10 @@ impl Incident{
     ///Returns the service time of the incident
     pub fn get_service_time(&self) -> types::Time{
         self.service_time
+    }
+
+    pub fn get_vehicles_required(&self) -> usize{
+        self.vehicles_required
     }
 
     ///Returns the time the incident was resolved in `Some<Time>` or `None` if the incident is yet to be resolved.
