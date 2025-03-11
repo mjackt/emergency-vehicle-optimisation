@@ -1,5 +1,7 @@
 //! Module containing all the functions related to the genetic algorithm operation.
+use core::time;
 use std::{collections::{HashMap, HashSet}, f32::MAX, fs::OpenOptions, time::Instant};
+use csv::Writer;
 use rand::{distr::{Distribution, Uniform}, rng, rngs::ThreadRng, seq::SliceRandom, Rng};
 use weighted_rand::table::WalkerTable;
 use crate::{data::Data, genetic, incident::{self, Incident}, node::Node, read_data, simulation::{evaluate, generate_incidents}, types::{self, Solution}};
@@ -61,15 +63,25 @@ pub fn tournament_selection(solutions: &Vec<Solution>,
     let mut selected: Vec<usize> = Vec::new();
     let mut selected_fitness: Vec<types::Time> = Vec::new();
 
+    let mut evaluated: Vec<usize> = Vec::new();
+
     let uniform_rng: Uniform<usize> = Uniform::try_from(0..solutions.len()).unwrap();
     *best_evaluated_fitness = MAX;
 
-    for _ in 0..tournament_size{
-        let mut choice: usize = uniform_rng.sample(rngthread);
+    let mut choice: usize;
 
-        while selected.contains(&choice){
-            choice = uniform_rng.sample(rngthread);
+    for j in 0..tournament_size{
+        if tournament_size as usize == solutions.len(){
+            choice = j as usize;
         }
+        else{
+            choice = uniform_rng.sample(rngthread);
+
+            while evaluated.contains(&choice){
+                choice = uniform_rng.sample(rngthread);
+            }
+        }
+        evaluated.push(choice);
 
         let tournament_entry: &Solution = &solutions[choice];
         let solution_fitness: types::Time = evaluate(tournament_entry, eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time, unreachable_set);
@@ -271,7 +283,8 @@ pub fn avg_and_best_fitness(solutions: &Vec<Solution>,
     let mut best_solution: &Solution = &solutions[0];
     let mut best_fitness: types::Time = evaluate(&solutions[0], eval_iterations, spawn_stack, graph, base_locations, route_cache, timestep, end_time, unreachable_set);
 
-    let mut total_fitness: types::Time = 0.0;
+    //Start total fitness at value of [0]
+    let mut total_fitness: types::Time = best_fitness;
 
 
     for i in 1..solutions.len(){
@@ -308,15 +321,17 @@ pub fn run(results: &mut Vec<Data>,
             mutation_num: u8,
             mutation_num_when_no_xover: u8,
             crossover_prob: f32,
+            crossover_prob_decrease: f32,
             spawn_stack_option: Option<Vec<Vec<incident::Incident>>>,
             tournament_size: u16,
+            fitness_file: &str,
             ){
-    
     let mut solutions : Vec<Solution> = Vec::new();
     let mut spawn_stack: Vec<Vec<incident::Incident>> = Vec::new();
     let mut spawn_time: types::Time = 0.0;
     let mut incident_sum: usize = 0;
     let mut vehicle_count: [u32; 5] = [0; 5];
+    let mut fitness_track: Vec<types::Time> = Vec::new();
     match spawn_stack_option{
         None => {
             for _ in 0..total_steps as usize{
@@ -350,10 +365,11 @@ pub fn run(results: &mut Vec<Data>,
 
     for i in 0..timeout{
         let mut xover: bool = false;
-        if rngthread.random::<f32>() <= crossover_prob{
+        if rngthread.random::<f32>() <= crossover_prob - (crossover_prob_decrease * i as f32){
             xover = true;
         }
         let evol_best_fitness:types::Time = evolve_pop(&mut solutions, sol_num/2, tournament_size, eval_iter, &spawn_stack, &graph, &base_locations, route_cache, timestep, end_time, max_cars, mutation_num, mutation_num_when_no_xover, rngthread, &mut unreachable_set, xover);
+        fitness_track.push(evol_best_fitness);
         println!("{}/{} ---{}--- {}", i + 1, timeout, xover, evol_best_fitness);
     }
     let end: Data = avg_and_best_fitness(&solutions, 1, &mut spawn_stack, &graph, &base_locations, route_cache, timestep, end_time, &mut unreachable_set);
@@ -365,6 +381,22 @@ pub fn run(results: &mut Vec<Data>,
 
     println!("*************\nFinal solutions:\n{}\n", end);
 
+    //Output of fitness tracking
+    let mut file = OpenOptions::new()
+    .write(true)
+    .create(true)
+    .truncate(true) // Clears the file if it exists
+    .open(fitness_file).unwrap();
+
+    let csv_row = fitness_track.iter()
+    .map(|byte| byte.to_string()) // Convert each byte to a string
+    .collect::<Vec<String>>() // Collect into Vec<String>
+    .join(","); // Join with commas
+
+    writeln!(file, "{}", csv_row);
+
+
+    //Output to results.csv
     let names: Vec<String> = read_data::police_names(place);
     let solution: &Solution = end.get_best_solution();
 

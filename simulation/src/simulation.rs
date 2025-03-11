@@ -352,3 +352,69 @@ pub fn evaluate(solution: &Vec<u8>,
     let solutions_avg_response: types::Time = sum_avg_response_times / iterations as f32;
     solutions_avg_response
 }
+
+
+
+//TESTS
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::{HashMap, HashSet};
+    use crate::types; 
+    use crate::vehicle; 
+    use crate::incident::Incident; 
+    use crate::node::Node;
+    use crate::vehicle::Vehicle;
+
+    #[test]
+    fn test_run_basic_scenario() {
+        //Construct graph
+        let mut graph: HashMap<types::Location, Node> = HashMap::new();
+        let one: Node = Node::new(vec![2,3], vec![1.0,1.0]);
+        let two: Node = Node::new(vec![1,4], vec![1.0,1.0]);
+        let three: Node = Node::new(vec![1,4], vec![1.0,1.0]);
+        let four: Node = Node::new(vec![2,3], vec![1.0,1.0]);
+        graph.insert(1, one);
+        graph.insert(2, two);
+        graph.insert(3, three);
+        graph.insert(4, four);
+
+        //Construct incidents
+        let mut spawn_stack: Vec<Vec<Incident>> = vec![vec![]; 10];  
+        let zero: Incident = Incident::new(2, 0.0, 0.0, 1);
+        spawn_stack[0].push(zero);
+        let one: Incident = Incident::new(3, 0.0, 1.0, 1);
+        spawn_stack[1].push(one);
+        let two: Incident = Incident::new(4, 0.0, 2.0, 2);
+        spawn_stack[2].push(two);
+        let three: Incident = Incident::new(3, 0.0, 3.0, 1);
+        spawn_stack[3].push(three);
+        let four: Incident = Incident::new(4, 0.0, 4.0, 1);
+        spawn_stack[4].push(four);
+        let seven: Incident = Incident::new(4, 1.0, 7.0, 1);
+        spawn_stack[7].push(seven);
+
+        let mut vehicles: Vec<vehicle::Vehicle> = vec![]; 
+        for _ in 0..2{
+            let v = Vehicle::new(1, "name".to_string());
+            vehicles.push(v);
+        }
+
+        let mut route_cache: HashMap<(types::Location, types::Location), types::Time> = HashMap::new();//TEST THIS
+        let mut unreachable_set: HashSet<types::Location> = HashSet::new();//TEST THIS
+        let timestep: types::Time = 1.0;
+        let end_time: types::Time = 10.0;
+
+        let avg_response_time = run(
+            &graph,
+            &spawn_stack,
+            &mut vehicles,
+            &mut route_cache,
+            timestep,
+            end_time,
+            &mut unreachable_set,
+        );
+        assert!(avg_response_time == 8.0/6.0);
+    }
+}
