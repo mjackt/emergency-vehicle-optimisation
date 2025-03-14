@@ -7,18 +7,7 @@
       "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
     },
     "elements": [
-  
-  {
-    "type": "node",
-    "id": 262174166,
-    "lat": 50.4104838,
-    "lon": -4.2221054,
-    "tags": {
-      "amenity": "police",
-      "created_by": "JOSM",
-      "name": "Saltash Police Station"
-    }
-  },
+
   {
     "type": "node",
     "id": 322953134,
@@ -96,16 +85,6 @@
   },
   {
     "type": "node",
-    "id": 705127056,
-    "lat": 50.2722370,
-    "lon": -4.7877001,
-    "tags": {
-      "amenity": "police",
-      "name": "Mevagissey Incorrect"
-    }
-  },
-  {
-    "type": "node",
     "id": 705475525,
     "lat": 50.2696469,
     "lon": -4.9092805,
@@ -155,17 +134,6 @@
     "tags": {
       "amenity": "police",
       "name": "Wadebridge Police Station"
-    }
-  },
-  {
-    "type": "node",
-    "id": 1627075841,
-    "lat": 50.6434380,
-    "lon": -4.2810721,
-    "tags": {
-      "amenity": "police",
-      "source": "OS_OpenData_StreetView",
-      "name": "Lifton Incorrect"
     }
   },
   {
@@ -400,39 +368,6 @@
       "amenity": "police",
       "building": "yes",
       "name": "Tiverton Police Station"
-    }
-  },
-  {
-    "type": "way",
-    "id": 182508762,
-    "nodes": [
-      1928680184,
-      1928680185,
-      1928680186,
-      1928680187,
-      1928680188,
-      1928680189,
-      1928680193,
-      11501157574,
-      11501157573,
-      1928680196,
-      1928680198,
-      1928680202,
-      1928680199,
-      1928680204,
-      1928680213,
-      1928680207,
-      1928680212,
-      1928680206,
-      1928680208,
-      1928680201,
-      1928680184
-    ],
-    "tags": {
-      "amenity": "police",
-      "building": "yes",
-      "source": "bing",
-      "name": "Devonport Navy?"
     }
   },
   {
@@ -821,7 +756,7 @@
     "tags": {
       "amenity": "police",
       "building": "yes",
-      "name": "Darwin Police?"
+      "name": "Beacon Park Community Police Station"
     }
   },
   {
@@ -929,33 +864,6 @@
   },
   {
     "type": "way",
-    "id": 1100921215,
-    "nodes": [
-      3112517173,
-      10075700033,
-      10075700034,
-      10075700035,
-      10075700036,
-      10075700037,
-      10075700038,
-      10075700039,
-      10075700040,
-      10075700041,
-      10075700042,
-      3112517722,
-      10030210315,
-      3112517205,
-      3112517728,
-      3112517173
-    ],
-    "tags": {
-      "amenity": "police",
-      "building": "yes",
-      "name": "Ivybridge Police Station 2" 
-    }
-  },
-  {
-    "type": "way",
     "id": 1108268107,
     "nodes": [
       10140140558,
@@ -990,73 +898,6 @@
       "image": "https://archive.org/details/ilfracombe-2021-09-05/DSCN3921.JPG",
       "operator": "Devon & Cornwall Constabulary",
       "name": "Ilfracombe Police Station"
-    }
-  },
-  {
-    "type": "way",
-    "id": 1218119595,
-    "nodes": [
-      11287220727,
-      11287220722,
-      11287220787,
-      11086116622,
-      11086116623,
-      11287220792,
-      11086116624,
-      11086116625,
-      11284531906,
-      11086116626,
-      11086116627,
-      11086116628,
-      11284531907,
-      11086116630,
-      11284531899,
-      11284531900,
-      11086116631,
-      11086116632,
-      11287220791,
-      11284531901,
-      11284531902,
-      11284531903,
-      11284531904,
-      11287220773,
-      11287220789,
-      11287220751,
-      11287220761,
-      11287220788,
-      11287220727
-    ],
-    "tags": {
-      "amenity": "police",
-      "name": "Royal Navy Police",
-      "operator": "Royal Navy Police",
-      "wikidata": "Q7374558",
-      "wikipedia": "en:Royal Navy Police"
-    }
-  },
-  {
-    "type": "way",
-    "id": 1253747639,
-    "nodes": [
-      11476684240,
-      11654042229,
-      11654042230,
-      11654042231,
-      11654042232,
-      11654042233,
-      11654042234,
-      11654042235,
-      11654042236,
-      11654042237,
-      11654042238,
-      11654042239,
-      1929361943,
-      11476684240
-    ],
-    "tags": {
-      "amenity": "police",
-      "building": "yes",
-      "name": "Plymouth Navy 2"
     }
   },
   {

@@ -245,26 +245,235 @@
 <a href="#245" id="245">245</a>
 <a href="#246" id="246">246</a>
 <a href="#247" id="247">247</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::incident::Incident;
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Module containing all methods related to the police response simulation.
+//! 
+//! The simulation can be explained as such:
+//! 1. Spawn new incidents using the `spawn_stack` incident schedule
+//! 2. Dispatch vehicles to incidents as efficiently as possible
+//! 3. Step the simulation and vehciles using the desired timstep
+//! 4. If the time &lt; end_time:
+//!     Go back to the start
+//!    Else:
+//!     Sum and return performance metrics
+//! 
+//! The simulation has been designed to run as efficiently as possible by using serveral concepts:
+//! ##### Hash Maps
+//! Due to the large amount of items and info being stored, hash maps are used pretty much everywhere to achieve O(1) accessing.
+//! ##### Route Caching
+//! Route calculations are done using Dijkstra and all knowledge gained from a Dijkstra run is cached in a HashMap.
+//! Before performing any calculations, this cache is checked to see if the calculation has been performed before and therefore doesn't need to be done again.
+//! ##### Incident Plan
+//! Predetermining the incident plan provides a fair test for all solutions. However it also has a couple performance boosts:
+//! - Makes route caching insanely powerful. If the incidents are always in the same place then journeys will be similar accross all solutions. Therefore caching is utilised to the maximum.
+//! - Removes need to randomly generate new incidents for every simulation.
+//! ##### Travel simplification
+//! A vehicle will always store the cost of it's latest journey. Then if a vehcile has just left base and now wants to return to base, it will just use this last travel cost value for the reverse journey rather than recalculating the new cost.
+</span><span class="kw">use </span><span class="kw">crate</span>::incident::Incident;
 <span class="kw">use </span><span class="kw">crate</span>::types;
 <span class="kw">use </span><span class="kw">crate</span>::dijkstra_node::DijkstraNode;
 <span class="kw">use </span><span class="kw">crate</span>::node::Node;
 <span class="kw">use </span><span class="kw">crate</span>::vehicle;
-<span class="kw">use </span><span class="kw">crate</span>::incident;
 
 <span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::collections::BinaryHeap;
 <span class="kw">use </span>std::collections::HashSet;
 <span class="kw">use </span>rand::rngs::ThreadRng;
 <span class="kw">use </span>rand::Rng;
+<span class="kw">use </span>weighted_rand::table::WalkerTable;
 
-<span class="kw">fn </span>update_route_cache(route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, new_knowledge: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, types::Time&gt;, source: types::Location){
+<span class="doccomment">/// Adds new calculation knowledge into the route cache
+/// ### Parameters
+/// * `route_cache` - The current hash map of knowledge.
+/// * `new_knowledge` - A hashmap of time calculations.
+/// * `source` - The source node where all calculations begin.
+</span><span class="kw">fn </span>update_route_cache(route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, new_knowledge: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, types::Time&gt;, source: types::Location){
     <span class="kw">for </span>(key, value) <span class="kw">in </span>new_knowledge{
         route_cache.insert((source, <span class="kw-2">*</span>key), <span class="kw-2">*</span>value);
     }
 }
 
-<span class="kw">fn </span>dijkstra(graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, source: types::Location, target: types::Location) -&gt; <span class="prelude-ty">Option</span>&lt;types::Time&gt;{
+<span class="doccomment">/// Performs a dijkstra algorithm. Terminates after target is located.
+/// ### Parameters
+/// * `graph` - The road network graph as a HashMap.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `source` - The starting node for the Dijkstra search.
+/// * `target` - The target node for the Dijkstra path.
+/// ### Returns
+/// * `Option&lt;types::Time&gt;` - An option either containing the time from source to target or None if there is no path.
+</span><span class="kw">fn </span>dijkstra(graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, source: types::Location, target: types::Location) -&gt; <span class="prelude-ty">Option</span>&lt;types::Time&gt;{
     <span class="kw">let </span><span class="kw-2">mut </span>heap = BinaryHeap::new();
     <span class="kw">let </span><span class="kw-2">mut </span>local_discovery: HashMap&lt;types::Location, types::Time&gt;= HashMap::new();
 
@@ -313,7 +522,15 @@
     <span class="prelude-val">None
 </span>}
 
-<span class="kw">fn </span>calc_travel_time(source: types::Location, target: types::Location, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;types::Time&gt;{
+<span class="doccomment">/// Calculates travel time from source to target or uses cache.
+/// ### Parameters
+/// * `source` - The starting node for the Dijkstra search.
+/// * `target` - The target node for the Dijkstra path.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `graph` - The road network graph as a HashMap.
+/// ### Returns
+/// * `Option&lt;types::Time&gt;` - An option either containing the time from source to target or None if there is no path.
+</span><span class="kw">fn </span>calc_travel_time(source: types::Location, target: types::Location, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;types::Time&gt;{
     <span class="kw">match </span>route_cache.get(<span class="kw-2">&amp;</span>(source, target)){
         <span class="prelude-val">Some</span>(time) =&gt; {
             <span class="kw">if </span><span class="kw-2">*</span>time == f32::MAX{<span class="comment">//Already known to be unreachable
@@ -327,8 +544,15 @@
     }
 }
 
-<span class="kw">fn </span>dispatching(vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;,
-                incidents: <span class="kw-2">&amp;mut </span>Vec&lt;incident::Incident&gt;,
+<span class="doccomment">/// Dispatches vehicles to active incidents.
+/// ### Parameters
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `incidents` - The Vec of current incidents.
+/// * `graph` - The road network graph as a HashMap.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `current_time` - The current time of the simulation
+</span><span class="kw">fn </span>dispatching(vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;,
+                incidents: <span class="kw-2">&amp;mut </span>Vec&lt;Incident&gt;,
                 graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;,
                 route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;,
                 current_time: types::Time){
@@ -337,10 +561,9 @@
         <span class="kw">if </span>event.is_solved() || !event.is_valid(){
             <span class="kw">continue</span>;
         }
-
-        <span class="kw">let </span><span class="kw-2">mut </span>closest_time: types::Time = std::f32::MAX; 
-        <span class="kw">let </span><span class="kw-2">mut </span>closest_car: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>vehicle::Vehicle&gt; = <span class="prelude-val">None</span>;
-
+        <span class="kw">let </span>vehicles_required: usize = event.get_vehicles_required();
+        <span class="kw">let </span><span class="kw-2">mut </span>closest_times: Vec&lt;types::Time&gt; = <span class="macro">vec!</span>[std::f32::MAX; vehicles_required]; 
+        <span class="kw">let </span><span class="kw-2">mut </span>closest_cars: Vec&lt;<span class="kw-2">&amp;mut </span>vehicle::Vehicle&gt; = Vec::new();
         <span class="kw">let </span>target: types::Location = event.get_location();
 
         <span class="kw">for </span>car <span class="kw">in </span><span class="kw-2">&amp;mut *</span>vehicles{
@@ -348,9 +571,19 @@
                 <span class="kw">let </span>current_loc: types::Location = car.get_location();
                 <span class="kw">match </span>calc_travel_time(current_loc, target, route_cache, graph){
                     <span class="prelude-val">Some</span>(travel_time) =&gt; {
-                        <span class="kw">if </span>travel_time &lt; closest_time{
-                            closest_time = travel_time;
-                            closest_car = <span class="prelude-val">Some</span>(car);
+                        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..closest_times.len(){
+                            <span class="kw">if </span>travel_time &lt; closest_times[i]{
+                                closest_times.insert(i, travel_time);
+                                closest_cars.insert(i, car);
+                                <span class="kw">break
+                            </span>}
+                        }
+                        <span class="comment">//Restore to correct lengths
+                        </span><span class="kw">while </span>closest_times.len() &gt; vehicles_required{
+                            closest_times.pop();
+                        }
+                        <span class="kw">while </span>closest_cars.len() &gt; vehicles_required{
+                            closest_cars.pop();
                         }
                     }
                     <span class="prelude-val">None </span>=&gt; {<span class="comment">//Graph must be disconnected
@@ -360,17 +593,14 @@
                 }
             }
         }
-        <span class="kw">match </span>closest_car{
-            <span class="prelude-val">Some</span>(closest_car) =&gt; {
-                <span class="kw">let </span>incident_time: types::Time = event.get_service_time();
 
-                closest_car.goto(target, closest_time, incident_time);
-                event.solved(current_time + closest_time);
-                <span class="comment">//println!("{}: {} responding to incident at {}. Response time: {}\n", current_time, closest_car.get_name(), target, closest_time);
-            </span>},
-            <span class="prelude-val">None </span>=&gt; (),
+        <span class="kw">let </span>incident_time: types::Time = event.get_service_time();
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..closest_cars.len(){
+            closest_cars[i].goto(target,closest_times[i], incident_time);
         }
-    }
+        event.solved(current_time + closest_times[vehicles_required - <span class="number">1</span>]);<span class="comment">//Event is solved after last car arrives
+        //println!("{}: {} responding to incident at {}. Response time: {}\n", current_time, closest_car.get_name(), target, closest_time);
+    </span>}
 
     <span class="kw">for </span>car <span class="kw">in </span>vehicles{
         <span class="kw">if </span>car.get_secs_till_free() == <span class="number">0.0 </span>&amp;&amp; car.get_location() != car.get_base(){
@@ -394,34 +624,71 @@
     }
 }
 
-<span class="kw">pub fn </span>generate_incidents(incidents: <span class="kw-2">&amp;mut </span>Vec&lt;incident::Incident&gt;, incident_probs: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, u32&gt;, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rng: <span class="kw-2">&amp;mut </span>ThreadRng){
+<span class="doccomment">/// Generates incidents based on probabilistic occurrence rates.
+/// ### Parameters
+/// * `incidents` - A mutable reference to a `Vec&lt;Incident&gt;`.
+/// * `incident_probs` - A `HashMap` mapping locations to probabilities representing the chance of an incident occurring at that location per timestep.
+/// * `timestep` - The simulation timestep.
+/// * `current_time` - The current simulation time.
+/// * `probability_weighting` - A weight applied to incident probability.
+/// * `rngthread` - A mutable reference to a random number generator.
+/// * `wa_table` - A reference to a `WalkerTable`, which is used to determine vehicle allocation.
+/// * `vehicle_count` - A mutable reference to an array of vehicle counts, tracking the number of incdients with each number of vehciles.
+/// * `service_time_mean` - The mean service time for an incident.
+/// * `_service_time_std` - The standard deviation of the service time (currently unused).
+</span><span class="kw">pub fn </span>generate_incidents(incidents: <span class="kw-2">&amp;mut </span>Vec&lt;Incident&gt;, incident_probs: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, f32&gt;, timestep: types::Time, current_time: types::Time, probability_weighting: f64, rngthread: <span class="kw-2">&amp;mut </span>ThreadRng, wa_table: <span class="kw-2">&amp;</span>WalkerTable, vehicle_count: <span class="kw-2">&amp;mut </span>[u32; <span class="number">5</span>], service_time_mean: f32, _service_time_std: f32){
     <span class="kw">for </span>(location, num_per_year) <span class="kw">in </span>incident_probs{
         <span class="comment">//Could save some maths here
         </span><span class="kw">let </span>prob: f64 = <span class="kw-2">*</span>num_per_year <span class="kw">as </span>f64 / <span class="number">365.0 </span>/ <span class="number">24.0 </span>/ <span class="number">60.0 </span>/ <span class="number">60.0 </span>* timestep <span class="kw">as </span>f64 * probability_weighting;<span class="comment">//Converting num per year into probabilty per timestep
-
-        </span><span class="kw">let </span>ran_float: f64 = rng.gen();
+        </span><span class="kw">let </span>ran_float: f64 = rngthread.random();
         <span class="kw">if </span>ran_float &lt; prob{
-            <span class="kw">let </span>service_time: types::Time = rand::thread_rng().gen_range(<span class="number">600</span>..<span class="number">2400</span>) <span class="kw">as </span>f32;
+            <span class="kw">let </span>vehicle_num = wa_table.next() + <span class="number">1</span>;
+            vehicle_count[vehicle_num-<span class="number">1</span>] += <span class="number">1</span>;
+            <span class="kw">let </span>service_time: types::Time = service_time_mean;
+            <span class="comment">/*let service_time: types::Time = rng().sample::&lt;f32,_&gt;(Normal::new(service_time_mean, service_time_std).unwrap());
+            if service_time &lt; 0.0{
+                panic!("Negative service time");//Obvs don't have to panic here. Could just set it to 0. Feels like it would be good to be aware tho.
+            }*/
 
-            <span class="kw">let </span>new_incident: incident::Incident = incident::Incident::new(<span class="kw-2">*</span>location, service_time, current_time);
+            </span><span class="kw">let </span>new_incident: Incident = Incident::new(<span class="kw-2">*</span>location, service_time, current_time, vehicle_num);
             incidents.push(new_incident);
         }
     }
 }
 
-<span class="kw">fn </span>spawn_incidents(spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;incident::Incident&gt;&gt;, incidents: <span class="kw-2">&amp;mut </span>Vec&lt;incident::Incident&gt;, index: usize){
-    <span class="kw">let </span><span class="kw-2">mut </span>this_step_incidents: Vec&lt;incident::Incident&gt; = spawn_stack[index].clone();
+<span class="doccomment">/// Adds incidents to the list of active ones. They are spawned from the spawn stack.
+/// ### Parameters
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `incidents` - A mutable reference to a `Vec&lt;Incident&gt;`.
+/// * `index` - The index of spawn stack to use.
+</span><span class="kw">fn </span>spawn_incidents(spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;Incident&gt;&gt;, incidents: <span class="kw-2">&amp;mut </span>Vec&lt;Incident&gt;, index: usize){
+    <span class="kw">let </span><span class="kw-2">mut </span>this_step_incidents: Vec&lt;Incident&gt; = spawn_stack[index].clone();
     incidents.append(<span class="kw-2">&amp;mut </span>this_step_incidents);
 }
 
-<span class="kw">fn </span>step_vehicles(vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;, timestep: types::Time){
+<span class="doccomment">/// Completes a timestep on each vehicle
+/// ### Parameters
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `timestep` - The simulation timestep.
+</span><span class="kw">fn </span>step_vehicles(vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;, timestep: types::Time){
     <span class="kw">for </span>vehicle <span class="kw">in </span>vehicles{
         vehicle.timestep(timestep);
     }
 }
 
-<span class="kw">fn </span>run(graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;, spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;incident::Incident&gt;&gt;, vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, timestep: types::Time, end_time: types::Time, unreachable_set: <span class="kw-2">&amp;mut </span>HashSet&lt;types::Location&gt;) -&gt; types::Time{
-    <span class="kw">let </span><span class="kw-2">mut </span>incidents: Vec&lt;incident::Incident&gt; = Vec::new();
+<span class="doccomment">/// Runs the simulation once.
+/// ### Parameters
+/// * `graph` - The road network graph as a HashMap.
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `vehicles` - Vec of all Vehicle objects.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `timestep` - The simulation timestep.
+/// * `end_time` - The time to end simulation at.
+/// * `unreachable_set` - A HashSet of locations known to be unreachable that will be updated throughout the simulation.
+/// ### Returns
+/// * `types::Time` - The average response time.
+</span><span class="kw">fn </span>run(graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;, spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;Incident&gt;&gt;, vehicles: <span class="kw-2">&amp;mut </span>Vec&lt;vehicle::Vehicle&gt;, route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;, timestep: types::Time, end_time: types::Time, unreachable_set: <span class="kw-2">&amp;mut </span>HashSet&lt;types::Location&gt;) -&gt; types::Time{
+    <span class="kw">let </span><span class="kw-2">mut </span>incidents: Vec&lt;Incident&gt; = Vec::new();
     <span class="kw">let </span><span class="kw-2">mut </span>time: types::Time = <span class="number">0.0</span>;
 
     <span class="kw">while </span>time &lt; end_time{
@@ -458,9 +725,22 @@
     </span><span class="kw">return </span>avg_response_time
 }
 
-<span class="kw">pub fn </span>evaluate(solution: <span class="kw-2">&amp;</span>Vec&lt;u8&gt;,
+<span class="doccomment">/// Evaluates a solution.
+/// ### Parameters
+/// * `solution` - The solution to be evaluated.
+/// * `iterations` - The number of iterations for the solution to be evaluated. Redundant should always be one currently.
+/// * `spawn_stack` - Reference to a 2D Vec containing incidents to spawn at each timestep.
+/// * `graph` - The road network graph as a HashMap.
+/// * `base_locations` - A Vec of locations in which police vehicles can be based at.
+/// * `route_cache` - The current hash map of knowledge.
+/// * `timestep` - The simulation timestep.
+/// * `end_time` - The time to end simulation at.
+/// * `unreachable_set` - A HashSet of locations known to be unreachable that will be updated throughout the simulation.
+/// ### Returns
+/// * `types::Time` - The average average response time.
+</span><span class="kw">pub fn </span>evaluate(solution: <span class="kw-2">&amp;</span>Vec&lt;u8&gt;,
             iterations: u8,
-            spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;incident::Incident&gt;&gt;,
+            spawn_stack: <span class="kw-2">&amp;</span>Vec&lt;Vec&lt;Incident&gt;&gt;,
             graph: <span class="kw-2">&amp;</span>HashMap&lt;types::Location, Node&gt;,
             base_locations: <span class="kw-2">&amp;</span>Vec&lt;types::Location&gt;,
             route_cache: <span class="kw-2">&amp;mut </span>HashMap&lt;(types::Location, types::Location), types::Time&gt;,
@@ -492,4 +772,69 @@
     <span class="kw">let </span>solutions_avg_response: types::Time = sum_avg_response_times / iterations <span class="kw">as </span>f32;
     solutions_avg_response
 }
-</code></pre></div></section></main></body></html>
+
+
+
+<span class="comment">//TESTS
+
+</span><span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>std::collections::{HashMap, HashSet};
+    <span class="kw">use </span><span class="kw">crate</span>::types; 
+    <span class="kw">use </span><span class="kw">crate</span>::vehicle; 
+    <span class="kw">use </span><span class="kw">crate</span>::incident::Incident; 
+    <span class="kw">use </span><span class="kw">crate</span>::node::Node;
+    <span class="kw">use </span><span class="kw">crate</span>::vehicle::Vehicle;
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_run_basic_scenario() {
+        <span class="comment">//Construct graph
+        </span><span class="kw">let </span><span class="kw-2">mut </span>graph: HashMap&lt;types::Location, Node&gt; = HashMap::new();
+        <span class="kw">let </span>one: Node = Node::new(<span class="macro">vec!</span>[<span class="number">2</span>,<span class="number">3</span>], <span class="macro">vec!</span>[<span class="number">1.0</span>,<span class="number">1.0</span>]);
+        <span class="kw">let </span>two: Node = Node::new(<span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">4</span>], <span class="macro">vec!</span>[<span class="number">1.0</span>,<span class="number">1.0</span>]);
+        <span class="kw">let </span>three: Node = Node::new(<span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">4</span>], <span class="macro">vec!</span>[<span class="number">1.0</span>,<span class="number">1.0</span>]);
+        <span class="kw">let </span>four: Node = Node::new(<span class="macro">vec!</span>[<span class="number">2</span>,<span class="number">3</span>], <span class="macro">vec!</span>[<span class="number">1.0</span>,<span class="number">1.0</span>]);
+        graph.insert(<span class="number">1</span>, one);
+        graph.insert(<span class="number">2</span>, two);
+        graph.insert(<span class="number">3</span>, three);
+        graph.insert(<span class="number">4</span>, four);
+
+        <span class="comment">//Construct incidents
+        </span><span class="kw">let </span><span class="kw-2">mut </span>spawn_stack: Vec&lt;Vec&lt;Incident&gt;&gt; = <span class="macro">vec!</span>[<span class="macro">vec!</span>[]; <span class="number">10</span>];  
+        <span class="kw">let </span>zero: Incident = Incident::new(<span class="number">2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1</span>);
+        spawn_stack[<span class="number">0</span>].push(zero);
+        <span class="kw">let </span>one: Incident = Incident::new(<span class="number">3</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1</span>);
+        spawn_stack[<span class="number">1</span>].push(one);
+        <span class="kw">let </span>two: Incident = Incident::new(<span class="number">4</span>, <span class="number">0.0</span>, <span class="number">2.0</span>, <span class="number">2</span>);
+        spawn_stack[<span class="number">2</span>].push(two);
+        <span class="kw">let </span>three: Incident = Incident::new(<span class="number">3</span>, <span class="number">0.0</span>, <span class="number">3.0</span>, <span class="number">1</span>);
+        spawn_stack[<span class="number">3</span>].push(three);
+        <span class="kw">let </span>four: Incident = Incident::new(<span class="number">4</span>, <span class="number">0.0</span>, <span class="number">4.0</span>, <span class="number">1</span>);
+        spawn_stack[<span class="number">4</span>].push(four);
+        <span class="kw">let </span>seven: Incident = Incident::new(<span class="number">4</span>, <span class="number">1.0</span>, <span class="number">7.0</span>, <span class="number">1</span>);
+        spawn_stack[<span class="number">7</span>].push(seven);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>vehicles: Vec&lt;vehicle::Vehicle&gt; = <span class="macro">vec!</span>[]; 
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">2</span>{
+            <span class="kw">let </span>v = Vehicle::new(<span class="number">1</span>, <span class="string">"name"</span>.to_string());
+            vehicles.push(v);
+        }
+
+        <span class="kw">let </span><span class="kw-2">mut </span>route_cache: HashMap&lt;(types::Location, types::Location), types::Time&gt; = HashMap::new();<span class="comment">//TEST THIS
+        </span><span class="kw">let </span><span class="kw-2">mut </span>unreachable_set: HashSet&lt;types::Location&gt; = HashSet::new();<span class="comment">//TEST THIS
+        </span><span class="kw">let </span>timestep: types::Time = <span class="number">1.0</span>;
+        <span class="kw">let </span>end_time: types::Time = <span class="number">10.0</span>;
+
+        <span class="kw">let </span>avg_response_time = run(
+            <span class="kw-2">&amp;</span>graph,
+            <span class="kw-2">&amp;</span>spawn_stack,
+            <span class="kw-2">&amp;mut </span>vehicles,
+            <span class="kw-2">&amp;mut </span>route_cache,
+            timestep,
+            end_time,
+            <span class="kw-2">&amp;mut </span>unreachable_set,
+        );
+        <span class="macro">assert!</span>(avg_response_time == <span class="number">8.0</span>/<span class="number">6.0</span>);
+    }
+}</code></pre></div></section></main></body></html>

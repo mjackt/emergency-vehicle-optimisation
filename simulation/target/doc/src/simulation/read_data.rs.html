@@ -97,24 +97,50 @@
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fs};
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Module contains methods focused on reading the input files required to run the simulation and GA.
+//! 
+//! This includes:
+//! - probs.json
+//! - police_ids.json
+//! - police_names.json
+//! - graph.json
+</span><span class="kw">use </span>std::{collections::HashMap, fs};
 
 <span class="kw">use </span><span class="kw">crate</span>::types;
 <span class="kw">use </span><span class="kw">crate</span>::node::Node;
 
-<span class="kw">const </span>PLACE: <span class="kw-2">&amp;</span>str = <span class="string">"dnc"</span>;
-
-<span class="kw">pub fn </span>probs() -&gt; HashMap&lt;types::Location, u32&gt; {
+<span class="doccomment">/// Returns a HashMap of locations and incident probabilites using the *probs.json* file.
+/// ### Returns
+/// `HashMap&lt;types::Location, f32&gt;` - A HashMap keyed by location ID which an associated value which represents how many incidents will occur at that location over a year.
+</span><span class="kw">pub fn </span>probs(place: <span class="kw-2">&amp;</span>str) -&gt; HashMap&lt;types::Location, f32&gt; {
     <span class="comment">// Attempt to read the JSON file
-    </span><span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/probs.json"</span>, PLACE);
+    </span><span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/probs.json"</span>, place);
     <span class="kw">let </span>file_content = fs::read_to_string(path).expect(<span class="string">"Error loading probs.json"</span>);
 
     <span class="comment">// Attempt to parse the JSON into a HashMap
-    </span><span class="kw">let </span>raw_data: HashMap&lt;String, u32&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>file_content).expect(<span class="string">"Error parsing probs.json"</span>);
+    </span><span class="kw">let </span>raw_data: HashMap&lt;String, f32&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>file_content).expect(<span class="string">"Error parsing probs.json"</span>);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>data: HashMap&lt;types::Location, u32&gt; = HashMap::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>data: HashMap&lt;types::Location, f32&gt; = HashMap::new();
     <span class="kw">for </span>(key, value) <span class="kw">in </span>raw_data {
-        <span class="kw">if </span>value == <span class="number">0</span>{
+        <span class="kw">if </span>value == <span class="number">0.0</span>{
             <span class="kw">continue
         </span>}
         <span class="kw">let </span>key_as_u64 = key.parse::&lt;u64&gt;().expect(<span class="string">"Invalid type in probs.json"</span>);
@@ -124,9 +150,10 @@
     data
 }
 
-<span class="kw">fn </span>apsp() -&gt; HashMap&lt;types::Location, HashMap&lt;types::Location, types::Time&gt;&gt; {
+<span class="doccomment">///OBSOLETE
+</span><span class="kw">fn </span>apsp(place: <span class="kw-2">&amp;</span>str) -&gt; HashMap&lt;types::Location, HashMap&lt;types::Location, types::Time&gt;&gt; {
     <span class="comment">// Attempt to read the JSON file
-    </span><span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/apsp.json"</span>, PLACE);
+    </span><span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/apsp.json"</span>, place);
     <span class="kw">let </span>file_content = fs::read_to_string(path).expect(<span class="string">"Error loading apsp.json"</span>);
 
     <span class="comment">// Attempt to parse the JSON into a HashMap
@@ -150,8 +177,11 @@
     data
 }
 
-<span class="kw">pub fn </span>graph() -&gt; HashMap&lt;types::Location, Node&gt;{
-    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/graph.json"</span>, PLACE);
+<span class="doccomment">/// Returns a HashMap of location IDs and Node objects using the *graph.json* file.
+/// ### Returns
+/// `HashMap&lt;types::Location, Node&gt;` - A HashMap keyed by location ID with the values as [Node] objects.
+</span><span class="kw">pub fn </span>graph(place: <span class="kw-2">&amp;</span>str) -&gt; HashMap&lt;types::Location, Node&gt;{
+    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/graph.json"</span>, place);
     <span class="kw">let </span>file_content = fs::read_to_string(path).expect(<span class="string">"Error loading graph.json"</span>);
     <span class="kw">let </span>raw_data: std::collections::HashMap&lt;String, serde_json::Value&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>file_content).expect(<span class="string">"Error parsing graph.json"</span>);
 
@@ -180,8 +210,11 @@
     graph
 }
 
-<span class="kw">pub fn </span>police() -&gt; Vec&lt;types::Location&gt;{
-    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/police_ids.json"</span>, PLACE);
+<span class="doccomment">/// Returns a list of all node IDs that are a police base. Uses police_ids.json.
+/// ### Returns
+/// `Vec&lt;types::Location&gt;` - A list of all node IDs that are a police base.
+</span><span class="kw">pub fn </span>police(place: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;types::Location&gt;{
+    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/police_ids.json"</span>, place);
     <span class="kw">let </span>file_content = fs::read_to_string(path).expect(<span class="string">"Error loading police_ids.json"</span>);
 
     <span class="kw">let </span>data: Vec&lt;types::Location&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>file_content).expect(<span class="string">"Error parsing police_ids.json"</span>);
@@ -189,8 +222,11 @@
     data
 }
 
-<span class="kw">pub fn </span>police_names() -&gt; Vec&lt;String&gt;{
-    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/police_names.json"</span>, PLACE);
+<span class="doccomment">/// Returns a list of the names of every police base. Uses police_names.json.
+/// ### Returns
+/// `Vec&lt;String&gt;` - A list of all police base names.
+</span><span class="kw">pub fn </span>police_names(place: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;String&gt;{
+    <span class="kw">let </span>path = <span class="macro">format!</span>(<span class="string">"map_data/{}/police_names.json"</span>, place);
     <span class="kw">let </span>file_content = fs::read_to_string(path).expect(<span class="string">"Error loading police_names.json"</span>);
 
     <span class="kw">let </span>data: Vec&lt;String&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>file_content).expect(<span class="string">"Error parsing police_names.json"</span>);

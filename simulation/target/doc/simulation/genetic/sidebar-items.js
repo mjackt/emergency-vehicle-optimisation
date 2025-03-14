@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["avg_and_best_fitness","crossover","evolve_pop","generate_solution","mutate","repair","tournament_selection"]};
+window.SIDEBAR_ITEMS = {"fn":["avg_and_best_fitness","crossover","evolve_pop","generate_solution","mutate","repair","run","tournament_selection"]};

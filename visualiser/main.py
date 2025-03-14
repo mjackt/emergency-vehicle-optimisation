@@ -64,9 +64,9 @@ if __name__=="__main__":
             elif value > storage_list[j].max:
                 storage_list[j].max = value
 
-    bubble_layer = folium.FeatureGroup(name="Bubble Map", show=True)
     min_layer = folium.FeatureGroup(name="Min Values", show=False)
     max_layer = folium.FeatureGroup(name="Max Values", show=False)
+    bubble_layer = folium.FeatureGroup(name="Bubble Map", show=True)
 
 
     for storage in storage_list:

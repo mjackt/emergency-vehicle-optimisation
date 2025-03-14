@@ -120,6 +120,71 @@
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
 <a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # What is it?
 //! A program to optimise the locations of police vehicles.
 //! 
@@ -130,15 +195,16 @@
 //! # Tuning GA
 //! A variety of paremeters are available to tune the GA.
 //! Some relate to the GA process, i.e tournament size or mutation count.
-//! Others refer to the simulation, i.e timestep or the max number of cars available.
+//! Others refer to the simulation, i.e TIMESTEP or the max number of cars available.
 //! 
 //! By default they are set to the parameters I have found most succesfull. However, this will change based on the area and constraints being used.
 //! 
 //! # Set Up
 //! Requires 3 files to be in place:
-//! - graph.json
-//! - police.json
 //! - probs.json
+//! - police_ids.json
+//! - police_names.json
+//! - graph.json
 //! 
 //! These files should be placed in a folder named x. Where x is the customisable variable 'PLACE' in read_data.rs.
 //! 
@@ -153,92 +219,156 @@
 <span class="kw">mod </span>genetic;
 <span class="kw">mod </span>data;
 
-<span class="kw">use </span>std::collections::{HashMap, HashSet};
-<span class="kw">use </span>std::time::Instant;
+<span class="kw">use </span>chrono::offset::Utc;
+<span class="kw">use </span>chrono::DateTime;
+
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::time::SystemTime;
+<span class="kw">use </span>std::{env, io};
+<span class="kw">use </span>std::fs::OpenOptions;
 <span class="kw">use </span>data::Data;
 <span class="kw">use </span>incident::Incident;
 <span class="kw">use </span>node::Node;
 <span class="kw">use </span>rand::rngs::ThreadRng;
-<span class="kw">use </span>rand::thread_rng;
-<span class="kw">use </span>types::Solution;
+<span class="kw">use </span>rand::rng;
+<span class="kw">use </span>simulation::generate_incidents;
+<span class="kw">use </span>weighted_rand::builder::<span class="kw-2">*</span>;
+<span class="kw">use </span>weighted_rand::table::WalkerTable;
+<span class="kw">use </span>std::io::Write;
 
-<span class="kw">use </span><span class="kw">crate</span>::genetic::{evolve_pop, avg_and_best_fitness};
-<span class="kw">use </span><span class="kw">crate</span>::simulation::generate_incidents;
 
 <span class="doccomment">/// Runs the entire GA process on input data pointed to by PLACE in read_data.rs.
 /// 
 /// After execution it will provide info on the GA process such as the final best solution, change in solution average and timing info.
 </span><span class="kw">fn </span>main(){
+    <span class="kw">let </span>args: Vec&lt;String&gt; = env::args().collect();
 
-    <span class="kw">let </span>incident_probs: HashMap&lt;types::Location, u32&gt; = read_data::probs();
+    <span class="kw">if </span>args.len() &gt; <span class="number">1</span>{<span class="comment">//Creates new csv file with station names as column headers
+        </span><span class="macro">println!</span>(<span class="string">"Enter 'y' to confirm a new results file"</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>txt = String::new();
+     
+        io::stdin().read_line(<span class="kw-2">&amp;mut </span>txt).expect(<span class="string">"failed to readline"</span>);
+        <span class="kw">if </span>txt.trim() == <span class="string">"y"</span>{
+            <span class="macro">println!</span>(<span class="string">"Creating new results.csv ..."</span>);
+            <span class="kw">let </span>csv_row = read_data::police_names(PLACE).join(<span class="string">","</span>);
 
-    <span class="macro">println!</span>(<span class="string">"{}"</span>, incident_probs.len());
+            <span class="kw">let </span><span class="kw-2">mut </span>file = OpenOptions::new()
+            .write(<span class="bool-val">true</span>)
+            .create(<span class="bool-val">true</span>)
+            .truncate(<span class="bool-val">true</span>) <span class="comment">// Clears the file if it exists
+            </span>.open(<span class="string">"results.csv"</span>).unwrap();
 
-    <span class="kw">let </span>graph: HashMap&lt;types::Location, Node&gt; = read_data::graph();
+            <span class="comment">// Write data as a new line
+            </span><span class="macro">writeln!</span>(file, <span class="string">"{}"</span>, csv_row);
+        }
+        <span class="kw">else </span>{
+            <span class="macro">println!</span>(<span class="string">"Results will be appended to current file"</span>);
+        }
+    }
+    <span class="kw">else</span>{
+        <span class="macro">println!</span>(<span class="string">"Results will be appended to current file"</span>);
+    }
 
-    <span class="kw">let </span>base_locations: Vec&lt;types::Location&gt; = read_data::police();
+    <span class="kw">let </span>incident_probs: HashMap&lt;types::Location, f32&gt; = read_data::probs(PLACE);
+
+    <span class="macro">println!</span>(<span class="string">"{} nodes have more than 0 incidents per year"</span>, incident_probs.len());
+
+    <span class="kw">let </span>graph: HashMap&lt;types::Location, Node&gt; = read_data::graph(PLACE);
+
+    <span class="kw">let </span>base_locations: Vec&lt;types::Location&gt; = read_data::police(PLACE);
 
     <span class="kw">let </span><span class="kw-2">mut </span>route_cache: HashMap&lt;(types::Location, types::Location), types::Time&gt; = HashMap::new();
 
-    <span class="kw">let </span><span class="kw-2">mut </span>solutions : Vec&lt;Solution&gt; = Vec::new();
-
-    <span class="kw">let </span><span class="kw-2">mut </span>rng: ThreadRng = thread_rng();
+    <span class="kw">let </span><span class="kw-2">mut </span>rngthread: ThreadRng = rng();
 
     <span class="comment">//TUNABLES
+    </span><span class="kw">const </span>PARAM_TEST: bool = <span class="bool-val">false</span>;<span class="comment">//Will run a selection of paramaters on the same schedule to compare results
     //Sim stuff
-    </span><span class="kw">const </span>MAX_CARS: u16 = <span class="number">120</span>;
-    <span class="kw">const </span>TIMESTEP: types::Time = <span class="number">120.0</span>;
-    <span class="kw">const </span>END_TIME: types::Time = <span class="number">60.0 </span>* <span class="number">60.0 </span>* <span class="number">12.0</span>;<span class="comment">//Secs. Not inclusive i.e when time hits end time its over
-    </span><span class="kw">const </span>PROBABILITY_WEIGHTING: f64 = <span class="number">0.4</span>;
-    <span class="comment">//GA stuff
+    </span><span class="kw">const </span>PLACE: <span class="kw-2">&amp;</span>str = <span class="string">"dnc_12months_50agg_final"</span>;
+    <span class="kw">const </span>MAX_CARS: u16 = <span class="number">100</span>;
+    <span class="kw">const </span>TIMESTEP: types::Time = <span class="number">60.0</span>;
+    <span class="kw">const </span>END_TIME: types::Time = <span class="number">60.0 </span>* <span class="number">60.0 </span>* <span class="number">72.0</span>;<span class="comment">//Secs. Not inclusive. i.e when time hits end time its over
+    </span><span class="kw">const </span>PROBABILITY_WEIGHTING: f64 = <span class="number">1.0</span>;<span class="comment">//use 0.4 with random incidents
+    </span><span class="kw">const </span>SEVERITY_WEIGHTING: [u32;<span class="number">5</span>] = [<span class="number">50</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">6</span>, <span class="number">0</span>];<span class="comment">//Weighting towards how many cars needed. Index 0 is weighting for 1 car, index 1 is weighting for 2 cars etc...
+    </span><span class="kw">const </span>SERVICE_TIME_MEAN: f32 = <span class="number">35.0</span>;
+    <span class="kw">const </span>SERVICE_TIME_STD: f32 = <span class="number">9.0</span>;<span class="comment">//Currently not used
+    //GA stuff
     </span><span class="kw">const </span>EVAL_ITER: u8 = <span class="number">1</span>;<span class="comment">//Should always be 1 if using incident plan
-    </span><span class="kw">const </span>SOL_NUM: u16 = <span class="number">400</span>;<span class="comment">//Must be div by 4
-    </span><span class="kw">const </span>TIMEOUT: u16 = <span class="number">50</span>;
+    </span><span class="kw">const </span>SOL_NUM: u16 = <span class="number">100</span>;<span class="comment">//Must be div by 4
+    </span><span class="kw">const </span>TIMEOUT: u16 = <span class="number">200</span>;
     <span class="kw">const </span>MUTATION_NUM: u8 = <span class="number">1</span>;
+    <span class="kw">const </span>MUTATION_NUM_WHEN_NO_XOVER: u8 = <span class="number">0</span>;
+    <span class="kw">const </span>CROSSOVER_PROBABILITY_DECREASE: f32 = <span class="number">0.0</span>;
+    <span class="kw">const </span>CROSSOVER_PROBABILITY: f32 = <span class="number">1.0</span>;
+    <span class="kw">const </span>GA_RUNS: usize = <span class="number">10</span>;
+    <span class="kw">const </span>TOURNAMENT_SIZE: u16 = <span class="number">100</span>;
 
-
+    <span class="kw">let </span>builder: WalkerTableBuilder = WalkerTableBuilder::new(<span class="kw-2">&amp;</span>SEVERITY_WEIGHTING);
+    <span class="kw">let </span><span class="kw-2">mut </span>wa_table: WalkerTable = builder.build();
     
     <span class="kw">let </span>total_steps: f32 = END_TIME/TIMESTEP;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>spawn_stack: Vec&lt;Vec&lt;incident::Incident&gt;&gt; = Vec::new();
-    <span class="kw">let </span><span class="kw-2">mut </span>spawn_time: types::Time = <span class="number">0.0</span>;
-    <span class="kw">for _ in </span><span class="number">0</span>..total_steps <span class="kw">as </span>usize{
-        <span class="kw">let </span><span class="kw-2">mut </span>step_incidents: Vec&lt;Incident&gt; = Vec::new();
-        generate_incidents(<span class="kw-2">&amp;mut </span>step_incidents, <span class="kw-2">&amp;</span>incident_probs, TIMESTEP, spawn_time, PROBABILITY_WEIGHTING, <span class="kw-2">&amp;mut </span>rng);
-        spawn_stack.push(step_incidents);
-        spawn_time += TIMESTEP;
+    <span class="kw">let </span><span class="kw-2">mut </span>results: Vec&lt;Data&gt; = Vec::new();
+    <span class="kw">if </span>!PARAM_TEST{
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..GA_RUNS{
+            <span class="kw">let </span>file_name: String = <span class="macro">format!</span>(<span class="string">"fitness{}.csv"</span>, i);
+            genetic::run(<span class="kw-2">&amp;mut </span>results, total_steps, <span class="kw-2">&amp;</span>incident_probs, TIMESTEP, PROBABILITY_WEIGHTING, <span class="kw-2">&amp;mut </span>rngthread, <span class="kw-2">&amp;mut </span>wa_table, SERVICE_TIME_MEAN, SERVICE_TIME_STD, SOL_NUM, <span class="kw-2">&amp;</span>base_locations, MAX_CARS, <span class="kw-2">&amp;</span>graph, <span class="kw-2">&amp;mut </span>route_cache, END_TIME, EVAL_ITER, PLACE, TIMEOUT, MUTATION_NUM, MUTATION_NUM_WHEN_NO_XOVER, CROSSOVER_PROBABILITY, CROSSOVER_PROBABILITY_DECREASE, <span class="prelude-val">None</span>, TOURNAMENT_SIZE, <span class="kw-2">&amp;</span>file_name);
+        }
     }
-    <span class="macro">println!</span>(<span class="string">"Incident plan generated"</span>);
-
-    <span class="kw">for _ in </span><span class="number">0</span>..SOL_NUM{
-        solutions.push(genetic::generate_solution(base_locations.len() <span class="kw">as </span>u8, MAX_CARS, <span class="kw-2">&amp;mut </span>rng));
-    }
-    <span class="macro">println!</span>(<span class="string">"Solutions generated"</span>);
-
-    <span class="kw">let </span><span class="kw-2">mut </span>unreachable_set: HashSet&lt;types::Location&gt; = HashSet::new();
-
-    <span class="kw">let </span>start_time: Instant = Instant::now();
-    <span class="kw">let </span>start: Data = avg_and_best_fitness(<span class="kw-2">&amp;</span>solutions, <span class="number">1</span>, <span class="kw-2">&amp;mut </span>spawn_stack, <span class="kw-2">&amp;</span>graph, <span class="kw-2">&amp;</span>base_locations, <span class="kw-2">&amp;mut </span>route_cache, TIMESTEP, END_TIME, <span class="kw-2">&amp;mut </span>unreachable_set);
-    <span class="macro">println!</span>(<span class="string">"First evaluations in {} seconds"</span>, start_time.elapsed().as_secs_f32());
-
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..TIMEOUT{
-        evolve_pop(<span class="kw-2">&amp;mut </span>solutions, SOL_NUM/<span class="number">2</span>, SOL_NUM<span class="kw-2">*</span><span class="number">3</span>/<span class="number">4</span>, EVAL_ITER, <span class="kw-2">&amp;</span>spawn_stack, <span class="kw-2">&amp;</span>graph, <span class="kw-2">&amp;</span>base_locations, <span class="kw-2">&amp;mut </span>route_cache, TIMESTEP, END_TIME, MAX_CARS, MUTATION_NUM, <span class="kw-2">&amp;mut </span>rng, <span class="kw-2">&amp;mut </span>unreachable_set);
-        <span class="macro">println!</span>(<span class="string">"{}/{}"</span>, i + <span class="number">1</span>, TIMEOUT);
-    }
-    <span class="kw">let </span>end: Data = avg_and_best_fitness(<span class="kw-2">&amp;</span>solutions, <span class="number">1</span>, <span class="kw-2">&amp;mut </span>spawn_stack, <span class="kw-2">&amp;</span>graph, <span class="kw-2">&amp;</span>base_locations, <span class="kw-2">&amp;mut </span>route_cache, TIMESTEP, END_TIME, <span class="kw-2">&amp;mut </span>unreachable_set);
-
-    <span class="kw">let </span>end_time: types::Time = start_time.elapsed().as_secs_f32();
-    <span class="macro">println!</span>(<span class="string">"*************\n{} iterations in {}"</span>, TIMEOUT + <span class="number">1</span>, end_time);
-    <span class="macro">println!</span>(<span class="string">"Averaging {} seconds per iteration\n          {} per solution evaluation"</span>, end_time/(TIMEOUT + <span class="number">1</span>) <span class="kw">as </span>f32, end_time/(TIMEOUT + <span class="number">1</span>) <span class="kw">as </span>f32 * SOL_NUM <span class="kw">as </span>f32);
-    <span class="macro">println!</span>(<span class="string">"*************\nStarting solutions:\n{}"</span>, start);
-
-    <span class="macro">println!</span>(<span class="string">"*************Final solutions:\n{}\n"</span>, end);
-
-    <span class="kw">let </span>names: Vec&lt;String&gt; = read_data::police_names();
-    <span class="kw">let </span>solution: <span class="kw-2">&amp;</span>Solution = end.get_best_solution();
-    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..solution.len(){
-        <span class="macro">println!</span>(<span class="string">"{}: {}"</span>, names[i], solution[i]);
+    <span class="kw">else</span>{<span class="comment">//Testing
+        </span><span class="macro">println!</span>(<span class="string">"GRID SEARCH"</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>spawn_stack: Vec&lt;Vec&lt;incident::Incident&gt;&gt; = Vec::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>spawn_time: types::Time = <span class="number">0.0</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>incident_sum: usize = <span class="number">0</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>vehicle_count: [u32; <span class="number">5</span>] = [<span class="number">0</span>; <span class="number">5</span>];
+        <span class="kw">for _ in </span><span class="number">0</span>..total_steps <span class="kw">as </span>usize{
+            <span class="kw">let </span><span class="kw-2">mut </span>step_incidents: Vec&lt;Incident&gt; = Vec::new();
+            generate_incidents(<span class="kw-2">&amp;mut </span>step_incidents, <span class="kw-2">&amp;</span>incident_probs, TIMESTEP, spawn_time, PROBABILITY_WEIGHTING, <span class="kw-2">&amp;mut </span>rngthread, <span class="kw-2">&amp;</span>wa_table, <span class="kw-2">&amp;mut </span>vehicle_count, SERVICE_TIME_MEAN, SERVICE_TIME_STD);
+            incident_sum += step_incidents.len();
+            spawn_stack.push(step_incidents);
+            spawn_time += TIMESTEP;
+        }
+        <span class="macro">println!</span>(<span class="string">"Uniform plan contains {} incidents"</span>, incident_sum);
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..vehicle_count.len(){
+            <span class="macro">println!</span>(<span class="string">"{} incidents required {} cars"</span>, vehicle_count[i], i+<span class="number">1</span>);
+        }
+        <span class="comment">//                    E_I SO_N TIM  M_N M_N2 XO_P XO_D TSZ
+        </span><span class="kw">let </span>grid_search: Vec&lt;(u8, u16, u16, u8, u8, f32, f32, u16)&gt; = <span class="macro">vec!</span>[<span class="comment">//Order of tunables match order in const declarations. For every tuple a GA run will be complted with those components
+            </span>(<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">100</span>),
+            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0025</span>, <span class="number">100</span>),
+            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0030</span>, <span class="number">100</span>),
+            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0035</span>, <span class="number">100</span>),
+        ];
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..grid_search.len(){
+            <span class="kw">let </span>file_name: String = <span class="macro">format!</span>(<span class="string">"fitness{}.csv"</span>, i);
+            genetic::run(<span class="kw-2">&amp;mut </span>results, total_steps, <span class="kw-2">&amp;</span>incident_probs, TIMESTEP, PROBABILITY_WEIGHTING, <span class="kw-2">&amp;mut </span>rngthread, <span class="kw-2">&amp;mut </span>wa_table, SERVICE_TIME_MEAN, SERVICE_TIME_STD, grid_search[i].<span class="number">1</span>, <span class="kw-2">&amp;</span>base_locations, MAX_CARS, <span class="kw-2">&amp;</span>graph, <span class="kw-2">&amp;mut </span>route_cache, END_TIME, grid_search[i].<span class="number">0</span>, PLACE, grid_search[i].<span class="number">2</span>, grid_search[i].<span class="number">3</span>, grid_search[i].<span class="number">4</span>, grid_search[i].<span class="number">5</span>, grid_search[i].<span class="number">6</span>, <span class="prelude-val">Some</span>(spawn_stack.clone()), grid_search[i].<span class="number">7</span>, <span class="kw-2">&amp;</span>file_name);
+        }
     }
 
-    <span class="macro">println!</span>(<span class="string">"*************\nUnreachables: {:?}"</span>, unreachable_set);
+    <span class="kw">let </span><span class="kw-2">mut </span>sum_best_response_time: types::Time = <span class="number">0.0</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>sum_solutions: Vec&lt;usize&gt; = Vec::new();
+    <span class="kw">for _ in </span><span class="number">0</span>..base_locations.len(){
+        sum_solutions.push(<span class="number">0</span>);
+    }
+    <span class="kw">for </span>result <span class="kw">in </span>results{
+        sum_best_response_time += result.get_best_fitness();
+        <span class="kw">let </span>best_solution = result.get_best_solution();
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..best_solution.len(){
+            sum_solutions[i] += best_solution[i] <span class="kw">as </span>usize;
+        }
+    }
+
+    <span class="macro">println!</span>(<span class="string">"*************\nAverages:\nBest Fitness: {}"</span>, sum_best_response_time/GA_RUNS <span class="kw">as </span>f32);
+
+    <span class="kw">let </span>names: Vec&lt;String&gt; = read_data::police_names(PLACE);
+    <span class="kw">let </span><span class="kw-2">mut </span>outcomes: Vec&lt;(String, f32)&gt; = Vec::new();
+    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..sum_solutions.len(){
+        outcomes.push((names[i].clone(), sum_solutions[i] <span class="kw">as </span>f32/GA_RUNS <span class="kw">as </span>f32));
+    }
+
+    outcomes.sort_by(|a, b| a.<span class="number">0</span>.cmp(<span class="kw-2">&amp;</span>b.<span class="number">0</span>));
+
+    <span class="kw">for </span>element <span class="kw">in </span>outcomes{
+        <span class="macro">println!</span>(<span class="string">"{}: {}"</span>, element.<span class="number">0</span>, element.<span class="number">1</span>);
+    }
 }</code></pre></div></section></main></body></html>

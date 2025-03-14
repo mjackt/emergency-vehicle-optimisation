@@ -124,10 +124,7 @@ fn main(){
     let mut results: Vec<Data> = Vec::new();
     if !PARAM_TEST{
         for i in 0..GA_RUNS{
-            let system_time = SystemTime::now();
-            let datetime: DateTime<Utc> = system_time.into();
-            println!("{}", datetime.format("%d/%m/%Y %T"));
-            let file_name: String = format!("fitness{}-{}.csv", i, datetime);
+            let file_name: String = format!("fitness{}.csv", i);
             genetic::run(&mut results, total_steps, &incident_probs, TIMESTEP, PROBABILITY_WEIGHTING, &mut rngthread, &mut wa_table, SERVICE_TIME_MEAN, SERVICE_TIME_STD, SOL_NUM, &base_locations, MAX_CARS, &graph, &mut route_cache, END_TIME, EVAL_ITER, PLACE, TIMEOUT, MUTATION_NUM, MUTATION_NUM_WHEN_NO_XOVER, CROSSOVER_PROBABILITY, CROSSOVER_PROBABILITY_DECREASE, None, TOURNAMENT_SIZE, &file_name);
         }
     }
@@ -150,10 +147,10 @@ fn main(){
         }
         //                    E_I SO_N TIM  M_N M_N2 XO_P XO_D TSZ
         let grid_search: Vec<(u8, u16, u16, u8, u8, f32, f32, u16)> = vec![//Order of tunables match order in const declarations. For every tuple a GA run will be complted with those components
-            (1,100,200,1,0,1.0, 0.0, 100),
-            (1,100,200,1,2,1.0, 0.0025, 100),
-            (1,100,200,1,2,1.0, 0.0030, 100),
-            (1,100,200,1,2,1.0, 0.0035, 100),
+            (1,100,160,1,0,1.0, 0.0, 100),
+            (1,100,160,1,2,1.0, 0.0025, 100),
+            (1,100,160,1,2,1.0, 0.0030, 100),
+            (1,100,160,1,2,1.0, 0.0035, 100),
         ];
         for i in 0..grid_search.len(){
             let file_name: String = format!("fitness{}.csv", i);
