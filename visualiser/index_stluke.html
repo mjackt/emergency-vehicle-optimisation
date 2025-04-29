@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_d08dc3db4a76e69e6c7cdca823a0da2d {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_d08dc3db4a76e69e6c7cdca823a0da2d" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_d08dc3db4a76e69e6c7cdca823a0da2d = L.map(
+                "map_d08dc3db4a76e69e6c7cdca823a0da2d",
+                {
+                    center: [50.67, -4.125],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 8,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_c97bb1b43fc9a4b1da6ccc7d03b44fa5 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_c97bb1b43fc9a4b1da6ccc7d03b44fa5.addTo(map_d08dc3db4a76e69e6c7cdca823a0da2d);
+        
+    
+            var feature_group_b0d601a1220889814ebde0141ead8c07 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_180523c01f16a28056d3af3c193a6395 = L.circleMarker(
+                [50.723642, -3.516495],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_121b5e3710936cf465c1fc2e201b97ae = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_76645883e22d64d1c0e6457a4df454f9 = $(`<div id="html_76645883e22d64d1c0e6457a4df454f9" style="width: 100.0%; height: 100.0%;"><b>St Lukes TEST</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_121b5e3710936cf465c1fc2e201b97ae.setContent(html_76645883e22d64d1c0e6457a4df454f9);
+            
+        
+
+        circle_marker_180523c01f16a28056d3af3c193a6395.bindPopup(popup_121b5e3710936cf465c1fc2e201b97ae)
+        ;
+
+        
+    
+    
+            var circle_marker_9bc5c64aede6589aa623eb783cba653d = L.circleMarker(
+                [50.7919963, -3.6653876],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 33.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_5964c88b2f06405183710cc780f2cfbb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e0e417e7691b6abe630293d1bcbecee2 = $(`<div id="html_e0e417e7691b6abe630293d1bcbecee2" style="width: 100.0%; height: 100.0%;"><b>Crediton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_5964c88b2f06405183710cc780f2cfbb.setContent(html_e0e417e7691b6abe630293d1bcbecee2);
+            
+        
+
+        circle_marker_9bc5c64aede6589aa623eb783cba653d.bindPopup(popup_5964c88b2f06405183710cc780f2cfbb)
+        ;
+
+        
+    
+    
+            var circle_marker_fb4c1d5132e164f7afbf14c6da611838 = L.circleMarker(
+                [50.7397561, -3.995865],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_8ba262ad32099aa0993f02a1c4df619f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_323cfff8560532236a04322afac6be03 = $(`<div id="html_323cfff8560532236a04322afac6be03" style="width: 100.0%; height: 100.0%;"><b>Okehampton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_8ba262ad32099aa0993f02a1c4df619f.setContent(html_323cfff8560532236a04322afac6be03);
+            
+        
+
+        circle_marker_fb4c1d5132e164f7afbf14c6da611838.bindPopup(popup_8ba262ad32099aa0993f02a1c4df619f)
+        ;
+
+        
+    
+    
+            var circle_marker_2252804f1ffb9ea1b8f50aa18fb777cb = L.circleMarker(
+                [51.0158632, -4.2051536],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 42.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_e30ac82debbcba8e95d98b782b8bd323 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_18b8959d8cceec293ae1a75c057f4309 = $(`<div id="html_18b8959d8cceec293ae1a75c057f4309" style="width: 100.0%; height: 100.0%;"><b>Bideford Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_e30ac82debbcba8e95d98b782b8bd323.setContent(html_18b8959d8cceec293ae1a75c057f4309);
+            
+        
+
+        circle_marker_2252804f1ffb9ea1b8f50aa18fb777cb.bindPopup(popup_e30ac82debbcba8e95d98b782b8bd323)
+        ;
+
+        
+    
+    
+            var circle_marker_0dc0db277f37e3ad3be3aab35314191e = L.circleMarker(
+                [50.7065963, -3.0725176],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_9167358499afb1f33a39d2a6dedf2181 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c4296813d3dced9b33c74b031447f658 = $(`<div id="html_c4296813d3dced9b33c74b031447f658" style="width: 100.0%; height: 100.0%;"><b>Seaton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_9167358499afb1f33a39d2a6dedf2181.setContent(html_c4296813d3dced9b33c74b031447f658);
+            
+        
+
+        circle_marker_0dc0db277f37e3ad3be3aab35314191e.bindPopup(popup_9167358499afb1f33a39d2a6dedf2181)
+        ;
+
+        
+    
+    
+            var circle_marker_71d5ad5247e497d893d3a2643d990333 = L.circleMarker(
+                [50.6868613, -3.2372024],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_2fbb29c75403be7c339034cecae50b3f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2716f9faa40a0ce4c9a3b43cb76823d9 = $(`<div id="html_2716f9faa40a0ce4c9a3b43cb76823d9" style="width: 100.0%; height: 100.0%;"><b>Sidmouth Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_2fbb29c75403be7c339034cecae50b3f.setContent(html_2716f9faa40a0ce4c9a3b43cb76823d9);
+            
+        
+
+        circle_marker_71d5ad5247e497d893d3a2643d990333.bindPopup(popup_2fbb29c75403be7c339034cecae50b3f)
+        ;
+
+        
+    
+    
+            var circle_marker_cafe5dccf8f6899a1755cb2acb6925e5 = L.circleMarker(
+                [50.599981, -3.6052645],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_a5f95b305456fc887790a357524949c1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7bb8f8a74b5cccff2832845c65bfef70 = $(`<div id="html_7bb8f8a74b5cccff2832845c65bfef70" style="width: 100.0%; height: 100.0%;"><b>Chudleigh Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_a5f95b305456fc887790a357524949c1.setContent(html_7bb8f8a74b5cccff2832845c65bfef70);
+            
+        
+
+        circle_marker_cafe5dccf8f6899a1755cb2acb6925e5.bindPopup(popup_a5f95b305456fc887790a357524949c1)
+        ;
+
+        
+    
+    
+            var circle_marker_87918292dffefde7d965ca45914b7857 = L.circleMarker(
+                [51.0175716, -3.8315569],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_72b6b8ab0b3ba3b26147498cb2aef509 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5d74ec9c725872bbbfa40b59cf86d729 = $(`<div id="html_5d74ec9c725872bbbfa40b59cf86d729" style="width: 100.0%; height: 100.0%;"><b>South Molton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_72b6b8ab0b3ba3b26147498cb2aef509.setContent(html_5d74ec9c725872bbbfa40b59cf86d729);
+            
+        
+
+        circle_marker_87918292dffefde7d965ca45914b7857.bindPopup(popup_72b6b8ab0b3ba3b26147498cb2aef509)
+        ;
+
+        
+    
+    
+            var marker_15fca3ceb4062b215a0e6d21d520fbd4 = L.marker(
+                [50.2696469, -4.9092805],
+                {
+}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+            var div_icon_2fae99484b46c820be2893820fdf7d4a = L.divIcon({
+  "html": "\u003cdiv style=\"color:red; font-size:12px;\"\u003e\u2716\u003c/div\u003e",
+  "className": "empty",
+});
+            marker_15fca3ceb4062b215a0e6d21d520fbd4.setIcon(div_icon_2fae99484b46c820be2893820fdf7d4a);
+        
+    
+        var popup_11eb684d76aca402bcb535b707832014 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_417b29a79d670a527611a1dee3b62149 = $(`<div id="html_417b29a79d670a527611a1dee3b62149" style="width: 100.0%; height: 100.0%;">Tregony Police Station</div>`)[0];
+                popup_11eb684d76aca402bcb535b707832014.setContent(html_417b29a79d670a527611a1dee3b62149);
+            
+        
+
+        marker_15fca3ceb4062b215a0e6d21d520fbd4.bindPopup(popup_11eb684d76aca402bcb535b707832014)
+        ;
+
+        
+    
+    
+            var circle_marker_ba08b15998832e991f8489cd60119776 = L.circleMarker(
+                [50.954389, -4.129219],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_b3f54d779940ce3366f9d0a495e19e76 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3dbe181231af3896b5895f96573c6d89 = $(`<div id="html_3dbe181231af3896b5895f96573c6d89" style="width: 100.0%; height: 100.0%;"><b>Great Torrington Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_b3f54d779940ce3366f9d0a495e19e76.setContent(html_3dbe181231af3896b5895f96573c6d89);
+            
+        
+
+        circle_marker_ba08b15998832e991f8489cd60119776.bindPopup(popup_b3f54d779940ce3366f9d0a495e19e76)
+        ;
+
+        
+    
+    
+            var circle_marker_c86031de9ec4b44e336ec1d5d6debe46 = L.circleMarker(
+                [50.288479, -3.7774703],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_ec9f8512a44c1e047302815775a52927 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5a119e343f808dffbbefe7521b6a9d49 = $(`<div id="html_5a119e343f808dffbbefe7521b6a9d49" style="width: 100.0%; height: 100.0%;"><b>Kingsbridge Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_ec9f8512a44c1e047302815775a52927.setContent(html_5a119e343f808dffbbefe7521b6a9d49);
+            
+        
+
+        circle_marker_c86031de9ec4b44e336ec1d5d6debe46.bindPopup(popup_ec9f8512a44c1e047302815775a52927)
+        ;
+
+        
+    
+    
+            var circle_marker_4774127f67e92b9e656f865b3ff7392a = L.circleMarker(
+                [50.2375332, -3.7773678],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_f53848cca43d5105300bf4ff9621e550 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_feb44ab73e75a1fb49504850e270a907 = $(`<div id="html_feb44ab73e75a1fb49504850e270a907" style="width: 100.0%; height: 100.0%;"><b>Salcombe Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_f53848cca43d5105300bf4ff9621e550.setContent(html_feb44ab73e75a1fb49504850e270a907);
+            
+        
+
+        circle_marker_4774127f67e92b9e656f865b3ff7392a.bindPopup(popup_f53848cca43d5105300bf4ff9621e550)
+        ;
+
+        
+    
+    
+            var circle_marker_0cd54c75702a115c53f4fb4d5942fc3b = L.circleMarker(
+                [50.5162943, -4.8393795],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_279b32def1b8a4d1a2c9837868c232dc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_689cd79f149b126c8a9c50ba761c343d = $(`<div id="html_689cd79f149b126c8a9c50ba761c343d" style="width: 100.0%; height: 100.0%;"><b>Wadebridge Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_279b32def1b8a4d1a2c9837868c232dc.setContent(html_689cd79f149b126c8a9c50ba761c343d);
+            
+        
+
+        circle_marker_0cd54c75702a115c53f4fb4d5942fc3b.bindPopup(popup_279b32def1b8a4d1a2c9837868c232dc)
+        ;
+
+        
+    
+    
+            var circle_marker_54c3f68b4496cd0af33bc7ecfb5d1670 = L.circleMarker(
+                [50.5277099, -3.6127873],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 51.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_bb23756bec32f57dc45c3c15ea5265cd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e146af5ab83ff96ff443228dbf36b6ee = $(`<div id="html_e146af5ab83ff96ff443228dbf36b6ee" style="width: 100.0%; height: 100.0%;"><b>Newton Abbot Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_bb23756bec32f57dc45c3c15ea5265cd.setContent(html_e146af5ab83ff96ff443228dbf36b6ee);
+            
+        
+
+        circle_marker_54c3f68b4496cd0af33bc7ecfb5d1670.bindPopup(popup_bb23756bec32f57dc45c3c15ea5265cd)
+        ;
+
+        
+    
+    
+            var circle_marker_f22218653003f9acca539b99fe3dd83b = L.circleMarker(
+                [50.4148562, -5.0745395],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_12c8063de0d92f6bfc24910fb3701427 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4d80632933aeeb91a1940dc68a58013d = $(`<div id="html_4d80632933aeeb91a1940dc68a58013d" style="width: 100.0%; height: 100.0%;"><b>Newquay Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 4.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 4</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_12c8063de0d92f6bfc24910fb3701427.setContent(html_4d80632933aeeb91a1940dc68a58013d);
+            
+        
+
+        circle_marker_f22218653003f9acca539b99fe3dd83b.bindPopup(popup_12c8063de0d92f6bfc24910fb3701427)
+        ;
+
+        
+    
+    
+            var circle_marker_998fec163f9b1029afff9826a4ea44ab = L.circleMarker(
+                [50.5462986, -4.1455423],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_110d5d1f37578837a1b37297fd2c3814 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a299851600595fda8c34ea9a7e67466f = $(`<div id="html_a299851600595fda8c34ea9a7e67466f" style="width: 100.0%; height: 100.0%;"><b>Tavistock Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_110d5d1f37578837a1b37297fd2c3814.setContent(html_a299851600595fda8c34ea9a7e67466f);
+            
+        
+
+        circle_marker_998fec163f9b1029afff9826a4ea44ab.bindPopup(popup_110d5d1f37578837a1b37297fd2c3814)
+        ;
+
+        
+    
+    
+            var circle_marker_8b5228345ccd12ab8a0a05fd1268f178 = L.circleMarker(
+                [50.358888, -4.7144139],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_4bf997a7c5236fcc751f7a48030c0ea9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7ae027f007eeeb4f73901aec3821ebb3 = $(`<div id="html_7ae027f007eeeb4f73901aec3821ebb3" style="width: 100.0%; height: 100.0%;"><b>St Blazey Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_4bf997a7c5236fcc751f7a48030c0ea9.setContent(html_7ae027f007eeeb4f73901aec3821ebb3);
+            
+        
+
+        circle_marker_8b5228345ccd12ab8a0a05fd1268f178.bindPopup(popup_4bf997a7c5236fcc751f7a48030c0ea9)
+        ;
+
+        
+    
+    
+            var marker_abfddaf0390ae079dc0405f5bdb01455 = L.marker(
+                [50.3773664, -4.1444683],
+                {
+}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+            var div_icon_37efd1abb46b7e9ad10372f040466441 = L.divIcon({
+  "html": "\u003cdiv style=\"color:red; font-size:12px;\"\u003e\u2716\u003c/div\u003e",
+  "className": "empty",
+});
+            marker_abfddaf0390ae079dc0405f5bdb01455.setIcon(div_icon_37efd1abb46b7e9ad10372f040466441);
+        
+    
+        var popup_264873a2dc4e36e4ce3ae1af3503cd8a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_64cca0c3c4a3b655e00fdca3a46dc892 = $(`<div id="html_64cca0c3c4a3b655e00fdca3a46dc892" style="width: 100.0%; height: 100.0%;">Plymouth British Transport Police</div>`)[0];
+                popup_264873a2dc4e36e4ce3ae1af3503cd8a.setContent(html_64cca0c3c4a3b655e00fdca3a46dc892);
+            
+        
+
+        marker_abfddaf0390ae079dc0405f5bdb01455.bindPopup(popup_264873a2dc4e36e4ce3ae1af3503cd8a)
+        ;
+
+        
+    
+    
+            var circle_marker_5a260b960e115e4abf9fdb12ae2ba6f6 = L.circleMarker(
+                [50.7287612, -3.5432833],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_c9686f88141be5f068702f6d6fe66a3a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_710d72cb31551219776b98e5ef0baca9 = $(`<div id="html_710d72cb31551219776b98e5ef0baca9" style="width: 100.0%; height: 100.0%;"><b>Exe St Davids British Transport Police</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_c9686f88141be5f068702f6d6fe66a3a.setContent(html_710d72cb31551219776b98e5ef0baca9);
+            
+        
+
+        circle_marker_5a260b960e115e4abf9fdb12ae2ba6f6.bindPopup(popup_c9686f88141be5f068702f6d6fe66a3a)
+        ;
+
+        
+    
+    
+            var circle_marker_ba388799d1114c9ef4ad9301e8509055 = L.circleMarker(
+                [50.7522638, -3.2787235],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_30437fd1fafdbd118cf38b9e3bf4cd29 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0da03ca67d81fc6ea4bae47134e7ddd5 = $(`<div id="html_0da03ca67d81fc6ea4bae47134e7ddd5" style="width: 100.0%; height: 100.0%;"><b>Ottery St Mary Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_30437fd1fafdbd118cf38b9e3bf4cd29.setContent(html_0da03ca67d81fc6ea4bae47134e7ddd5);
+            
+        
+
+        circle_marker_ba388799d1114c9ef4ad9301e8509055.bindPopup(popup_30437fd1fafdbd118cf38b9e3bf4cd29)
+        ;
+
+        
+    
+    
+            var circle_marker_05a5bf13d1349c39c6fb843de7f7a85d = L.circleMarker(
+                [50.7179686, -3.4762957],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_51cf29a1514ef8193b78cbc43caa721e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c836a7634cf64057789bca9a9fc7af78 = $(`<div id="html_c836a7634cf64057789bca9a9fc7af78" style="width: 100.0%; height: 100.0%;"><b>Exeter Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_51cf29a1514ef8193b78cbc43caa721e.setContent(html_c836a7634cf64057789bca9a9fc7af78);
+            
+        
+
+        circle_marker_05a5bf13d1349c39c6fb843de7f7a85d.bindPopup(popup_51cf29a1514ef8193b78cbc43caa721e)
+        ;
+
+        
+    
+    
+            var circle_marker_48dacc11853b390343b3a1945698aaba = L.circleMarker(
+                [50.3909557, -3.5092625],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_01e692e9413a2c9c10bb1be9912d9b03 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bc676287919ee1663331352d74371f53 = $(`<div id="html_bc676287919ee1663331352d74371f53" style="width: 100.0%; height: 100.0%;"><b>Brixham Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_01e692e9413a2c9c10bb1be9912d9b03.setContent(html_bc676287919ee1663331352d74371f53);
+            
+        
+
+        circle_marker_48dacc11853b390343b3a1945698aaba.bindPopup(popup_01e692e9413a2c9c10bb1be9912d9b03)
+        ;
+
+        
+    
+    
+            var circle_marker_25fe7f624f12883ab1a94be1398c8a8f = L.circleMarker(
+                [50.1615525, -5.0867386],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 48.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_42bc0f02602687aa9e04fffe2a6e8333 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0ef32578fe9b637abda18bf3b849f16e = $(`<div id="html_0ef32578fe9b637abda18bf3b849f16e" style="width: 100.0%; height: 100.0%;"><b>Falmouth Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_42bc0f02602687aa9e04fffe2a6e8333.setContent(html_0ef32578fe9b637abda18bf3b849f16e);
+            
+        
+
+        circle_marker_25fe7f624f12883ab1a94be1398c8a8f.bindPopup(popup_42bc0f02602687aa9e04fffe2a6e8333)
+        ;
+
+        
+    
+    
+            var circle_marker_ed87f125c59cbf6267847a8914191d6b = L.circleMarker(
+                [50.4357221, -3.6927193],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_4984e83268368b06909fd5d2fce51c53 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_278e817167b173244cb5628a6193cba0 = $(`<div id="html_278e817167b173244cb5628a6193cba0" style="width: 100.0%; height: 100.0%;"><b>Totnes Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_4984e83268368b06909fd5d2fce51c53.setContent(html_278e817167b173244cb5628a6193cba0);
+            
+        
+
+        circle_marker_ed87f125c59cbf6267847a8914191d6b.bindPopup(popup_4984e83268368b06909fd5d2fce51c53)
+        ;
+
+        
+    
+    
+            var circle_marker_e1dddb397f399563d989a309ae82895a = L.circleMarker(
+                [50.2099944, -5.3001366],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 57.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_168db69b309ade3adf5083190c805530 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_92a724481c19878448e6a36802491fa8 = $(`<div id="html_92a724481c19878448e6a36802491fa8" style="width: 100.0%; height: 100.0%;"><b>Camborne Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_168db69b309ade3adf5083190c805530.setContent(html_92a724481c19878448e6a36802491fa8);
+            
+        
+
+        circle_marker_e1dddb397f399563d989a309ae82895a.bindPopup(popup_168db69b309ade3adf5083190c805530)
+        ;
+
+        
+    
+    
+            var circle_marker_eccd0f27785337dc1c89ee3da6dda146 = L.circleMarker(
+                [50.1189347, -5.5419247],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 54.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_591ee5bb0db63760888f1ff93e77eb0b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1d840a395b2f4af4f88966e8473fa08b = $(`<div id="html_1d840a395b2f4af4f88966e8473fa08b" style="width: 100.0%; height: 100.0%;"><b>Penzance Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_591ee5bb0db63760888f1ff93e77eb0b.setContent(html_1d840a395b2f4af4f88966e8473fa08b);
+            
+        
+
+        circle_marker_eccd0f27785337dc1c89ee3da6dda146.bindPopup(popup_591ee5bb0db63760888f1ff93e77eb0b)
+        ;
+
+        
+    
+    
+            var circle_marker_7575ed44455edf7495b4e1d64137a9e2 = L.circleMarker(
+                [50.9038825, -3.4831992],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 39.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_b96544d053971fffcc6c51c2ff3cc03b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a49de368da9ccf1236ad62b93768726d = $(`<div id="html_a49de368da9ccf1236ad62b93768726d" style="width: 100.0%; height: 100.0%;"><b>Tiverton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_b96544d053971fffcc6c51c2ff3cc03b.setContent(html_a49de368da9ccf1236ad62b93768726d);
+            
+        
+
+        circle_marker_7575ed44455edf7495b4e1d64137a9e2.bindPopup(popup_b96544d053971fffcc6c51c2ff3cc03b)
+        ;
+
+        
+    
+    
+            var circle_marker_cbbb5da0c76ab17d728aadea2d0c5cf5 = L.circleMarker(
+                [50.4671698, -4.7011867],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_9703554c146e7514d42ad51bdc657133 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7df712c555ac0b23eb017b32692e5cbb = $(`<div id="html_7df712c555ac0b23eb017b32692e5cbb" style="width: 100.0%; height: 100.0%;"><b>Bodmin Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_9703554c146e7514d42ad51bdc657133.setContent(html_7df712c555ac0b23eb017b32692e5cbb);
+            
+        
+
+        circle_marker_cbbb5da0c76ab17d728aadea2d0c5cf5.bindPopup(popup_9703554c146e7514d42ad51bdc657133)
+        ;
+
+        
+    
+    
+            var circle_marker_cc43a768e2ac358a9aa6ffada251df75 = L.circleMarker(
+                [50.4701197, -3.5406909],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 66.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_da8277353fe3bfd45e2fcb896a4ca8ba = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a517b60795d1445b2003e9bf0a2ed4a9 = $(`<div id="html_a517b60795d1445b2003e9bf0a2ed4a9" style="width: 100.0%; height: 100.0%;"><b>Torquay Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 4.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 4</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 5</span></div>`)[0];
+                popup_da8277353fe3bfd45e2fcb896a4ca8ba.setContent(html_a517b60795d1445b2003e9bf0a2ed4a9);
+            
+        
+
+        circle_marker_cc43a768e2ac358a9aa6ffada251df75.bindPopup(popup_da8277353fe3bfd45e2fcb896a4ca8ba)
+        ;
+
+        
+    
+    
+            var marker_78591bae85edeea23ed16b7344478354 = L.marker(
+                [50.5197673, -3.7452134],
+                {
+}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+            var div_icon_a1e289850762623179493f9336ccec6a = L.divIcon({
+  "html": "\u003cdiv style=\"color:red; font-size:12px;\"\u003e\u2716\u003c/div\u003e",
+  "className": "empty",
+});
+            marker_78591bae85edeea23ed16b7344478354.setIcon(div_icon_a1e289850762623179493f9336ccec6a);
+        
+    
+        var popup_f136c6152ab3e5a92623585dfeefe2ff = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_298ad6de8a94a84ead27766f94a7de51 = $(`<div id="html_298ad6de8a94a84ead27766f94a7de51" style="width: 100.0%; height: 100.0%;">Ashburton Police Station</div>`)[0];
+                popup_f136c6152ab3e5a92623585dfeefe2ff.setContent(html_298ad6de8a94a84ead27766f94a7de51);
+            
+        
+
+        marker_78591bae85edeea23ed16b7344478354.bindPopup(popup_f136c6152ab3e5a92623585dfeefe2ff)
+        ;
+
+        
+    
+    
+            var circle_marker_5b254442b849702cb589d9e8936fbc10 = L.circleMarker(
+                [51.1071135, -4.1637195],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_e850b22934b60f043a9e4fa9bab29116 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ad643e9adec1c10db2f3fdeab25d0225 = $(`<div id="html_ad643e9adec1c10db2f3fdeab25d0225" style="width: 100.0%; height: 100.0%;"><b>Braunton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_e850b22934b60f043a9e4fa9bab29116.setContent(html_ad643e9adec1c10db2f3fdeab25d0225);
+            
+        
+
+        circle_marker_5b254442b849702cb589d9e8936fbc10.bindPopup(popup_e850b22934b60f043a9e4fa9bab29116)
+        ;
+
+        
+    
+    
+            var circle_marker_a4aa20abaf78aa8284a690cd748dbac8 = L.circleMarker(
+                [51.0812313, -4.0648341],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 48.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_ae550e0c378c6f965f5304151910e5f4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_545308d65f60c6bd376a3395bf1499a9 = $(`<div id="html_545308d65f60c6bd376a3395bf1499a9" style="width: 100.0%; height: 100.0%;"><b>Barnstaple Police Station & Magistrates Court</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_ae550e0c378c6f965f5304151910e5f4.setContent(html_545308d65f60c6bd376a3395bf1499a9);
+            
+        
+
+        circle_marker_a4aa20abaf78aa8284a690cd748dbac8.bindPopup(popup_ae550e0c378c6f965f5304151910e5f4)
+        ;
+
+        
+    
+    
+            var circle_marker_cda2f0a4ae0256e5ef012e392d7b6422 = L.circleMarker(
+                [50.3727763, -4.1752695],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_4c5f0159fa6da250ae931fa42488ae19 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fb6fc31a1683c1ab93f88df29e463d10 = $(`<div id="html_fb6fc31a1683c1ab93f88df29e463d10" style="width: 100.0%; height: 100.0%;"><b>Devonport Police Office</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_4c5f0159fa6da250ae931fa42488ae19.setContent(html_fb6fc31a1683c1ab93f88df29e463d10);
+            
+        
+
+        circle_marker_cda2f0a4ae0256e5ef012e392d7b6422.bindPopup(popup_4c5f0159fa6da250ae931fa42488ae19)
+        ;
+
+        
+    
+    
+            var circle_marker_00312a61b8721441b7296863b7e79037 = L.circleMarker(
+                [50.391317, -4.0549195],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_054663bab0220f138f3d1e3c816d9f62 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8e4b70b026977d4e62a453b9513f41af = $(`<div id="html_8e4b70b026977d4e62a453b9513f41af" style="width: 100.0%; height: 100.0%;"><b>Plympton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_054663bab0220f138f3d1e3c816d9f62.setContent(html_8e4b70b026977d4e62a453b9513f41af);
+            
+        
+
+        circle_marker_00312a61b8721441b7296863b7e79037.bindPopup(popup_054663bab0220f138f3d1e3c816d9f62)
+        ;
+
+        
+    
+    
+            var circle_marker_c52b9d3e2362445678093c14af7be4ca = L.circleMarker(
+                [50.3595136, -4.4559855],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_18e1df55aab7ad5099b373ec43622adb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_14420209da57936fcb492cc40d9254b7 = $(`<div id="html_14420209da57936fcb492cc40d9254b7" style="width: 100.0%; height: 100.0%;"><b>Looe Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_18e1df55aab7ad5099b373ec43622adb.setContent(html_14420209da57936fcb492cc40d9254b7);
+            
+        
+
+        circle_marker_c52b9d3e2362445678093c14af7be4ca.bindPopup(popup_18e1df55aab7ad5099b373ec43622adb)
+        ;
+
+        
+    
+    
+            var circle_marker_bdc5a41088cfb61766085d5e8aa83e57 = L.circleMarker(
+                [50.7987859, -3.1927503],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_390ea4678143dd582c7e750a608e2ad5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_537a0d9bfc51f778fba1d399ef98c902 = $(`<div id="html_537a0d9bfc51f778fba1d399ef98c902" style="width: 100.0%; height: 100.0%;"><b>Honiton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_390ea4678143dd582c7e750a608e2ad5.setContent(html_537a0d9bfc51f778fba1d399ef98c902);
+            
+        
+
+        circle_marker_bdc5a41088cfb61766085d5e8aa83e57.bindPopup(popup_390ea4678143dd582c7e750a608e2ad5)
+        ;
+
+        
+    
+    
+            var circle_marker_c865926690cc4eaffab693cc0926c62b = L.circleMarker(
+                [50.8590592, -3.3913054],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_04eeee9f355e703d84f22bb142a4224a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6495d8b35c77e17098ccf51bf46cbcb4 = $(`<div id="html_6495d8b35c77e17098ccf51bf46cbcb4" style="width: 100.0%; height: 100.0%;"><b>Cullompton Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.0</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 1</span></div>`)[0];
+                popup_04eeee9f355e703d84f22bb142a4224a.setContent(html_6495d8b35c77e17098ccf51bf46cbcb4);
+            
+        
+
+        circle_marker_c865926690cc4eaffab693cc0926c62b.bindPopup(popup_04eeee9f355e703d84f22bb142a4224a)
+        ;
+
+        
+    
+    
+            var circle_marker_439ab08948917a7217ceacd1ed53b8c6 = L.circleMarker(
+                [50.3521475, -3.5791552],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_35af36a5609e85a23b2fc8c3b989c825 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_486d4db1e06118a565a71ba9feb42884 = $(`<div id="html_486d4db1e06118a565a71ba9feb42884" style="width: 100.0%; height: 100.0%;"><b>Dartmouth Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 0.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_35af36a5609e85a23b2fc8c3b989c825.setContent(html_486d4db1e06118a565a71ba9feb42884);
+            
+        
+
+        circle_marker_439ab08948917a7217ceacd1ed53b8c6.bindPopup(popup_35af36a5609e85a23b2fc8c3b989c825)
+        ;
+
+        
+    
+    
+            var circle_marker_fd6a6e75fa59ca58f9a2668bb3ce587a = L.circleMarker(
+                [50.410342, -4.2224414],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_d821a65eedd43fe0c10ce6770375294f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4d141214d366c0e669b0a518673e1097 = $(`<div id="html_4d141214d366c0e669b0a518673e1097" style="width: 100.0%; height: 100.0%;"><b>Saltash Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_d821a65eedd43fe0c10ce6770375294f.setContent(html_4d141214d366c0e669b0a518673e1097);
+            
+        
+
+        circle_marker_fd6a6e75fa59ca58f9a2668bb3ce587a.bindPopup(popup_d821a65eedd43fe0c10ce6770375294f)
+        ;
+
+        
+    
+    
+            var circle_marker_f69f2bfae2a83b52e1f7052bb5667b8a = L.circleMarker(
+                [50.3879719, -3.9198962],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_9803486664c75a46e9fcb2f422739c8f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f3190e0a12e7079222878117b63a821e = $(`<div id="html_f3190e0a12e7079222878117b63a821e" style="width: 100.0%; height: 100.0%;"><b>Ivybridge Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_9803486664c75a46e9fcb2f422739c8f.setContent(html_f3190e0a12e7079222878117b63a821e);
+            
+        
+
+        circle_marker_f69f2bfae2a83b52e1f7052bb5667b8a.bindPopup(popup_9803486664c75a46e9fcb2f422739c8f)
+        ;
+
+        
+    
+    
+            var circle_marker_a042b0da55eb626a05d993654b8e13fc = L.circleMarker(
+                [50.1039232, -5.2698742],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_66bf5e9620fa1e434d4c2df044942914 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6f1549171180b5b83b7f3db84074cb07 = $(`<div id="html_6f1549171180b5b83b7f3db84074cb07" style="width: 100.0%; height: 100.0%;"><b>Helston Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_66bf5e9620fa1e434d4c2df044942914.setContent(html_6f1549171180b5b83b7f3db84074cb07);
+            
+        
+
+        circle_marker_a042b0da55eb626a05d993654b8e13fc.bindPopup(popup_66bf5e9620fa1e434d4c2df044942914)
+        ;
+
+        
+    
+    
+            var circle_marker_dc269328bfb2500322c5ede7211be7c4 = L.circleMarker(
+                [50.2660185, -5.0557755],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 57.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_7bf497ea0921022d63df987802d53042 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_61f2ecd869df49650687dc780bde8ce2 = $(`<div id="html_61f2ecd869df49650687dc780bde8ce2" style="width: 100.0%; height: 100.0%;"><b>Truro Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_7bf497ea0921022d63df987802d53042.setContent(html_61f2ecd869df49650687dc780bde8ce2);
+            
+        
+
+        circle_marker_dc269328bfb2500322c5ede7211be7c4.bindPopup(popup_7bf497ea0921022d63df987802d53042)
+        ;
+
+        
+    
+    
+            var circle_marker_a2431256024e1ed8d1225da73bf00630 = L.circleMarker(
+                [50.8122895, -4.3529534],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_7b5bad128c06cf19e032e4d7074a02e8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3ddfbc73db3124dee78e42acf7aa4fa0 = $(`<div id="html_3ddfbc73db3124dee78e42acf7aa4fa0" style="width: 100.0%; height: 100.0%;"><b>Holsworthy Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_7b5bad128c06cf19e032e4d7074a02e8.setContent(html_3ddfbc73db3124dee78e42acf7aa4fa0);
+            
+        
+
+        circle_marker_a2431256024e1ed8d1225da73bf00630.bindPopup(popup_7b5bad128c06cf19e032e4d7074a02e8)
+        ;
+
+        
+    
+    
+            var circle_marker_5c0f670fc8509c794c3bf3763d8bcea9 = L.circleMarker(
+                [50.3912358, -4.1614851],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_3acd8eae6093a96821ec24b36951c0ff = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3f6019e30ab4b1b11a6a9726a92c02e6 = $(`<div id="html_3f6019e30ab4b1b11a6a9726a92c02e6" style="width: 100.0%; height: 100.0%;"><b>Beacon Park Community Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 1</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 2</span></div>`)[0];
+                popup_3acd8eae6093a96821ec24b36951c0ff.setContent(html_3f6019e30ab4b1b11a6a9726a92c02e6);
+            
+        
+
+        circle_marker_5c0f670fc8509c794c3bf3763d8bcea9.bindPopup(popup_3acd8eae6093a96821ec24b36951c0ff)
+        ;
+
+        
+    
+    
+            var circle_marker_22c9b8c1c91088dc1c8500b44cde5f33 = L.circleMarker(
+                [50.4574327, -4.4645149],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_efbd99d1c0529f655f22a877d6c6ff48 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d638ab9ea47cc37d3b1f59df7d060f26 = $(`<div id="html_d638ab9ea47cc37d3b1f59df7d060f26" style="width: 100.0%; height: 100.0%;"><b>Liskeard Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_efbd99d1c0529f655f22a877d6c6ff48.setContent(html_d638ab9ea47cc37d3b1f59df7d060f26);
+            
+        
+
+        circle_marker_22c9b8c1c91088dc1c8500b44cde5f33.bindPopup(popup_efbd99d1c0529f655f22a877d6c6ff48)
+        ;
+
+        
+    
+    
+            var circle_marker_596b747ae50b6637d7ed215962568797 = L.circleMarker(
+                [50.8290395, -4.5437496],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 39.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_15e5c3199d1b68fe5da524d5e676ffa1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ba0e5fc49225c5ad07025ec6dd065855 = $(`<div id="html_ba0e5fc49225c5ad07025ec6dd065855" style="width: 100.0%; height: 100.0%;"><b>Bude Police station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_15e5c3199d1b68fe5da524d5e676ffa1.setContent(html_ba0e5fc49225c5ad07025ec6dd065855);
+            
+        
+
+        circle_marker_596b747ae50b6637d7ed215962568797.bindPopup(popup_15e5c3199d1b68fe5da524d5e676ffa1)
+        ;
+
+        
+    
+    
+            var circle_marker_574d185ec022868578570749fd726340 = L.circleMarker(
+                [50.3747598, -4.1945164],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_58265c5e299047c462137fad3e43b3a5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1c81fdda93b5159dbec84637c969e1d0 = $(`<div id="html_1c81fdda93b5159dbec84637c969e1d0" style="width: 100.0%; height: 100.0%;"><b>Torpoint Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 1.8</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 0</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_58265c5e299047c462137fad3e43b3a5.setContent(html_1c81fdda93b5159dbec84637c969e1d0);
+            
+        
+
+        circle_marker_574d185ec022868578570749fd726340.bindPopup(popup_58265c5e299047c462137fad3e43b3a5)
+        ;
+
+        
+    
+    
+            var circle_marker_3ab42870be5a3cf63a73610439d2ed4c = L.circleMarker(
+                [50.4106663, -4.1331896],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 39.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_9e58c4e2180ef558e7255c5917d02f92 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bc9fc462203b7b0c21c751b41f39608c = $(`<div id="html_bc9fc462203b7b0c21c751b41f39608c" style="width: 100.0%; height: 100.0%;"><b>Crownhill Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_9e58c4e2180ef558e7255c5917d02f92.setContent(html_bc9fc462203b7b0c21c751b41f39608c);
+            
+        
+
+        circle_marker_3ab42870be5a3cf63a73610439d2ed4c.bindPopup(popup_9e58c4e2180ef558e7255c5917d02f92)
+        ;
+
+        
+    
+    
+            var circle_marker_0ac0e4313bf31e8c43c7e10f2a7e1595 = L.circleMarker(
+                [51.2064232, -4.1209658],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 39.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_8491d4f9d20d5b728f9884b0473ef7ce = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ed139572c4b66b8644574c8cec6762db = $(`<div id="html_ed139572c4b66b8644574c8cec6762db" style="width: 100.0%; height: 100.0%;"><b>Ilfracombe Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.6</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_8491d4f9d20d5b728f9884b0473ef7ce.setContent(html_ed139572c4b66b8644574c8cec6762db);
+            
+        
+
+        circle_marker_0ac0e4313bf31e8c43c7e10f2a7e1595.bindPopup(popup_8491d4f9d20d5b728f9884b0473ef7ce)
+        ;
+
+        
+    
+    
+            var circle_marker_c0952202a8d2484c0b0c18c613a6a1a1 = L.circleMarker(
+                [50.3395697, -4.7872854],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 48.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_f3b34e027d2ab500f1ae4f3f7f3bc5e3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4b30a55ed69d24352fa0805c04360c8a = $(`<div id="html_4b30a55ed69d24352fa0805c04360c8a" style="width: 100.0%; height: 100.0%;"><b>St Austell Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_f3b34e027d2ab500f1ae4f3f7f3bc5e3.setContent(html_4b30a55ed69d24352fa0805c04360c8a);
+            
+        
+
+        circle_marker_c0952202a8d2484c0b0c18c613a6a1a1.bindPopup(popup_f3b34e027d2ab500f1ae4f3f7f3bc5e3)
+        ;
+
+        
+    
+    
+            var circle_marker_59f1e1b043936de04035f0cd7207c213 = L.circleMarker(
+                [50.6298658, -4.3727677],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 36.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_12e63be4c479a8f0eaf20822448f810c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_09d745303fdf0f8f1c9f18592cd1c178 = $(`<div id="html_09d745303fdf0f8f1c9f18592cd1c178" style="width: 100.0%; height: 100.0%;"><b>Launceston Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 2.4</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 2</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 3</span></div>`)[0];
+                popup_12e63be4c479a8f0eaf20822448f810c.setContent(html_09d745303fdf0f8f1c9f18592cd1c178);
+            
+        
+
+        circle_marker_59f1e1b043936de04035f0cd7207c213.bindPopup(popup_12e63be4c479a8f0eaf20822448f810c)
+        ;
+
+        
+    
+    
+            var circle_marker_49531d0e7508b7c0c907e305f874b46f = L.circleMarker(
+                [50.3724415, -4.136438],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 48.0, "stroke": true, "weight": 3}
+            ).addTo(feature_group_b0d601a1220889814ebde0141ead8c07);
+        
+    
+        var popup_ed69090e63bd8121514a5278ec444cd6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1065d3a660da59f5a1771c26ebdf9714 = $(`<div id="html_1065d3a660da59f5a1771c26ebdf9714" style="width: 100.0%; height: 100.0%;"><b>Charles Cross Police Station</b>                          <br>                         <span style="display:inline-block; width:80px;">Average: 3.2</span>                         <br>                         <span style="display:inline-block; width:80px;">Min: 3</span>                         <br>                         <span style="display:inline-block; width:80px;">Max: 4</span></div>`)[0];
+                popup_ed69090e63bd8121514a5278ec444cd6.setContent(html_1065d3a660da59f5a1771c26ebdf9714);
+            
+        
+
+        circle_marker_49531d0e7508b7c0c907e305f874b46f.bindPopup(popup_ed69090e63bd8121514a5278ec444cd6)
+        ;
+
+        
+    
+    
+            feature_group_b0d601a1220889814ebde0141ead8c07.addTo(map_d08dc3db4a76e69e6c7cdca823a0da2d);
+        
+    
+            var feature_group_0243e5f8bc8db78618abbf8188115d10 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_6050a21de6aedd8c012d7495ddb3388b = L.circleMarker(
+                [50.723642, -3.516495],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_e9cb8e4f314f45c8207459cbe0a02ea1 = L.circleMarker(
+                [50.7919963, -3.6653876],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_b89d2c42f93ca3fda67913a53d9d291b = L.circleMarker(
+                [50.7397561, -3.995865],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_b1eb637911f63884bf3d57c3d4ab7d83 = L.circleMarker(
+                [51.0158632, -4.2051536],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_41cfdfb7365b4a2310631edbf62d695d = L.circleMarker(
+                [50.6868613, -3.2372024],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_3088c33eed2b21520565dcd541de9f0f = L.circleMarker(
+                [50.599981, -3.6052645],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_38203a66fe090bc16d18653c534fc364 = L.circleMarker(
+                [50.288479, -3.7774703],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_c327c939c1ac49550b1f5e3d4ddaa6d5 = L.circleMarker(
+                [50.5162943, -4.8393795],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_67f1686c3da4c13b24fcdffa14440b1f = L.circleMarker(
+                [50.5277099, -3.6127873],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_515402242d0fd94aa084d64d6c972995 = L.circleMarker(
+                [50.4148562, -5.0745395],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_a0317dc3d4cba429eb3509ebbbee89a0 = L.circleMarker(
+                [50.5462986, -4.1455423],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_d11604863bf61599cc39a4d6756025dd = L.circleMarker(
+                [50.7179686, -3.4762957],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_fc249fa1020d135d42877882886fb516 = L.circleMarker(
+                [50.3909557, -3.5092625],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_254ec6f244430d96ac69bd338f2552ea = L.circleMarker(
+                [50.1615525, -5.0867386],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_0f442b1e8b9bcd29c1f8ac19a550c2ef = L.circleMarker(
+                [50.4357221, -3.6927193],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_6f1f8fbed95c75327b53cf6015aae5fa = L.circleMarker(
+                [50.2099944, -5.3001366],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_d9277ea0fafed327d4b69dd099d67260 = L.circleMarker(
+                [50.1189347, -5.5419247],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_d46341c51a04cd1842ba1eea0d711ad1 = L.circleMarker(
+                [50.9038825, -3.4831992],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_e8aa135250efc08ea62b38936fabd53c = L.circleMarker(
+                [50.4671698, -4.7011867],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_5a955e36b964799704aaa1927d6363c4 = L.circleMarker(
+                [50.4701197, -3.5406909],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_c2e266601acdaa87fe73c76b849276c8 = L.circleMarker(
+                [51.0812313, -4.0648341],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_c0c8470e8a95b85c5fafca3b3e682e12 = L.circleMarker(
+                [50.3727763, -4.1752695],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_e6cdba566e2ea20cfbf9d29279839adc = L.circleMarker(
+                [50.391317, -4.0549195],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_529094a7ad5a9451a09a397e9311ad9d = L.circleMarker(
+                [50.3595136, -4.4559855],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_0cd6ee2bf060dc5ff1e497cc011cdbf0 = L.circleMarker(
+                [50.7987859, -3.1927503],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_a2eefc9e6e746431fa4656fe70e22216 = L.circleMarker(
+                [50.410342, -4.2224414],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_fe24871dd0513ef8fbb23a930c66f2f3 = L.circleMarker(
+                [50.3879719, -3.9198962],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_b0adfbe08250246ad95834cc47de7e02 = L.circleMarker(
+                [50.1039232, -5.2698742],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_e9624bcc06099c7615c5fcce335a6161 = L.circleMarker(
+                [50.2660185, -5.0557755],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_b407a08a279a2591dbb52c548d588ecc = L.circleMarker(
+                [50.3912358, -4.1614851],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_32b9e65f875d0d9c277e5468d7284b65 = L.circleMarker(
+                [50.4574327, -4.4645149],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_7c7862b2bf8564a8e51960dcf1e25a52 = L.circleMarker(
+                [50.8290395, -4.5437496],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_f7f0761edca58aa3d9df8445debb6268 = L.circleMarker(
+                [50.4106663, -4.1331896],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_94987f95f3704e263537c3f9552cb881 = L.circleMarker(
+                [51.2064232, -4.1209658],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_0059a13e4c4db7f0efb993ef8730bc76 = L.circleMarker(
+                [50.3395697, -4.7872854],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_a440ac9a681899b9b1909db2f24f5e44 = L.circleMarker(
+                [50.6298658, -4.3727677],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var circle_marker_7917104a938d4fe9ee417e7f5b00c8ce = L.circleMarker(
+                [50.3724415, -4.136438],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_0243e5f8bc8db78618abbf8188115d10);
+        
+    
+            var feature_group_71595febca231acdbb3dda28abc19f94 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_38589f742c858cc1131c361c0667b6f8 = L.circleMarker(
+                [50.723642, -3.516495],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_7a9e33ac6529e68ed6a3725fdfeac55c = L.circleMarker(
+                [50.7919963, -3.6653876],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_3942d6cb229b1bf3e7045e1dfaf5e445 = L.circleMarker(
+                [50.7397561, -3.995865],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_0931c1b6aa5ad53bd12a2a697adbcfdd = L.circleMarker(
+                [51.0158632, -4.2051536],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_6cf692811583657f945c7e281d640be7 = L.circleMarker(
+                [50.7065963, -3.0725176],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_21958e37c405fa976e0e3d267a259575 = L.circleMarker(
+                [50.6868613, -3.2372024],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_8812cc712a74f1e746cc9c68a439f4d1 = L.circleMarker(
+                [50.599981, -3.6052645],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_12af078dc2c81268e420605f1a2d832d = L.circleMarker(
+                [51.0175716, -3.8315569],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_c87bf5255a656a326d3cf4c84787b3c8 = L.circleMarker(
+                [50.954389, -4.129219],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_bd9a4c0089190e1bc65e56559125fffa = L.circleMarker(
+                [50.288479, -3.7774703],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_6db67614461671125b0e0146f5dd9cb9 = L.circleMarker(
+                [50.2375332, -3.7773678],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_7fb6643e07e11e2c5b0d52836fd00ccb = L.circleMarker(
+                [50.5162943, -4.8393795],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_ad29c4f9c9c34fa3aab213a5ff3a44e4 = L.circleMarker(
+                [50.5277099, -3.6127873],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_bd6f21f9362e711986952b29627c7ffe = L.circleMarker(
+                [50.4148562, -5.0745395],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_43b3d0fa3d3ce99c7ffe6e189a9e565c = L.circleMarker(
+                [50.5462986, -4.1455423],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_4b778147857d08101e4f6e26cc04021a = L.circleMarker(
+                [50.358888, -4.7144139],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_0c98c0d9389662632461a93a06f8a603 = L.circleMarker(
+                [50.7287612, -3.5432833],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_bbb9fe08122ff048de556b87af5829fb = L.circleMarker(
+                [50.7522638, -3.2787235],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_4db6e83f1bb5b701311a27ca92e36424 = L.circleMarker(
+                [50.7179686, -3.4762957],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_7ab2e7b45312d1ab5574b09d07bb2208 = L.circleMarker(
+                [50.3909557, -3.5092625],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_2a53c59b8c3a02748b9ac3e36e06d549 = L.circleMarker(
+                [50.1615525, -5.0867386],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_cbcb11909845e827fcefabfc421d615b = L.circleMarker(
+                [50.4357221, -3.6927193],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_8e8bf38ade84ccaf73097ed8af7cf9b2 = L.circleMarker(
+                [50.2099944, -5.3001366],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_2f099ce4311f22884bedf1e615c8bb3c = L.circleMarker(
+                [50.1189347, -5.5419247],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_f76ad692e0088b9b8a70dff1548d63b0 = L.circleMarker(
+                [50.9038825, -3.4831992],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_0b09cdc62f3b087bb1d9f8d2082f0295 = L.circleMarker(
+                [50.4671698, -4.7011867],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_673f280e980ea37c490e9fa6a8d98a20 = L.circleMarker(
+                [50.4701197, -3.5406909],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 75, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_a9962b3019984b1fdfd1692b33cd99b9 = L.circleMarker(
+                [51.1071135, -4.1637195],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_3185d1830d2e0f078b206dae2bed8440 = L.circleMarker(
+                [51.0812313, -4.0648341],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_06a8312397188a53092eb3566475d211 = L.circleMarker(
+                [50.3727763, -4.1752695],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_c7ed4e7fc880c66f17a18f5ec98f9e8b = L.circleMarker(
+                [50.391317, -4.0549195],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_eba8149dbfe734ef1a6cab6e176e6796 = L.circleMarker(
+                [50.3595136, -4.4559855],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_eca85f65f7c2ea4887e68c19fa287abc = L.circleMarker(
+                [50.7987859, -3.1927503],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_2b6a3e826587c06ad4e3fcb48cd960ff = L.circleMarker(
+                [50.8590592, -3.3913054],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_5d2aa0458d31f0222d8785aca87fa394 = L.circleMarker(
+                [50.3521475, -3.5791552],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_ae0bbc51f56db71cd96377cec00dec91 = L.circleMarker(
+                [50.410342, -4.2224414],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_f9d20ad7389a703abb91a6f46a89ec9a = L.circleMarker(
+                [50.3879719, -3.9198962],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_9a33374da87e6e9356e03f264d28c394 = L.circleMarker(
+                [50.1039232, -5.2698742],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_a252d66125fe9b6c63809ac37852d30a = L.circleMarker(
+                [50.2660185, -5.0557755],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_fb65ed37eb46fbe61d8276f5fa660a63 = L.circleMarker(
+                [50.8122895, -4.3529534],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_7efd65407e10f5b26ed4071f45ef17b6 = L.circleMarker(
+                [50.3912358, -4.1614851],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 30, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_759075227cbb4a5a22abc881e4c76368 = L.circleMarker(
+                [50.4574327, -4.4645149],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_029f382ffb06588c5e72af78d6e259dd = L.circleMarker(
+                [50.8290395, -4.5437496],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_8398c39b390e85aa5bf5bffb27c78d7e = L.circleMarker(
+                [50.3747598, -4.1945164],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_ab069284225549f6efd3ace7f1a7fcb2 = L.circleMarker(
+                [50.4106663, -4.1331896],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_2467a4cd5c8eb6994521999ca32b835b = L.circleMarker(
+                [51.2064232, -4.1209658],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_44a33128b141cb344883a37eaae4376d = L.circleMarker(
+                [50.3395697, -4.7872854],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_b505f975608ac9a60d90a58976286ea3 = L.circleMarker(
+                [50.6298658, -4.3727677],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 45, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var circle_marker_48fe126da2cbd182d7040f114f2294a3 = L.circleMarker(
+                [50.3724415, -4.136438],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.0, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 60, "stroke": true, "weight": 1}
+            ).addTo(feature_group_71595febca231acdbb3dda28abc19f94);
+        
+    
+            var layer_control_abf5bcbf1d8dfb22ae2df274181edd04_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_c97bb1b43fc9a4b1da6ccc7d03b44fa5,
+                },
+                overlays :  {
+                    "Bubble Map" : feature_group_b0d601a1220889814ebde0141ead8c07,
+                    "Min Values" : feature_group_0243e5f8bc8db78618abbf8188115d10,
+                    "Max Values" : feature_group_71595febca231acdbb3dda28abc19f94,
+                },
+            };
+            let layer_control_abf5bcbf1d8dfb22ae2df274181edd04 = L.control.layers(
+                layer_control_abf5bcbf1d8dfb22ae2df274181edd04_layers.base_layers,
+                layer_control_abf5bcbf1d8dfb22ae2df274181edd04_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_d08dc3db4a76e69e6c7cdca823a0da2d);
+
+        
+</script>
+</html>

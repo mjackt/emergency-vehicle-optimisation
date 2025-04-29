@@ -686,7 +686,7 @@ def truncate(f, n):
     return '.'.join([i, (d+'0'*n)[:n]])
 
 if __name__=="__main__":
-    graph: dict = read_data('dnc')
+    graph: dict = read_data('keynsham')
 
     AGGLOMERATE_LIMIT = 50.0
 
@@ -817,7 +817,7 @@ if __name__=="__main__":
     colors = [G.nodes[node]['color'] for node in G.nodes()]
 
     # Draw nodes with specified colors
-    nx.draw_networkx(G, pos, with_labels = False, node_size = 10, node_color = colors)
+    nx.draw_networkx(G, pos, with_labels = False, node_size = 100, node_color = colors)
 
     #plt.savefig("out/graph.pdf")
-    #plt.show()
+    plt.show()

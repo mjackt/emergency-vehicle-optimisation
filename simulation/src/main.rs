@@ -95,10 +95,10 @@ fn main(){
     let mut rngthread: ThreadRng = rng();
 
     //TUNABLES
-    const PARAM_TEST: bool = false;//Will run a selection of paramaters on the same schedule to compare results
+    const PARAM_TEST: bool = true;//Will run a selection of paramaters on the same schedule to compare results
     //Sim stuff
     const PLACE: &str = "dnc_12months_50agg_final";
-    const MAX_CARS: u16 = 100;
+    const MAX_CARS: u16 = 75;
     const TIMESTEP: types::Time = 60.0;
     const END_TIME: types::Time = 60.0 * 60.0 * 72.0;//Secs. Not inclusive. i.e when time hits end time its over
     const PROBABILITY_WEIGHTING: f64 = 1.0;//use 0.4 with random incidents
@@ -113,7 +113,7 @@ fn main(){
     const MUTATION_NUM_WHEN_NO_XOVER: u8 = 0;
     const CROSSOVER_PROBABILITY_DECREASE: f32 = 0.0;
     const CROSSOVER_PROBABILITY: f32 = 1.0;
-    const GA_RUNS: usize = 10;
+    const GA_RUNS: usize = 5;
     const TOURNAMENT_SIZE: u16 = 100;
 
     let builder: WalkerTableBuilder = WalkerTableBuilder::new(&SEVERITY_WEIGHTING);
@@ -147,10 +147,10 @@ fn main(){
         }
         //                    E_I SO_N TIM  M_N M_N2 XO_P XO_D TSZ
         let grid_search: Vec<(u8, u16, u16, u8, u8, f32, f32, u16)> = vec![//Order of tunables match order in const declarations. For every tuple a GA run will be complted with those components
-            (1,100,160,1,0,1.0, 0.0, 100),
-            (1,100,160,1,2,1.0, 0.0025, 100),
-            (1,100,160,1,2,1.0, 0.0030, 100),
-            (1,100,160,1,2,1.0, 0.0035, 100),
+            (1,100,200,1,0,1.0, 0.0, 100),
+            (1,200,200,1,0,1.0, 0.0, 200),
+            (1,100,200,2,0,1.0, 0.0, 100),
+            (1,100,200,1,2,1.0, 0.005, 100),
         ];
         for i in 0..grid_search.len(){
             let file_name: String = format!("fitness{}.csv", i);

@@ -282,10 +282,10 @@
     <span class="kw">let </span><span class="kw-2">mut </span>rngthread: ThreadRng = rng();
 
     <span class="comment">//TUNABLES
-    </span><span class="kw">const </span>PARAM_TEST: bool = <span class="bool-val">false</span>;<span class="comment">//Will run a selection of paramaters on the same schedule to compare results
+    </span><span class="kw">const </span>PARAM_TEST: bool = <span class="bool-val">true</span>;<span class="comment">//Will run a selection of paramaters on the same schedule to compare results
     //Sim stuff
     </span><span class="kw">const </span>PLACE: <span class="kw-2">&amp;</span>str = <span class="string">"dnc_12months_50agg_final"</span>;
-    <span class="kw">const </span>MAX_CARS: u16 = <span class="number">100</span>;
+    <span class="kw">const </span>MAX_CARS: u16 = <span class="number">75</span>;
     <span class="kw">const </span>TIMESTEP: types::Time = <span class="number">60.0</span>;
     <span class="kw">const </span>END_TIME: types::Time = <span class="number">60.0 </span>* <span class="number">60.0 </span>* <span class="number">72.0</span>;<span class="comment">//Secs. Not inclusive. i.e when time hits end time its over
     </span><span class="kw">const </span>PROBABILITY_WEIGHTING: f64 = <span class="number">1.0</span>;<span class="comment">//use 0.4 with random incidents
@@ -300,7 +300,7 @@
     <span class="kw">const </span>MUTATION_NUM_WHEN_NO_XOVER: u8 = <span class="number">0</span>;
     <span class="kw">const </span>CROSSOVER_PROBABILITY_DECREASE: f32 = <span class="number">0.0</span>;
     <span class="kw">const </span>CROSSOVER_PROBABILITY: f32 = <span class="number">1.0</span>;
-    <span class="kw">const </span>GA_RUNS: usize = <span class="number">10</span>;
+    <span class="kw">const </span>GA_RUNS: usize = <span class="number">5</span>;
     <span class="kw">const </span>TOURNAMENT_SIZE: u16 = <span class="number">100</span>;
 
     <span class="kw">let </span>builder: WalkerTableBuilder = WalkerTableBuilder::new(<span class="kw-2">&amp;</span>SEVERITY_WEIGHTING);
@@ -334,10 +334,10 @@
         }
         <span class="comment">//                    E_I SO_N TIM  M_N M_N2 XO_P XO_D TSZ
         </span><span class="kw">let </span>grid_search: Vec&lt;(u8, u16, u16, u8, u8, f32, f32, u16)&gt; = <span class="macro">vec!</span>[<span class="comment">//Order of tunables match order in const declarations. For every tuple a GA run will be complted with those components
-            </span>(<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">100</span>),
-            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0025</span>, <span class="number">100</span>),
-            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0030</span>, <span class="number">100</span>),
-            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">160</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.0035</span>, <span class="number">100</span>),
+            </span>(<span class="number">1</span>,<span class="number">100</span>,<span class="number">200</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">100</span>),
+            (<span class="number">1</span>,<span class="number">200</span>,<span class="number">200</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">200</span>),
+            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">200</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">100</span>),
+            (<span class="number">1</span>,<span class="number">100</span>,<span class="number">200</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1.0</span>, <span class="number">0.005</span>, <span class="number">100</span>),
         ];
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..grid_search.len(){
             <span class="kw">let </span>file_name: String = <span class="macro">format!</span>(<span class="string">"fitness{}.csv"</span>, i);
